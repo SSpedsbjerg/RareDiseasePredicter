@@ -25,7 +25,7 @@ namespace RareDiseasePredicter.Enums {
         Chest,
         LeftChest,
         RightChest,
-        Stomic,
+        Stomach,
         Hips,
         RightLeg,
         LeftLeg,

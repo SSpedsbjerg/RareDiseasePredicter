@@ -7,5 +7,9 @@ namespace RareDiseasePredicter.Interfaces {
         ICollection<ISymptom> GetSymptoms();
 
         bool AddSymptoms(ISymptom symptom);
+
+        string GetName();
+
+        bool SetName(string name);
         }
     }
