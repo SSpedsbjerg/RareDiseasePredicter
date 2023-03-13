@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\simon\\OneDrive\\Dokumenter\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter.csproj": {}
+    "C:\\Users\\meldg\\Documents\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter.csproj": {}
   },
   "projects": {
-    "C:\\Users\\simon\\OneDrive\\Dokumenter\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter.csproj": {
+    "C:\\Users\\meldg\\Documents\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\simon\\OneDrive\\Dokumenter\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter.csproj",
+        "projectUniqueName": "C:\\Users\\meldg\\Documents\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter.csproj",
         "projectName": "RareDiseasePredicter",
-        "projectPath": "C:\\Users\\simon\\OneDrive\\Dokumenter\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter.csproj",
-        "packagesPath": "C:\\Users\\simon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\simon\\OneDrive\\Dokumenter\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\obj\\",
+        "projectPath": "C:\\Users\\meldg\\Documents\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter.csproj",
+        "packagesPath": "C:\\Users\\meldg\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\meldg\\Documents\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\simon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\meldg\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
