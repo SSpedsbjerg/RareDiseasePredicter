@@ -4,6 +4,9 @@ using System.Text;
 
 namespace RareDiseasePredicter.Interfaces {
     interface ISymptom {
+        ICollection<Enums.Region> GetRegions();
+
+        bool AddRegion();
 
         }
     }
