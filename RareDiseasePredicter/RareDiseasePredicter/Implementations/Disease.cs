@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace RareDiseasePredicter.Implementations {
-    internal class Disease : Interfaces.IDisease {
+    class Disease : Interfaces.IDisease {
         List<ISymptom> symptoms = new List<ISymptom>();
         string name = "";
         public Disease(string name, List<ISymptom> symptoms) {
