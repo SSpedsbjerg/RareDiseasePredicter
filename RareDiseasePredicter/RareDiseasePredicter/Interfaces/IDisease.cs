@@ -6,6 +6,10 @@ namespace RareDiseasePredicter.Interfaces {
     interface IDisease {
         ICollection<ISymptom> GetSymptoms();
 
+        int GetID();
+
+        bool SetID(int ID);
+
         bool AddSymptoms(ISymptom symptom);
 
         string GetName();

@@ -8,6 +8,8 @@ namespace RareDiseasePredicter.Implementations {
 
         private string name = "";
         List<Region> regions = new List<Region>();
+        int ID = -1;
+
 
         public Symptom(string name) {
             this.name = name;
@@ -23,6 +25,10 @@ namespace RareDiseasePredicter.Implementations {
             return true;
             }
 
+        public int GetID() {
+            return ID;
+        }
+
         public string GetName() {
             return this.name;
             }
@@ -30,6 +36,11 @@ namespace RareDiseasePredicter.Implementations {
         public ICollection<Region> GetRegions() {
             return regions;
             }
+
+        public bool SetID(int ID) {
+            this.ID = ID;
+            return true;
+        }
 
         public bool SetName(string name) {
             this.name = name;

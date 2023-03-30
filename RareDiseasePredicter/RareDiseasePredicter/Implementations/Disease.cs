@@ -7,6 +7,8 @@ namespace RareDiseasePredicter.Implementations {
     class Disease : Interfaces.IDisease {
         List<ISymptom> symptoms = new List<ISymptom>();
         string name = "";
+        int ID = -1;
+
         public Disease(string name, List<ISymptom> symptoms) {
             this.name = name;
             this.symptoms = symptoms;
@@ -31,6 +33,15 @@ namespace RareDiseasePredicter.Implementations {
 
         public bool SetName(string name) {
             this.name = name;
+            return true;
+        }
+
+        public int GetID() {
+            return this.ID;
+        }
+
+        public bool SetID(int ID) {
+            this.ID = ID;
             return true;
         }
     }
