@@ -9,14 +9,10 @@ namespace RareDiseasePredicter.Controller {
     [Route("api/[controller]")]
     public class DataController : ControllerBase {
 
-        internal class JSONFormatter {
-
-            }
-
         [HttpGet]
         [Route("/")]
-        public async Task<string> test() {
-            return "200";
+        public Task<string> NoRequest() {
+            return Task.FromResult("200");
             }
 
         [HttpGet]
@@ -27,7 +23,6 @@ namespace RareDiseasePredicter.Controller {
             List<ISymptom> symptoms = new List<ISymptom>();
             List<string> stringSymptoms = new List<string>();
             symptoms = await DatabaseController.getSymptoms() as List<ISymptom>;
-
             string jsonString = JsonSerializer.Serialize(symptoms);
             return jsonString;
         }

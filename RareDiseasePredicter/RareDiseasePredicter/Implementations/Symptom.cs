@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using RareDiseasePredicter.Enums;
+﻿using RareDiseasePredicter.Enums;
 using RareDiseasePredicter.Interfaces;
 
 namespace RareDiseasePredicter.Implementations {
-    class Symptom : Interfaces.ISymptom {
+    class Symptom : ISymptom {
 
         private string name = "";
         private string despription = null;
@@ -28,6 +25,11 @@ namespace RareDiseasePredicter.Implementations {
             set { this.ID = value; }
             }
 
+        public ICollection<Region> Regions {
+            get { return regions; }
+            set { this.regions = (List<Region>)value; }
+            }
+
         public Symptom(string name) {
             this.name = name;
             }
@@ -35,6 +37,19 @@ namespace RareDiseasePredicter.Implementations {
         public Symptom(string name, ICollection<Region> regions) {
             this.name = name;
             this.regions = (List<Region>)regions;
+            }
+
+        public Symptom(string name, ICollection<Region> regions, int id) {
+            this.name = name;
+            this.regions = (List<Region>)regions;
+            this.ID = id;
+            }
+
+        public Symptom(string name, ICollection<Region> regions, int id, string description) {
+            this.name = name;
+            this.regions = (List<Region>)regions;
+            this.ID = id;
+            this.despription = description;
             }
 
         public bool AddRegion(Region region) {
