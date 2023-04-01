@@ -1,25 +1,35 @@
 ﻿using RareDiseasePredicter.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.SelfHost;
-using System.Net;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using RareDiseasePredicter.Implementations;
 
 namespace RareDiseasePredicter.Controller {
-    public class DataController : ApiController {
-        static readonly IDeterminer determiner = null;
-        HttpSelfHostConfiguration config = new HttpSelfHostConfiguration("http://localhost:8080");
 
-        config.Routes.MapHttpRoute(
+    [ApiController]
+    [Route("api/[controller]")]
+    public class DataController : ControllerBase {
 
-            );
+        internal class JSONFormatter {
 
-        [HttpPost]
-        public async Task<ActionResult<ISymptom>> PostSymptoms(ISymptom symptom) {
-            return CreatedAtActionResult(symptom.GetName(), new {id = symptom.GetID()}, symptom);
+            }
+
+        [HttpGet]
+        [Route("/")]
+        public async Task<string> test() {
+            return "200";
+            }
+
+        [HttpGet]
+        [Route("/Symptoms")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<string> GetSymptoms() {            
+            List<ISymptom> symptoms = new List<ISymptom>();
+            List<string> stringSymptoms = new List<string>();
+            symptoms = await DatabaseController.getSymptoms() as List<ISymptom>;
+
+            string jsonString = JsonSerializer.Serialize(symptoms);
+            return jsonString;
         }
     }
 }

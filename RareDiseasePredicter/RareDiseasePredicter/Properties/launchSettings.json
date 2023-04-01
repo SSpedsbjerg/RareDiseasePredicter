@@ -1,0 +1,22 @@
+{
+  "profiles": {
+    "RareDiseasePredicter": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:57693;http://localhost:57694"
+    },
+
+    "ReleaseVersion": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Release"
+      },
+      "applicationUrl": "https://localhost:57693;http://localhost:57694"
+    }
+  }
+}

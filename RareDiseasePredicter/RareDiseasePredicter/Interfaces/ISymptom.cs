@@ -6,15 +6,13 @@ namespace RareDiseasePredicter.Interfaces {
     interface ISymptom {
         ICollection<Enums.Region> GetRegions();
 
-        int GetID();
+        public string Name {get;set;}
 
-        bool SetID(int ID);
+        public string Description { get;set;}
+
+        public int ID { get; set;}
 
         bool AddRegion(Enums.Region region);
-
-        string GetName();
-
-        bool SetName(string name);
 
         }
     }
