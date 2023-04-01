@@ -19,12 +19,18 @@ namespace RareDiseasePredicter.Controller {
         [Route("/Symptoms")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<string> GetSymptoms() {            
-            List<ISymptom> symptoms = new List<ISymptom>();
-            List<string> stringSymptoms = new List<string>();
-            symptoms = await DatabaseController.getSymptoms() as List<ISymptom>;
+        public async Task<string> GetSymptoms() {
+            List<ISymptom> symptoms = await DatabaseController.getSymptoms() as List<ISymptom>;
             string jsonString = JsonSerializer.Serialize(symptoms);
             return jsonString;
         }
+
+        [HttpGet]
+        [Route("/Diseases")]
+        public async Task<string> GetDiseases() {
+            List<IDisease> diseases = await DatabaseController.getDiseases() as List<IDisease>;
+            string jsonString = JsonSerializer.Serialize(diseases);
+            return jsonString;
+            }
     }
 }
