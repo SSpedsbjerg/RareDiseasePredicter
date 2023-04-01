@@ -8,8 +8,8 @@ namespace RareDiseasePredicter.Controller {
         //TODO: This is just for dummy data and should be connected to a database
         public static async Task<ICollection<ISymptom>> getSymptoms() {
             List<ISymptom> symptoms = new List<ISymptom>();
-            symptoms.Add(new Symptom("Headache", new List<Region> { Region.Head }, 0, "Pain in Brain"));
-            symptoms.Add(new Symptom("Pain", new List<Region> { Region.Head, Region.Face, Region.Lips, Region.Mouth, Region.Ear, Region.Neck, Region.Shoulders }, 1, "Pain"));
+            symptoms.Add(new Symptom("Hovdepine", new List<Region> { Region.Head }, 0, "Smerte i hjernen"));
+            symptoms.Add(new Symptom("Smerte", new List<Region> { Region.Head, Region.Face, Region.Lips, Region.Mouth, Region.Ear, Region.Neck, Region.Shoulders }, 1, "Smerte"));
             return symptoms;
             }
 
@@ -18,7 +18,7 @@ namespace RareDiseasePredicter.Controller {
             List<IDisease> diseases = new List<IDisease>();
             diseases.Add(new Disease("Steven Johnson",
                 new List<ISymptom> {
-                    new Symptom("Pain",
+                    new Symptom("Smerte",
                     new List<Region> {
                         Region.Head,
                         Region.Face,
@@ -27,20 +27,20 @@ namespace RareDiseasePredicter.Controller {
                         Region.Ear,
                         Region.Neck },
                     1,
-                    "Pain is low but is spread over the whole body" )},
+                    "Smerte er lav, men over det hele" )},
                 0,
-                "Commenly arises from medicine",
+                "Kommer ofte fra medicin",
                 "https://www.nhs.uk/conditions/stevens-johnson-syndrome/"
                 ));
 
             diseases.Add(new Disease("Pompes",
                 new List<ISymptom> {
-                    new Symptom("Muscle Weakness",
+                    new Symptom("Muskel svaghed",
                     new List<Region> {
                         Region.UpperArms,
                         Region.LowerArms },
                     2,
-                    "Tolerable Headache" )},
+                    "" )},
                 1,
                 "",
                 ""
