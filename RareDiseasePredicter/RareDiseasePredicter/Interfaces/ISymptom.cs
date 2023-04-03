@@ -1,16 +1,21 @@
-﻿using System;
+﻿using RareDiseasePredicter.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace RareDiseasePredicter.Interfaces {
     interface ISymptom {
-        ICollection<Enums.Region> GetRegions();
+        ICollection<Region> GetRegions();
 
-        bool AddRegion(Enums.Region region);
+        public string Name {get;set;}
 
-        string GetName();
+        public string Description { get;set;}
 
-        bool SetName(string name);
+        public int ID { get; set;}
+
+        public ICollection<Region> Regions { get; set;}
+
+        bool AddRegion(Region region);
 
         }
     }
