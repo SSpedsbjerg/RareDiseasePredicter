@@ -1,17 +1,112 @@
-﻿using RareDiseasePredicter.Enums;
+﻿using Microsoft.Data.Sqlite;
+using RareDiseasePredicter.Enums;
 using RareDiseasePredicter.Implementations;
 using RareDiseasePredicter.Interfaces;
+
 
 namespace RareDiseasePredicter.Controller {
     static class DatabaseController {
 
+        private static SqliteConnection Connection;
+
+        private static bool CreateConnection() {
+            if (Connection == null) {
+                try {
+                    Connection = new SqliteConnection("Data Source = Database.db;Version=3;");
+                    Connection.Open();
+                    return true;
+                }
+                catch {
+                    return false;
+                }
+            }
+            else {
+                return true;
+            }
+        }
+
+        private static bool CreateTable() {
+            try {
+                string createQuery;
+                createQuery = "CREATE TABLE DiseaseSymptomsReference (ID int identity(1,1) not null primary key," +
+                    "DiseaseID int not null," +
+                    "SymptomID int not null);";
+                var command = Connection.CreateCommand();
+                command.CommandText = createQuery;
+                command.ExecuteNonQuery();
+
+                createQuery = "CREATE TABLE Disease" +
+                    " (Name VARCHAR(512)," +
+                    " Description VARCHAR(MAX)," +
+                    " Href VARCHAR(MAX)," +
+                    " ID int identity(1,1) not null primary key," +
+                    " FOREIGN KEY SymptomsIDs REFERENCES DiseaseSymptomsReference(ID)," +
+                    " );";
+                command = Connection.CreateCommand();
+                command.CommandText = createQuery;
+                command.ExecuteNonQuery();
+
+                createQuery = "CREATE TABLE Regions (" +
+                    " ID int identity(1,1) not null primary key," +
+                    " Name VARCHAR(512)" +
+                    ");";
+                command = Connection.CreateCommand();
+                command.CommandText = createQuery;
+                command.ExecuteNonQuery();
+
+                createQuery = "CREATE TABLE Symptoms (" +
+                    " ID int identity(1,1) not null primary key," +
+                    " Region int FOREIGN KEY REFERENCES Regions(ID)," +
+                    " Name VARCHAR(MAX)," +
+                    " Description VARCHAR(MAX)," +
+                    " );";
+                command = Connection.CreateCommand();
+                command.CommandText = createQuery;
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch {
+                return false;
+            }
+
+        }
+
         //TODO: This is just for dummy data and should be connected to a database
+        //Deprecated, use GetSymptomsAsync
         public static async Task<ICollection<ISymptom>> getSymptoms() {
             List<ISymptom> symptoms = new List<ISymptom>();
             symptoms.Add(new Symptom("Hovdepine", new List<Region> { Region.Head }, 0, "Smerte i hjernen"));
             symptoms.Add(new Symptom("Smerte", new List<Region> { Region.Head, Region.Face, Region.Lips, Region.Mouth, Region.Ear, Region.Neck, Region.Shoulders }, 1, "Smerte"));
             return symptoms;
             }
+
+        public static async Task<ICollection<ISymptom>> GetSymptomsAsync() {
+            if(CreateConnection()) {
+
+            }
+            else {
+                return null;
+            }
+            List<ISymptom> symptoms = new List<ISymptom>();
+
+            return null;
+        }
+
+        public static async Task<bool> AddDiseaseAsync(IDisease disease) {
+            if(CreateConnection()) {
+
+            }
+            else {
+                return null;
+            }
+            List<ISymptom> symptoms = new List<ISymptom>();
+
+            return null;
+        }
+
+        public static async Task<bool> AddSymptomAsync(ISymptom symptom) {
+
+        }
 
         //TODO: This is just for dummy data and should be connected to a database
         public static async Task<ICollection<IDisease>> getDiseases(){
