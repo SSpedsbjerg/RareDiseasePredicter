@@ -36,11 +36,10 @@ namespace RareDiseasePredicter.Controller {
                 command.ExecuteNonQuery();
 
                 createQuery = "CREATE TABLE Disease" +
-                    " (Name VARCHAR(512)," +
+                    " (ID int identity(1,1) not null primary key," +
                     " Description VARCHAR(MAX)," +
                     " Href VARCHAR(MAX)," +
-                    " ID int identity(1,1) not null primary key," +
-                    " FOREIGN KEY SymptomsIDs REFERENCES DiseaseSymptomsReference(ID)," +
+                    " Name VARCHAR(512)" +
                     " );";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
@@ -100,7 +99,6 @@ namespace RareDiseasePredicter.Controller {
                 foreach(ISymptom symptom in disease.GetSymptoms()) {
                     query = $"SELECT * FROM Symptoms WHERE ID = {symptom.ID};";
                     command.CommandText = query;
-                    
                     using (var reader = command.ExecuteReader()) {
                         bool found = false;
                         while(await reader.ReadAsync()) {
@@ -113,12 +111,18 @@ namespace RareDiseasePredicter.Controller {
                         }
                     }
                 }
-                query = "";
+                foreach(ISymptom symptom in disease.GetSymptoms()) {
+                    query = $"INSERT INTO DiseaseSymptomsReference ({disease.ID}, {symptom.ID});";
+                    command.CommandText = query;
+                    await command.ExecuteNonQueryAsync();
+                }
+                query = $"INSERT INTO Disease ({disease.ID}, {disease.Description}, {disease.Href}, {disease.Name});";
+                command.CommandText = query;
+                await command.ExecuteNonQueryAsync();
             }
             else {
                 return false;
             }
-
             return true;
         }
 
