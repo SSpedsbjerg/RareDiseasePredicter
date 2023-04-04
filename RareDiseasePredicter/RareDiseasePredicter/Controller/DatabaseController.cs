@@ -2,7 +2,7 @@
 using RareDiseasePredicter.Enums;
 using RareDiseasePredicter.Implementations;
 using RareDiseasePredicter.Interfaces;
-
+using System.Data;
 
 namespace RareDiseasePredicter.Controller {
     static class DatabaseController {
@@ -12,7 +12,7 @@ namespace RareDiseasePredicter.Controller {
         private static bool CreateConnection() {
             if (Connection == null) {
                 try {
-                    Connection = new SqliteConnection("Data Source = Database.db;Version=3;");
+                    Connection = new SqliteConnection("Data Source = Database.sqlite;Version=3;");
                     Connection.Open();
                     return true;
                 }
@@ -93,15 +93,33 @@ namespace RareDiseasePredicter.Controller {
         }
 
         public static async Task<bool> AddDiseaseAsync(IDisease disease) {
+            string query;
+            const int ID = 0;
+            var command = Connection.CreateCommand();
             if(CreateConnection()) {
-
+                foreach(ISymptom symptom in disease.GetSymptoms()) {
+                    query = $"SELECT * FROM Symptoms WHERE ID = {symptom.ID};";
+                    command.CommandText = query;
+                    
+                    using (var reader = command.ExecuteReader()) {
+                        bool found = false;
+                        while(await reader.ReadAsync()) {
+                            if (symptom.ID == reader.GetInt32(ID)) {
+                                found = true;
+                            }
+                        }
+                        if(!found) {
+                            throw new Exception($"{disease.Name} : {disease.ID} contains a Symptom ({symptom.Name} : {symptom.ID}) which does not have a maching ID with any other symptoms in the database");
+                        }
+                    }
+                }
+                query = "";
             }
             else {
-                return null;
+                return false;
             }
-            List<ISymptom> symptoms = new List<ISymptom>();
 
-            return null;
+            return true;
         }
 
         public static async Task<bool> AddSymptomAsync(ISymptom symptom) {
