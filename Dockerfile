@@ -11,4 +11,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 as runtime
 WORKDIR /publish
 COPY --from=build-env /publish .
 EXPOSE 57693
-ENTRYPOINT ["dotnet", "RareDiseasePredicter.dll"]
+ENTRYPOINT ["dotnet", "RareDiseasePredicter.dll", "--urls", "http://*:57693"]
