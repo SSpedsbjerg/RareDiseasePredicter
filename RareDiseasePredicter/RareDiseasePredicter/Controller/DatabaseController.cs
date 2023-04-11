@@ -25,7 +25,7 @@ namespace RareDiseasePredicter.Controller {
             }
         }
 
-        private static bool CreateTable() {
+        private static bool CreateTables() {
             try {
                 string createQuery;
                 createQuery = "CREATE TABLE DiseaseSymptomsReference (ID int identity(1,1) not null primary key," +
@@ -41,6 +41,14 @@ namespace RareDiseasePredicter.Controller {
                     " Href VARCHAR(MAX)," +
                     " Name VARCHAR(512)" +
                     " );";
+                command = Connection.CreateCommand();
+                command.CommandText = createQuery;
+                command.ExecuteNonQuery();
+
+                createQuery = "CREATE TABLE RegionSymptoms (" +
+                    "ID int identity(1,1) not null primary key," +
+                    "SymptomRef int not null," +
+                    "RegionRef int not null);";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
@@ -93,7 +101,6 @@ namespace RareDiseasePredicter.Controller {
 
         public static async Task<bool> AddDiseaseAsync(IDisease disease) {
             string query;
-            const int ID = 0;
             var command = Connection.CreateCommand();
             if(CreateConnection()) {
                 foreach(ISymptom symptom in disease.GetSymptoms()) {
@@ -102,7 +109,7 @@ namespace RareDiseasePredicter.Controller {
                     using (var reader = command.ExecuteReader()) {
                         bool found = false;
                         while(await reader.ReadAsync()) {
-                            if (symptom.ID == reader.GetInt32(ID)) {
+                            if (symptom.ID == reader.GetInt32(0)) {
                                 found = true;
                             }
                         }
@@ -127,7 +134,30 @@ namespace RareDiseasePredicter.Controller {
         }
 
         public static async Task<bool> AddSymptomAsync(ISymptom symptom) {
+            var command = Connection.CreateCommand();
+            foreach(IRegion region in symptom.Regions) {
+                if (await AddRegionAsync(region)) { Console.WriteLine($"Added {region.Name} to the database"); }
+            }
+            List<int> ids = new List<int>();
+            string query;
+            foreach(IRegion region in symptom.Regions) {
+                query = $"SELECT"
+            }
+            query = $"INSERT INTO Symptoms ({region}, {symptom.Name}, {symptom.Description})"
+        }
 
+        //Read all of the regions and if any matches, don't add it
+        public static async Task<bool> AddRegionAsync(IRegion region) {
+            var command = Connection.CreateCommand();
+            using (var reader = command.ExecuteReader()) {
+                while(await reader.ReadAsync()) {
+                    if (reader.GetString(1) == region.Name) {
+                        return false;
+                    }
+                }
+                command.CommandText = $"INSERT INTO Regions {region.Name};";
+                return true;
+            }
         }
 
         //TODO: This is just for dummy data and should be connected to a database
