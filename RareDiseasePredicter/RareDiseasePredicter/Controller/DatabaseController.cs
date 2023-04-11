@@ -55,12 +55,13 @@ namespace RareDiseasePredicter.Controller {
 
                 createQuery = "CREATE TABLE Regions (" +
                     " ID int identity(1,1) not null primary key," +
-                    " Name VARCHAR(512)" +
-                    ");";
+                    " Name VARCHAR(512)," +
+                    " SympRef int not null);";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
 
+                //TODO: Update Region to reference RegionSymptoms
                 createQuery = "CREATE TABLE Symptoms (" +
                     " ID int identity(1,1) not null primary key," +
                     " Region int FOREIGN KEY REFERENCES Regions(ID)," +
@@ -134,30 +135,91 @@ namespace RareDiseasePredicter.Controller {
         }
 
         public static async Task<bool> AddSymptomAsync(ISymptom symptom) {
+            try {
+                var command = Connection.CreateCommand();
+                foreach(IRegion region in symptom.Regions) {
+                    if(await AddRegionAsync(region)) { Console.WriteLine($"Added {region.Name} to the database"); }
+                }
+                List<IRegion> regions = (List<IRegion>)await GetRegionsAsync();
+                command.CommandText = "SELECT SymptomRef FROM RegionSymptoms";
+                int lastRefID = -1;
+                using(var reader = command.ExecuteReader()) {
+                    while(await reader.ReadAsync()) {
+                        lastRefID = reader.GetInt32(0);
+                    }
+                }
+                lastRefID++;
+                command.CommandText = $"INSERT INTO Symptoms {lastRefID}, {symptom.Name}, {symptom.Description}";
+                var query = command.ExecuteNonQueryAsync();
+                foreach(IRegion region in regions) {
+                    foreach(IRegion sympRegion in symptom.Regions) {
+                        if(region.ID == sympRegion.ID) {
+                            AddSympRegionReferenceAsync(sympRegion.ID, region.ID);
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        //Checks if the reference already exist, if not add it
+        private static async Task<bool> AddSympRegionReferenceAsync(int sympID, int regionID) {
             var command = Connection.CreateCommand();
-            foreach(IRegion region in symptom.Regions) {
-                if (await AddRegionAsync(region)) { Console.WriteLine($"Added {region.Name} to the database"); }
+            command.CommandText = "SELECT * FROM RegionSymptoms";
+            int id0 = -1;
+            int id1 = -1;
+            using ( var reader = command.ExecuteReader()) {
+                while (await reader.ReadAsync()) {
+                    id0 = reader.GetInt32(0);
+                    id1 = reader.GetInt32(1);
+                    if(id0 == sympID && id1 == regionID) return false;
+                }
             }
-            List<int> ids = new List<int>();
-            string query;
-            foreach(IRegion region in symptom.Regions) {
-                query = $"SELECT"
-            }
-            query = $"INSERT INTO Symptoms ({region}, {symptom.Name}, {symptom.Description})"
+            if(id0 == -1 || id1 == -1) return false;
+            command.CommandText = $"INSERT INTO RegionSymptoms {sympID}, {regionID}";
+            command.ExecuteNonQuery();
+            return true;
         }
 
         //Read all of the regions and if any matches, don't add it
         public static async Task<bool> AddRegionAsync(IRegion region) {
             var command = Connection.CreateCommand();
+            command.CommandText = "SELECT Name FROM Regions";
             using (var reader = command.ExecuteReader()) {
                 while(await reader.ReadAsync()) {
-                    if (reader.GetString(1) == region.Name) {
+                    if (reader.GetString(0) == region.Name) {
                         return false;
                     }
                 }
-                command.CommandText = $"INSERT INTO Regions {region.Name};";
+
+                command.CommandText = "SELECT SymptomRef FROM RegionSymptoms";
+                int lastRefID = -1;
+                using(var reader_ = command.ExecuteReader()) {
+                    while(await reader_.ReadAsync()) {
+                        lastRefID = reader_.GetInt32(1);
+                    }
+                }
+                lastRefID++;
+
+                command.CommandText = $"INSERT INTO Regions {region.Name}, {lastRefID};";
+                await command.ExecuteNonQueryAsync();
                 return true;
             }
+        }
+
+        public static async Task<ICollection<IRegion>> GetRegionsAsync() {
+            List<IRegion> regions = new List<IRegion>();
+            var command = Connection.CreateCommand();
+            using (var reader = command.ExecuteReader()) {  
+                while(await reader.ReadAsync()) {
+                    regions.Add(new Implementations.Region(reader.GetString(1), reader.GetInt32(0)));
+                }
+            }
+            return regions;
         }
 
         //TODO: This is just for dummy data and should be connected to a database
