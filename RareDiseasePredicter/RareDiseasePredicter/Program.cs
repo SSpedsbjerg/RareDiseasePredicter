@@ -15,8 +15,8 @@ internal class Program {
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,
                               policy => {
-                                  policy.WithOrigins("http://localhost:57694",
-                                                      "http://localhost:57693");
+                                  policy.WithOrigins("http://localhost:50000",
+                                                      "http://localhost:8080");
                               });
         });
 
