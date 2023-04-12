@@ -35,10 +35,9 @@ function autocomplete(inp, arr) {
                 closeAllLists();
             });
 
-            a.appendChild(b);
-            count++;
-
             if (count<maxcount){
+              a.appendChild(b);
+              count++;
             }
           }
 
