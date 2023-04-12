@@ -2,7 +2,7 @@
 
 namespace RareDiseasePredicter {
     public static class Log {
-        public static async Task<bool> LogError(Exception exception, string className, string description) {
+        public static async Task<bool> Error(Exception exception, string className, string description) {
             try {
                 StreamWriter streamWriter = new StreamWriter("ErrorLog.txt");
                 var write = streamWriter.WriteLineAsync($"----------{DateTime.Now:yyyy-MM-dd hh:mm:ss}----------\n{exception}\n{className}\n{description}");
@@ -16,7 +16,7 @@ namespace RareDiseasePredicter {
                 }
             }
 
-        public static async Task<bool> LogWarning(string warning, string className, string description) {
+        public static async Task<bool> Warning(string warning, string className, string description) {
             try {
                 StreamWriter streamWriter = new StreamWriter("WarningLog.txt");
                 var write = streamWriter.WriteLineAsync($"----------{DateTime.Now:yyyy-MM-dd hh:mm:ss}----------\n{warning}\n{className}\n{description}");

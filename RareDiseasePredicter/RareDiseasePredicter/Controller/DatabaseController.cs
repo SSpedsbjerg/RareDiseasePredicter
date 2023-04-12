@@ -1,8 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
-using RareDiseasePredicter.Enums;
-using RareDiseasePredicter.Implementations;
 using RareDiseasePredicter.Interfaces;
-using System.Data;
 
 namespace RareDiseasePredicter.Controller {
     static class DatabaseController {
@@ -80,24 +77,23 @@ namespace RareDiseasePredicter.Controller {
         }
 
         public static async Task<ICollection<ISymptom>> GetSymptomsAsync() {
+
             if(CreateConnection()) {
 
             }
             else {
                 return null;
             }
-            List<ISymptom> symptoms = new List<ISymptom>();
+            List<ISymptom> symptoms = new();
 
             return null;
         }
 
         public static async Task<bool> AddDiseaseAsync(IDisease disease) {
-            string query;
             var command = Connection.CreateCommand();
             if(CreateConnection()) {
                 foreach(ISymptom symptom in disease.GetSymptoms()) {
-                    query = $"SELECT * FROM Symptoms WHERE ID = {symptom.ID};";
-                    command.CommandText = query;
+                    command.CommandText = $"SELECT * FROM Symptoms WHERE ID = {symptom.ID};";
                     using (var reader = command.ExecuteReader()) {
                         bool found = false;
                         while(await reader.ReadAsync()) {
@@ -106,32 +102,45 @@ namespace RareDiseasePredicter.Controller {
                             }
                         }
                         if(!found) {
-                            throw new Exception($"{disease.Name} : {disease.ID} contains a Symptom ({symptom.Name} : {symptom.ID}) which does not have a maching ID with any other symptoms in the database");
+                            _ = Log.Error(new Exception($"{disease.Name} : {disease.ID} contains a Symptom ({symptom.Name} : {symptom.ID}) which does not have a maching ID with any other symptoms in the database"), "AddDiseaseAsync", "This method does not automaticly add a new Symptom because expected higher risk of repeated Symptoms");
                         }
                     }
                 }
                 foreach(ISymptom symptom in disease.GetSymptoms()) {
-                    query = $"INSERT INTO DiseaseSymptomsReference ({disease.ID}, {symptom.ID});";
-                    command.CommandText = query;
+                    command.CommandText = $"INSERT INTO DiseaseSymptomsReference ({disease.ID}, {symptom.ID});";
                     await command.ExecuteNonQueryAsync();
                 }
-                query = $"INSERT INTO Disease ({disease.ID}, {disease.Description}, {disease.Href}, {disease.Name});";
-                command.CommandText = query;
+                command.CommandText = $"INSERT INTO Disease ({disease.ID}, {disease.Description}, {disease.Href}, {disease.Name});";
                 await command.ExecuteNonQueryAsync();
             }
             else {
+                _ = Log.Error(new Exception("Could not create connection to database"), "AddDiseaseAsync", "");
                 return false;
             }
             return true;
         }
 
         public static async Task<bool> AddSymptomAsync(ISymptom symptom) {
+            if (!CreateConnection()) {
+                _ = Log.Error(new Exception("Could not create connection to database"), "AddSymptomAsync", "");
+                return false;
+                }
             try {
                 var command = Connection.CreateCommand();
                 foreach(IRegion region in symptom.Regions) {
-                    if(await AddRegionAsync(region)) { Console.WriteLine($"Added {region.Name} to the database"); }
+                    if(await AddRegionAsync(region)) {
+                        Console.WriteLine($"Added {region.Name} to the database");
+                        _ = Log.Warning("Added a Region through AddSymptom", "AddSymptomAsync", "Risk of repeated Region");
+                        }
                 }
-                List<IRegion> regions = (List<IRegion>)await GetRegionsAsync();
+                command.CommandText = "SELECT ID FROM Symptoms";
+                using (var reader = command.ExecuteReader()) {
+                    if (reader.GetInt32(0) == symptom.ID) {
+                        _ = Log.Warning("Tried to add a symptom which already exist", "AddSymptomAsync", "");
+                        return false;
+                        }
+                    }
+                var regions = GetRegionsAsync();
                 command.CommandText = "SELECT SymptomRef FROM RegionSymptoms";
                 int lastRefID = -1;
                 using(var reader = command.ExecuteReader()) {
@@ -139,19 +148,26 @@ namespace RareDiseasePredicter.Controller {
                         lastRefID = reader.GetInt32(0);
                     }
                 }
+                if (lastRefID == -1 ) {
+                    _=Log.Error(new Exception($"lasRefID was {lastRefID}"), "AddSymptomAsync", "");
+                    return false;
+                    }
                 lastRefID++;
                 command.CommandText = $"INSERT INTO Symptoms {lastRefID}, {symptom.Name}, {symptom.Description}";
                 var query = command.ExecuteNonQueryAsync();
-                foreach(IRegion region in regions) {
+                List<IRegion> _regions = (List<IRegion>)await regions;
+                foreach(IRegion region in _regions) {
                     foreach(IRegion sympRegion in symptom.Regions) {
                         if(region.ID == sympRegion.ID) {
-                            AddSympRegionReferenceAsync(sympRegion.ID, region.ID);
+                            await AddSympRegionReferenceAsync(lastRefID, region.ID);
                         }
                     }
                 }
+                await query;
                 return true;
             }
             catch (Exception ex) {
+                _ = Log.Error(ex, "AddSymptomAsync", "");
                 Console.WriteLine(ex.Message);
                 return false;
             }
@@ -159,6 +175,10 @@ namespace RareDiseasePredicter.Controller {
 
         //Checks if the reference already exist, if not add it
         private static async Task<bool> AddSympRegionReferenceAsync(int sympID, int regionID) {
+            if(!CreateConnection()) {
+                _ = Log.Error(new Exception("Could not create connection to database"), "AddSympRegionReferenceAsync", "");
+                return false;
+                }
             var command = Connection.CreateCommand();
             command.CommandText = "SELECT * FROM RegionSymptoms";
             int id0 = -1;
@@ -167,10 +187,16 @@ namespace RareDiseasePredicter.Controller {
                 while (await reader.ReadAsync()) {
                     id0 = reader.GetInt32(0);
                     id1 = reader.GetInt32(1);
-                    if(id0 == sympID && id1 == regionID) return false;
-                }
+                    if(id0 == sympID && id1 == regionID) {
+                        _ = Log.Warning("Tried to add a SympRegion Reference that already exist", "AddSympRegionReferenceAsync", "");
+                        return false;
+                        }
+                    }
             }
-            if(id0 == -1 || id1 == -1) return false;
+            if(id0 == -1 || id1 == -1) {
+                _ = Log.Error(new Exception($"id0 had the value of {id0} and id1 had the value of {id1}"), "AddSympRegionReferenceAsync", "Failed in reading RegionSymptoms from database");
+                return false;
+                }
             command.CommandText = $"INSERT INTO RegionSymptoms {sympID}, {regionID}";
             command.ExecuteNonQuery();
             return true;
@@ -178,11 +204,16 @@ namespace RareDiseasePredicter.Controller {
 
         //Read all of the regions and if any matches, don't add it
         public static async Task<bool> AddRegionAsync(IRegion region) {
+            if(!CreateConnection()) {
+                _ = Log.Error(new Exception("Could not create connection to database"), "AddRegionAsync", "");
+                return false;
+                }
             var command = Connection.CreateCommand();
             command.CommandText = "SELECT Name FROM Regions";
             using (var reader = command.ExecuteReader()) {
                 while(await reader.ReadAsync()) {
                     if (reader.GetString(0) == region.Name) {
+                        _ = Log.Warning("Tried to add a Region that already exist", "AddRegionAsync", "");
                         return false;
                     }
                 }
@@ -194,6 +225,11 @@ namespace RareDiseasePredicter.Controller {
                         lastRefID = reader_.GetInt32(1);
                     }
                 }
+                if (lastRefID == -1) {
+                    _ = Log.Error(new Exception("lastRefID was -1"), "AddRegionAsync", "");
+                    return false;
+                    }
+
                 lastRefID++;
 
                 command.CommandText = $"INSERT INTO Regions {region.Name}, {lastRefID};";
