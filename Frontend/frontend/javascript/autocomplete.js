@@ -3,7 +3,7 @@ function autocomplete(inp, arr) {
     var currentFocus;
     //execute a function when someone writes in the text field
     inp.addEventListener("input", function(e) {
-        var a, b, i, count = 0,
+        var a, b, i, count = 0, maxcount = 5,
         val = this.value;
         //close any already open lists of autocompleted values
         closeAllLists();
@@ -35,10 +35,9 @@ function autocomplete(inp, arr) {
                 closeAllLists();
             });
 
-            a.appendChild(b);
-            count++;
-
-            if (count<5){
+            if (count<maxcount){
+              a.appendChild(b);
+              count++;
             }
           }
 

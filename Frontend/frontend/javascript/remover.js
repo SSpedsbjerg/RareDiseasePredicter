@@ -1,3 +1,4 @@
+//Create new row with symptom and region in table "symptomtable"
 function appen() {
     var table = document.getElementById("symptomtable");
     var str1 = document.getElementById("region");
@@ -14,9 +15,8 @@ function appen() {
     str2.value = "";
     str1.value = "";
   }
-
-  function deleteRowFunction(o) {
-    //no clue what to put here?
-    var p=o.parentNode.parentNode;
-        p.parentNode.removeChild(p);
+ //Get rows' parent and delete the child (row) as parent
+  function deleteRowFunction(row) {
+    var parent=row.parentNode.parentNode;
+        parent.parentNode.removeChild(parent);
    }
