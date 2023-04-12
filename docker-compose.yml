@@ -1,0 +1,11 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  backend:
+    build: .
+    ports:
+      - "50000:57693"
+
+  frontend:
+    build: ./Frontend
+    ports:
+        - "8080:80"
