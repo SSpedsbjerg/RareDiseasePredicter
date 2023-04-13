@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using RareDiseasePredicter.Implementations;
 using RareDiseasePredicter.Interfaces;
 
 namespace RareDiseasePredicter.Controller {
@@ -13,7 +14,8 @@ namespace RareDiseasePredicter.Controller {
                     Connection.Open();
                     return true;
                 }
-                catch {
+                catch(Exception e) {
+                    _ = Log.Error(e, "CreateConnection", e.Message);
                     return false;
                 }
             }
@@ -77,16 +79,45 @@ namespace RareDiseasePredicter.Controller {
         }
 
         public static async Task<ICollection<ISymptom>> GetSymptomsAsync() {
-
+            List<ISymptom> symptomList = new List<ISymptom>();
+            List<int> regionIDs = new List<int>();
             if(CreateConnection()) {
-
+                var command = Connection.CreateCommand();
+                command.CommandText = "SELECT * FROM Symptoms";
+                using (var reader = command.ExecuteReader()) {
+                    while (reader.Read()) {
+                        string name = reader.GetString(2);
+                        int id = reader.GetInt32(0);
+                        string description = reader.GetString(3);
+                        ISymptom symptom = new Symptom(name) {
+                            Description = description
+                            };
+                        symptom.ID = id;
+                        symptomList.Add(symptom);
+                        regionIDs.Add(reader.GetInt32(1));
+                        }
+                    }
+                command.CommandText = "SELECT * FROM RegionSymptoms";
+                List<Tuple<int, IRegion>> regionTuples = (List<Tuple<int, IRegion>>)await GetRegionTuplesAsync();
+                using (var reader = command.ExecuteReader()) {
+                    int runs = 0;
+                    while(reader.Read()) {
+                        foreach(ISymptom symptom in symptomList) {
+                            if(reader.GetInt32(1) == regionIDs[runs]) {
+                                if (reader.GetInt32(2) == regionTuples[runs].Item1) {
+                                    symptom.AddRegion(regionTuples[runs].Item2); //This one will be funny to debug if there is an error
+                                    }
+                                }
+                            }
+                        runs++;
+                        }
+                    }
             }
             else {
+                _ = Log.Error(new Exception("Could not create Connection"), "GetSymptomsAsync", "");
                 return null;
             }
-            List<ISymptom> symptoms = new();
-
-            return null;
+            return symptomList;
         }
 
         public static async Task<bool> AddDiseaseAsync(IDisease disease) {
@@ -239,11 +270,31 @@ namespace RareDiseasePredicter.Controller {
         }
 
         public static async Task<ICollection<IRegion>> GetRegionsAsync() {
+            if(!CreateConnection()) {
+                _ = Log.Error(new Exception("Could not create connection"), "GetRegionsAsync", "");
+                return null;
+                }
             List<IRegion> regions = new List<IRegion>();
             var command = Connection.CreateCommand();
+            command.CommandText = "SELECT * FROM Regions";
             using (var reader = command.ExecuteReader()) {  
                 while(await reader.ReadAsync()) {
-                    regions.Add(new Implementations.Region(reader.GetString(1), reader.GetInt32(0)));
+                    regions.Add(new Region(reader.GetString(1), reader.GetInt32(0)));
+                }
+            }
+            return regions;
+        }
+        public static async Task<ICollection<Tuple<int, IRegion>>> GetRegionTuplesAsync() {
+            if(!CreateConnection()) {
+                _ = Log.Error(new Exception("Could not create connection"), "GetRegionTuplesAsync", "");
+                return null;
+                }
+            List<Tuple<int, IRegion>> regions = new List<Tuple<int, IRegion>>();
+            var command = Connection.CreateCommand();
+            command.CommandText = "SELECT * FROM Regions";
+            using (var reader = command.ExecuteReader()) {  
+                while(await reader.ReadAsync()) {
+                    regions.Add(new Tuple<int, IRegion>(reader.GetInt32(2) ,new Region(reader.GetString(1), reader.GetInt32(0))));
                 }
             }
             return regions;
