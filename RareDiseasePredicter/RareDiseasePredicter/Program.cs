@@ -9,6 +9,17 @@ internal class Program {
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddEndpointsApiExplorer();
 
+        var MyAllowSpecificOrigins = "AllowCore";
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                              policy => {
+                                  policy.WithOrigins("http://localhost:50000",
+                                                      "http://localhost:8080");
+                              });
+        });
+
         // Add services to the container.
 
         builder.Services.AddControllers();
@@ -16,6 +27,8 @@ internal class Program {
         var app = builder.Build();
 
         app.UseHttpsRedirection();
+
+        app.UseCors(MyAllowSpecificOrigins);
 
         app.UseAuthorization();
 
