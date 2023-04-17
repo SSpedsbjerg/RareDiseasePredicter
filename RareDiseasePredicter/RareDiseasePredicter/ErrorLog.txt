@@ -1,0 +1,92 @@
+----------2023-04-17 09.47.01----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 09.50.03----------
+System.ArgumentException: Connection string keyword 'version' is not supported. For a possible alternative, see https://go.microsoft.com/fwlink/?linkid=2142181.
+   at Microsoft.Data.Sqlite.SqliteConnectionStringBuilder.GetIndex(String keyword)
+   at Microsoft.Data.Sqlite.SqliteConnectionStringBuilder.set_Item(String keyword, Object value)
+   at System.Data.Common.DbConnectionStringBuilder.set_ConnectionString(String value)
+   at Microsoft.Data.Sqlite.SqliteConnectionStringBuilder..ctor(String connectionString)
+   at Microsoft.Data.Sqlite.SqliteConnectionFactory.GetPoolGroup(String connectionString)
+   at Microsoft.Data.Sqlite.SqliteConnection.set_ConnectionString(String value)
+   at Microsoft.Data.Sqlite.SqliteConnection..ctor(String connectionString)
+   at RareDiseasePredicter.Controller.DatabaseController.CreateConnection() in C:\Users\simon\Documents\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DatabaseController.cs:line 22
+CreateConnection
+Connection string keyword 'version' is not supported. For a possible alternative, see https://go.microsoft.com/fwlink/?linkid=2142181.
+----------2023-04-17 09.50.03----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 09.55.28----------
+System.Exception: You need to call SQLitePCL.raw.SetProvider().  If you are using a bundle package, this is done by calling SQLitePCL.Batteries.Init().
+   at SQLitePCL.raw.get_Provider()
+   at SQLitePCL.raw.sqlite3_open_v2(utf8z filename, sqlite3& db, Int32 flags, utf8z vfs)
+   at SQLitePCL.raw.sqlite3_open_v2(String filename, sqlite3& db, Int32 flags, String vfs)
+   at Microsoft.Data.Sqlite.SqliteConnectionInternal..ctor(SqliteConnectionStringBuilder connectionOptions, SqliteConnectionPool pool)
+   at Microsoft.Data.Sqlite.SqliteConnectionPool.GetConnection()
+   at Microsoft.Data.Sqlite.SqliteConnectionFactory.GetConnection(SqliteConnection outerConnection)
+   at Microsoft.Data.Sqlite.SqliteConnection.Open()
+   at RareDiseasePredicter.Controller.DatabaseController.CreateConnection() in C:\Users\simon\Documents\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DatabaseController.cs:line 23
+CreateConnection
+You need to call SQLitePCL.raw.SetProvider().  If you are using a bundle package, this is done by calling SQLitePCL.Batteries.Init().
+----------2023-04-17 09.55.28----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 09.57.37----------
+System.Exception: You need to call SQLitePCL.raw.SetProvider().  If you are using a bundle package, this is done by calling SQLitePCL.Batteries.Init().
+   at SQLitePCL.raw.get_Provider()
+   at SQLitePCL.raw.sqlite3_open_v2(utf8z filename, sqlite3& db, Int32 flags, utf8z vfs)
+   at SQLitePCL.raw.sqlite3_open_v2(String filename, sqlite3& db, Int32 flags, String vfs)
+   at Microsoft.Data.Sqlite.SqliteConnectionInternal..ctor(SqliteConnectionStringBuilder connectionOptions, SqliteConnectionPool pool)
+   at Microsoft.Data.Sqlite.SqliteConnectionPool.GetConnection()
+   at Microsoft.Data.Sqlite.SqliteConnectionFactory.GetConnection(SqliteConnection outerConnection)
+   at Microsoft.Data.Sqlite.SqliteConnection.Open()
+   at RareDiseasePredicter.Controller.DatabaseController.CreateConnection() in C:\Users\simon\Documents\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DatabaseController.cs:line 23
+CreateConnection
+You need to call SQLitePCL.raw.SetProvider().  If you are using a bundle package, this is done by calling SQLitePCL.Batteries.Init().
+----------2023-04-17 09.57.37----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.00.18----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.04.03----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.04.36----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.10.41----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.14.35----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.14.41----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.15.52----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.16.17----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.17.30----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2023-04-17 10.19.54----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database

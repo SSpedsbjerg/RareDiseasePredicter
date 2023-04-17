@@ -7,10 +7,16 @@ namespace RareDiseasePredicter.Controller {
 
         private static SqliteConnection Connection;
 
+        public static bool Start() {
+            if (!CreateConnection()) return false;
+            if (!CreateTables()) return false;
+            return true;
+            }
+
         private static bool CreateConnection() {
             if (Connection == null) {
                 try {
-                    Connection = new SqliteConnection("Data Source = Database.sqlite;Version=3;");
+                    Connection = new SqliteConnection("Data Source = Database.db");
                     Connection.Open();
                     return true;
                 }
@@ -27,45 +33,42 @@ namespace RareDiseasePredicter.Controller {
         private static bool CreateTables() {
             try {
                 string createQuery;
-                createQuery = "CREATE TABLE DiseaseSymptomsReference (ID int identity(1,1) not null primary key," +
-                    "DiseaseID int not null," +
-                    "SymptomID int not null);";
+                createQuery = "CREATE TABLE IF NOT EXISTS DiseaseSymptomsReference " +
+                    "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "DiseaseID INTEGER NOT NULL, " +
+                    "SymptomID INTEGER NOT NULL);";
                 var command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
-
-                createQuery = "CREATE TABLE Disease" +
-                    " (ID int identity(1,1) not null primary key," +
-                    " Description VARCHAR(MAX)," +
-                    " Href VARCHAR(MAX)," +
-                    " Name VARCHAR(512)" +
+                createQuery = "CREATE TABLE IF NOT EXISTS Disease" +
+                    " (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    " Description TEXT," +
+                    " Href TEXT," +
+                    " Name TEXT" +
                     " );";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
-
-                createQuery = "CREATE TABLE RegionSymptoms (" +
-                    "ID int identity(1,1) not null primary key," +
-                    "SymptomRef int not null," +
-                    "RegionRef int not null);";
+                createQuery = "CREATE TABLE IF NOT EXISTS RegionSymptoms (" +
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "SymptomRef INTEGER NOT NULL, " +
+                    "RegionRef INTEGER NOT NULL);";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
-
-                createQuery = "CREATE TABLE Regions (" +
-                    " ID int identity(1,1) not null primary key," +
-                    " Name VARCHAR(512)," +
-                    " SympRef int not null);";
+                createQuery = "CREATE TABLE IF NOT EXISTS Regions (" +
+                    " ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                    " Name TEXT," +
+                    " SympRef INTEGER NOT NULL);";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
-
                 //TODO: Update Region to reference RegionSymptoms
-                createQuery = "CREATE TABLE Symptoms (" +
-                    " ID int identity(1,1) not null primary key," +
-                    " Region int NOT NULL," +
-                    " Name VARCHAR(MAX)," +
-                    " Description VARCHAR(MAX)," +
+                createQuery = "CREATE TABLE IF NOT EXISTS Symptoms (" +
+                    " ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                    " Region INTEGER NOT NULL," +
+                    " Name TEXT," +
+                    " Description TEXT" +
                     " );";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
@@ -77,6 +80,50 @@ namespace RareDiseasePredicter.Controller {
             }
 
         }
+
+        public static async Task<ICollection<IDisease>> GetDiseaseAsync() {
+            List<IDisease> diseaseList = new List<IDisease>();
+            //List<int> regionIDs = new List<int>();
+            if(CreateConnection()) {
+                var command = Connection.CreateCommand();
+                command.CommandText = "SELECT * FROM Disease";
+                using(var reader = command.ExecuteReader()) {
+                    while(reader.Read()) {
+                        string href = reader.GetString(2);
+                        int id = reader.GetInt32(0);
+                        string description = reader.GetString(1);
+                        string name = reader.GetString(3);
+                        var disease = new Disease();
+                        disease.SetID(id);
+                        disease.Name = name;
+                        disease.Href = href;
+                        disease.Description = description;
+                        diseaseList.Add(disease);
+                        }
+                    }
+                command.CommandText = "SELECT * FROM DiseaseSymptomsReference";
+                List<ISymptom> symptoms = (List<ISymptom>)await GetSymptomsAsync();
+                using(var reader = command.ExecuteReader()) {
+                    int runs = 0;
+                    while(reader.Read()) {
+                        foreach(IDisease disease in diseaseList) {
+                            if (disease.ID == reader.GetInt32(1)) {
+                                foreach (ISymptom symptom in symptoms) {
+                                    if (symptom.ID == reader.GetInt32(2)) {
+                                        disease.AddSymptoms(symptom);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            else {
+                _ = Log.Error(new Exception("Could not create Connection"), "GetSymptomsAsync", "");
+                return null;
+                }
+            return diseaseList;
+            }
 
         public static async Task<ICollection<ISymptom>> GetSymptomsAsync() {
             List<ISymptom> symptomList = new List<ISymptom>();

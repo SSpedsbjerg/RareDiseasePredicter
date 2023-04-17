@@ -33,6 +33,8 @@ namespace RareDiseasePredicter.Implementations {
             set { this.symptoms = (List<ISymptom>)value; }
             }
 
+        public Disease(string Name) { this.Name = Name; }
+
         public Disease(string name, List<ISymptom> symptoms) {
             this.name = name;
             this.symptoms = symptoms;
