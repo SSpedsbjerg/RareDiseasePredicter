@@ -1,0 +1,40 @@
+----------2023-04-18 10.37.45----------
+Tried to add a Region that already exist
+AddRegionAsync
+
+----------2023-04-18 10.37.45----------
+Tried to add a Region that already exist
+AddRegionAsync
+
+----------2023-04-18 10.37.45----------
+Tried to add a Region that already exist
+AddRegionAsync
+
+----------2023-04-18 10.48.04----------
+Tried to add a Region that already exist
+AddRegionAsync
+
+----------2023-04-18 10.48.04----------
+Tried to add a Region that already exist
+AddRegionAsync
+
+----------2023-04-18 10.48.04----------
+Tried to add a Region that already exist
+AddRegionAsync
+
+----------2023-04-18 10.50.32----------
+Tried to add a Region that already exist
+AddRegionAsync
+
+----------2023-04-18 10.50.32----------
+Tried to add a Region that already exist
+AddRegionAsync
+
+----------2023-04-18 10.50.32----------
+Tried to add a Region that already exist
+AddRegionAsync
+
+----------2023-04-18 11.07.18----------
+Start
+0
+0

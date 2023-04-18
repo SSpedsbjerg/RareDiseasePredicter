@@ -21,9 +21,36 @@ namespace RareDiseasePredicter.Controller {
             Console.WriteLine(name);
             bool success = await DatabaseController.AddRegionAsync(new Region(name, -1));
             if (success) {
-                return name;
+                return "200";
                 }
-            return name;//update to fit with documentation
+            return "500";//update to fit with documentation
+            }
+
+        [HttpGet]
+        [Route("/AddSymptom/{name}+{Description}+{Regions}")]
+        public async Task<string> AddSymptom([FromRoute]string name, string description, string regions) {
+            Console.WriteLine($"{name}, {description}, {regions}");
+            Task<ICollection<IRegion>> dbRegions = DatabaseController.GetRegionsAsync();
+            ISymptom symptom = new Symptom(name);
+            symptom.Description = description;
+            string[] regionsArray = regions.Split(',');
+            List<int> regionIDs = new List<int>();
+            foreach (string region in regionsArray) {
+                regionIDs.Add(int.Parse(region));
+                }
+            foreach (int regionID in regionIDs) {
+                foreach (IRegion region in await dbRegions) {
+                    if (regionID == region.ID) {
+                        symptom.AddRegion(region);
+                        }
+                    }
+                }
+            symptom.ID = -1;
+            bool success = await DatabaseController.AddSymptomAsync(symptom);
+            if(success) {
+                return "200";
+                }
+            return $"400"; //update to fit with documentation
             }
         
         [HttpGet]

@@ -94,3 +94,37 @@ Unknow reason for not being able to start database
 System.Exception: lastRefID was -1
 AddRegionAsync
 
+----------2023-04-18 10.37.45----------
+System.InvalidOperationException: No data exists for the row/column.
+   at Microsoft.Data.Sqlite.SqliteDataRecord.IsDBNull(Int32 ordinal)
+   at Microsoft.Data.Sqlite.SqliteValueReader.GetInt64(Int32 ordinal)
+   at Microsoft.Data.Sqlite.SqliteValueReader.GetInt32(Int32 ordinal)
+   at Microsoft.Data.Sqlite.SqliteDataReader.GetInt32(Int32 ordinal)
+   at RareDiseasePredicter.Controller.DatabaseController.AddSymptomAsync(ISymptom symptom) in C:\Users\simon\Documents\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DatabaseController.cs:line 216
+AddSymptomAsync
+
+----------2023-04-18 10.48.04----------
+System.Exception: id0 had the value of -1 and id1 had the value of -1
+AddSympRegionReferenceAsync
+Failed in reading RegionSymptoms from database
+----------2023-04-18 10.48.04----------
+System.Exception: id0 had the value of -1 and id1 had the value of -1
+AddSympRegionReferenceAsync
+Failed in reading RegionSymptoms from database
+----------2023-04-18 10.48.04----------
+System.Exception: id0 had the value of -1 and id1 had the value of -1
+AddSympRegionReferenceAsync
+Failed in reading RegionSymptoms from database
+----------2023-04-18 10.50.32----------
+Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'near "1": syntax error'.
+   at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+   at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteCommand.GetStatements(Stopwatch timer)+MoveNext()
+   at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader()
+   at Microsoft.Data.Sqlite.SqliteCommand.ExecuteNonQuery()
+   at RareDiseasePredicter.Controller.DatabaseController.AddSympRegionReferenceAsync(Int32 sympID, Int32 regionID) in C:\Users\simon\Documents\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DatabaseController.cs:line 291
+   at RareDiseasePredicter.Controller.DatabaseController.AddSymptomAsync(ISymptom symptom) in C:\Users\simon\Documents\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DatabaseController.cs:line 247
+AddSymptomAsync
+

@@ -148,11 +148,14 @@ namespace RareDiseasePredicter.Controller {
                 List<Tuple<int, IRegion>> regionTuples = (List<Tuple<int, IRegion>>)await GetRegionTuplesAsync();
                 using (var reader = command.ExecuteReader()) {
                     int runs = 0;
+                    _ = Log.Warning("Start", "0", "0");
                     while(reader.Read()) {
+                        _ = Log.Warning("yes", "0", "0");
                         foreach(ISymptom symptom in symptomList) {
                             if(reader.GetInt32(1) == regionIDs[runs]) {
                                 if (reader.GetInt32(2) == regionTuples[runs].Item1) {
                                     symptom.AddRegion(regionTuples[runs].Item2); //This one will be funny to debug if there is an error
+                                    _ = Log.Warning("yes", "1", "1");
                                     }
                                 }
                             }
@@ -213,25 +216,32 @@ namespace RareDiseasePredicter.Controller {
                 }
                 command.CommandText = "SELECT ID FROM Symptoms";
                 using (var reader = command.ExecuteReader()) {
-                    if (reader.GetInt32(0) == symptom.ID) {
-                        _ = Log.Warning("Tried to add a symptom which already exist", "AddSymptomAsync", "");
-                        return false;
+                    while(reader.Read()) {
+                        if(reader.GetInt32(0) == symptom.ID) {
+                            _ = Log.Warning("Tried to add a symptom which already exist", "AddSymptomAsync", "");
+                            return false;
+                            }
                         }
                     }
                 var regions = GetRegionsAsync();
                 command.CommandText = "SELECT SymptomRef FROM RegionSymptoms";
                 int lastRefID = -1;
+                bool hasData = false;
                 using(var reader = command.ExecuteReader()) {
-                    while(await reader.ReadAsync()) {
+                    while(reader.Read()) {
+                        hasData = true;
                         lastRefID = reader.GetInt32(0);
                     }
+                    if (!hasData) {
+                        lastRefID= 0;
+                        }
                 }
                 if (lastRefID == -1 ) {
                     _=Log.Error(new Exception($"lasRefID was {lastRefID}"), "AddSymptomAsync", "");
                     return false;
                     }
                 lastRefID++;
-                command.CommandText = $"INSERT INTO Symptoms {lastRefID}, {symptom.Name}, {symptom.Description}";
+                command.CommandText = $"INSERT INTO Symptoms (Region, Name, Description) VALUES ('{lastRefID}', '{symptom.Name}', '{symptom.Description}')";
                 var query = command.ExecuteNonQueryAsync();
                 List<IRegion> _regions = (List<IRegion>)await regions;
                 foreach(IRegion region in _regions) {
@@ -261,8 +271,10 @@ namespace RareDiseasePredicter.Controller {
             command.CommandText = "SELECT * FROM RegionSymptoms";
             int id0 = -1;
             int id1 = -1;
+            bool hasData = false;
             using ( var reader = command.ExecuteReader()) {
                 while (await reader.ReadAsync()) {
+                    hasData = true;
                     id0 = reader.GetInt32(0);
                     id1 = reader.GetInt32(1);
                     if(id0 == sympID && id1 == regionID) {
@@ -271,11 +283,14 @@ namespace RareDiseasePredicter.Controller {
                         }
                     }
             }
+            if (!hasData) {
+                id0 = 0; id1 = 0;
+                }
             if(id0 == -1 || id1 == -1) {
                 _ = Log.Error(new Exception($"id0 had the value of {id0} and id1 had the value of {id1}"), "AddSympRegionReferenceAsync", "Failed in reading RegionSymptoms from database");
                 return false;
                 }
-            command.CommandText = $"INSERT INTO RegionSymptoms {sympID}, {regionID}";
+            command.CommandText = $"INSERT INTO RegionSymptoms (SymptomRef, RegionRef) VALUES ({sympID}, {regionID})";
             command.ExecuteNonQuery();
             return true;
         }
