@@ -15,15 +15,15 @@ namespace RareDiseasePredicter.Controller {
             return Task.FromResult("200");
             }
 
-        [HttpPost]
-        [Route("/AddRegion")]
-        public async Task<string> AddRegion([FromBody]string name) {
+        [HttpGet]
+        [Route("/AddRegion/{name}")]
+        public async Task<string> AddRegion([FromRoute]string name) {
             Console.WriteLine(name);
             bool success = await DatabaseController.AddRegionAsync(new Region(name, -1));
             if (success) {
-                return "200";
+                return name;
                 }
-            return "400";//update to fit with documentation
+            return name;//update to fit with documentation
             }
         
         [HttpGet]
@@ -40,6 +40,14 @@ namespace RareDiseasePredicter.Controller {
         [Route("/Drop")]
         public async Task<string> DropTables() {
             return "500";
+            }
+
+        [HttpGet]
+        [Route("/Regions")]
+        public async Task<string> GetRegions() {
+            List<IRegion> regions = await DatabaseController.GetRegionsAsync() as List<IRegion>;
+            string jsonString = JsonSerializer.Serialize(regions);
+            return jsonString;
             }
 
         [HttpGet]

@@ -90,3 +90,7 @@ Unknow reason for not being able to start database
 System.Exception: Could not start database
 Program
 Unknow reason for not being able to start database
+----------2023-04-18 09.57.40----------
+System.Exception: lastRefID was -1
+AddRegionAsync
+

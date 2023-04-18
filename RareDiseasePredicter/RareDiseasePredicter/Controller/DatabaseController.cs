@@ -295,26 +295,30 @@ namespace RareDiseasePredicter.Controller {
                         return false;
                     }
                 }
-
-                command.CommandText = "SELECT SymptomRef FROM RegionSymptoms";
-                int lastRefID = -1;
-                using(var reader_ = command.ExecuteReader()) {
-                    while(await reader_.ReadAsync()) {
-                        lastRefID = reader_.GetInt32(1);
+            }
+            command.CommandText = "SELECT SymptomRef FROM RegionSymptoms";
+            int lastRefID = -1;
+            bool hasValues = false;
+            using(var reader_ = command.ExecuteReader()) {
+                while(await reader_.ReadAsync()) {
+                    hasValues = true;
+                    lastRefID = reader_.GetInt32(1);
                     }
-                }
-                if (lastRefID == -1) {
+                if (!hasValues) {
+                    lastRefID = 0;
+                    }
+                else if (lastRefID == -1) {
                     _ = Log.Error(new Exception("lastRefID was -1"), "AddRegionAsync", "");
                     return false;
                     }
-
-                lastRefID++;
-
-                command.CommandText = $"INSERT INTO Regions {region.Name}, {lastRefID};";
-                await command.ExecuteNonQueryAsync();
-                return true;
+                else {
+                    lastRefID++;
+                    }
+                }
+            command.CommandText = $"INSERT INTO Regions (Name, SympRef) VALUES ('{region.Name}', {lastRefID});";
+            command.ExecuteNonQuery();
+            return true;
             }
-        }
 
         public static async Task<ICollection<IRegion>> GetRegionsAsync() {
             if(!CreateConnection()) {
