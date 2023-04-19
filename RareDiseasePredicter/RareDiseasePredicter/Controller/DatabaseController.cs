@@ -51,15 +51,14 @@ namespace RareDiseasePredicter.Controller {
                 command.ExecuteNonQuery();
                 createQuery = "CREATE TABLE IF NOT EXISTS RegionSymptoms (" +
                     "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "SymptomRef INTEGER NOT NULL, " +
-                    "RegionRef INTEGER NOT NULL);";
+                    "Symptom INTEGER NOT NULL, " +
+                    "Region INTEGER NOT NULL);";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
                 createQuery = "CREATE TABLE IF NOT EXISTS Regions (" +
                     " ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    " Name TEXT," +
-                    " SympRef INTEGER NOT NULL);";
+                    " Name TEXT);";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
@@ -126,8 +125,8 @@ namespace RareDiseasePredicter.Controller {
             }
 
         public static async Task<ICollection<ISymptom>> GetSymptomsAsync() {
-            List<ISymptom> symptomList = new List<ISymptom>();
-            List<int> regionIDs = new List<int>();
+            List<Tuple<int, int>> symptomList = new List<Tuple<int, int>>(); //1 item is region id, 2 item is what symptom that region should be added to
+            List<ISymptom> symptoms = new List<ISymptom>();
             if(CreateConnection()) {
                 var command = Connection.CreateCommand();
                 command.CommandText = "SELECT * FROM Symptoms";
@@ -140,26 +139,23 @@ namespace RareDiseasePredicter.Controller {
                             Description = description
                             };
                         symptom.ID = id;
-                        symptomList.Add(symptom);
-                        regionIDs.Add(reader.GetInt32(1));
+                        symptoms.Add(symptom); //Adds symptom
+                        symptomList.Add(new Tuple<int, int>(reader.GetInt32(1), symptoms.Count - 1));//First value is for the region, second is the index of symptom in symptoms
                         }
                     }
                 command.CommandText = "SELECT * FROM RegionSymptoms";
-                List<Tuple<int, IRegion>> regionTuples = (List<Tuple<int, IRegion>>)await GetRegionTuplesAsync();
+                List<IRegion> regions = (List<IRegion>)await GetRegionsAsync();
                 using (var reader = command.ExecuteReader()) {
-                    int runs = 0;
-                    _ = Log.Warning("Start", "0", "0");
                     while(reader.Read()) {
-                        _ = Log.Warning("yes", "0", "0");
-                        foreach(ISymptom symptom in symptomList) {
-                            if(reader.GetInt32(1) == regionIDs[runs]) {
-                                if (reader.GetInt32(2) == regionTuples[runs].Item1) {
-                                    symptom.AddRegion(regionTuples[runs].Item2); //This one will be funny to debug if there is an error
-                                    _ = Log.Warning("yes", "1", "1");
+                        foreach(ISymptom symptom in symptoms) {//search the symptoms
+                            if(reader.GetInt32(1) == symptom.ID) {//if a symptomreference matches with the symptoms' id  continue
+                                foreach(IRegion region in regions) {//search for all regions
+                                    if(region.ID == reader.GetInt32(2)) {//if a regions id matches with any the regions references add the region to the symptom
+                                        symptom.AddRegion(region);
+                                        }
                                     }
                                 }
                             }
-                        runs++;
                         }
                     }
             }
@@ -167,7 +163,7 @@ namespace RareDiseasePredicter.Controller {
                 _ = Log.Error(new Exception("Could not create Connection"), "GetSymptomsAsync", "");
                 return null;
             }
-            return symptomList;
+            return symptoms;
         }
 
         public static async Task<bool> AddDiseaseAsync(IDisease disease) {
@@ -208,12 +204,6 @@ namespace RareDiseasePredicter.Controller {
                 }
             try {
                 var command = Connection.CreateCommand();
-                foreach(IRegion region in symptom.Regions) {
-                    if(await AddRegionAsync(region)) {
-                        Console.WriteLine($"Added {region.Name} to the database");
-                        _ = Log.Warning("Added a Region through AddSymptom", "AddSymptomAsync", "Risk of repeated Region");
-                        }
-                }
                 command.CommandText = "SELECT ID FROM Symptoms";
                 using (var reader = command.ExecuteReader()) {
                     while(reader.Read()) {
@@ -224,7 +214,7 @@ namespace RareDiseasePredicter.Controller {
                         }
                     }
                 var regions = GetRegionsAsync();
-                command.CommandText = "SELECT SymptomRef FROM RegionSymptoms";
+                command.CommandText = "SELECT Symptom FROM RegionSymptoms";
                 int lastRefID = -1;
                 bool hasData = false;
                 using(var reader = command.ExecuteReader()) {
@@ -244,13 +234,9 @@ namespace RareDiseasePredicter.Controller {
                 command.CommandText = $"INSERT INTO Symptoms (Region, Name, Description) VALUES ('{lastRefID}', '{symptom.Name}', '{symptom.Description}')";
                 var query = command.ExecuteNonQueryAsync();
                 List<IRegion> _regions = (List<IRegion>)await regions;
-                foreach(IRegion region in _regions) {
-                    foreach(IRegion sympRegion in symptom.Regions) {
-                        if(region.ID == sympRegion.ID) {
-                            await AddSympRegionReferenceAsync(lastRefID, region.ID);
-                        }
+                foreach (IRegion region in _regions) {
+                        await AddSympRegionReferenceAsync(lastRefID, region.ID);
                     }
-                }
                 await query;
                 return true;
             }
@@ -290,7 +276,7 @@ namespace RareDiseasePredicter.Controller {
                 _ = Log.Error(new Exception($"id0 had the value of {id0} and id1 had the value of {id1}"), "AddSympRegionReferenceAsync", "Failed in reading RegionSymptoms from database");
                 return false;
                 }
-            command.CommandText = $"INSERT INTO RegionSymptoms (SymptomRef, RegionRef) VALUES ({sympID}, {regionID})";
+            command.CommandText = $"INSERT INTO RegionSymptoms (Symptom, Region) VALUES ({sympID}, {regionID})";
             command.ExecuteNonQuery();
             return true;
         }
@@ -305,32 +291,13 @@ namespace RareDiseasePredicter.Controller {
             command.CommandText = "SELECT Name FROM Regions";
             using (var reader = command.ExecuteReader()) {
                 while(await reader.ReadAsync()) {
-                    if (reader.GetString(0) == region.Name) {
+                    if (reader.GetString(0).ToLower() == region.Name.ToLower()) {
                         _ = Log.Warning("Tried to add a Region that already exist", "AddRegionAsync", "");
                         return false;
                     }
                 }
             }
-            command.CommandText = "SELECT SymptomRef FROM RegionSymptoms";
-            int lastRefID = -1;
-            bool hasValues = false;
-            using(var reader_ = command.ExecuteReader()) {
-                while(await reader_.ReadAsync()) {
-                    hasValues = true;
-                    lastRefID = reader_.GetInt32(1);
-                    }
-                if (!hasValues) {
-                    lastRefID = 0;
-                    }
-                else if (lastRefID == -1) {
-                    _ = Log.Error(new Exception("lastRefID was -1"), "AddRegionAsync", "");
-                    return false;
-                    }
-                else {
-                    lastRefID++;
-                    }
-                }
-            command.CommandText = $"INSERT INTO Regions (Name, SympRef) VALUES ('{region.Name}', {lastRefID});";
+            command.CommandText = $"INSERT INTO Regions (Name) VALUES ('{region.Name}');";
             command.ExecuteNonQuery();
             return true;
             }
@@ -346,21 +313,6 @@ namespace RareDiseasePredicter.Controller {
             using (var reader = command.ExecuteReader()) {  
                 while(await reader.ReadAsync()) {
                     regions.Add(new Region(reader.GetString(1), reader.GetInt32(0)));
-                }
-            }
-            return regions;
-        }
-        public static async Task<ICollection<Tuple<int, IRegion>>> GetRegionTuplesAsync() {
-            if(!CreateConnection()) {
-                _ = Log.Error(new Exception("Could not create connection"), "GetRegionTuplesAsync", "");
-                return null;
-                }
-            List<Tuple<int, IRegion>> regions = new List<Tuple<int, IRegion>>();
-            var command = Connection.CreateCommand();
-            command.CommandText = "SELECT * FROM Regions";
-            using (var reader = command.ExecuteReader()) {  
-                while(await reader.ReadAsync()) {
-                    regions.Add(new Tuple<int, IRegion>(reader.GetInt32(2) ,new Region(reader.GetString(1), reader.GetInt32(0))));
                 }
             }
             return regions;
