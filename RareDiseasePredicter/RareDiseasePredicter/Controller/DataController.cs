@@ -27,6 +27,36 @@ namespace RareDiseasePredicter.Controller {
             }
 
         [HttpGet]
+        [Route("/AddDisease/{name}+{description}+{href}+{symptomRef}")]
+        public async Task<string> AddDisease([FromRoute]string name, string description, string href, string symptomRef) {
+            //string name, List<ISymptom> symptoms, int id, string description, string href
+            Task<ICollection<ISymptom>> dbSymptoms = DatabaseController.GetSymptomsAsync();
+            IDisease disease = new Disease();
+            disease.Name = name;
+            disease.Description = description;
+            disease.Href = href;
+            disease.ID = -1;
+            string[] symptomsArray = symptomRef.Split(',');
+            List<int> symptomsIDs = new List<int>();
+            foreach (string symptomString in symptomsArray) {
+                symptomsIDs.Add(int.Parse(symptomString));
+                }
+            foreach (int symptomID in symptomsIDs) {
+                foreach (ISymptom symptom in await dbSymptoms) {
+                    if (symptomID == symptom.ID) {
+                        disease.AddSymptoms(symptom);
+                        }
+                    }
+                }
+
+            bool success = await DatabaseController.AddDiseaseAsync(disease);
+            if (success) {
+                return "200";
+                }
+            return "400"; //update to fit with documentation
+            }
+
+        [HttpGet]
         [Route("/AddSymptom/{name}+{Description}+{Regions}")]
         public async Task<string> AddSymptom([FromRoute]string name, string description, string regions) {
             Console.WriteLine($"{name}, {description}, {regions}");

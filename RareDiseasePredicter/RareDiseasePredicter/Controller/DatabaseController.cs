@@ -103,12 +103,11 @@ namespace RareDiseasePredicter.Controller {
                 command.CommandText = "SELECT * FROM DiseaseSymptomsReference";
                 List<ISymptom> symptoms = (List<ISymptom>)await GetSymptomsAsync();
                 using(var reader = command.ExecuteReader()) {
-                    int runs = 0;
                     while(reader.Read()) {
                         foreach(IDisease disease in diseaseList) {
-                            if (disease.ID == reader.GetInt32(1)) {
-                                foreach (ISymptom symptom in symptoms) {
-                                    if (symptom.ID == reader.GetInt32(2)) {
+                            if(reader.GetInt32(1) == disease.ID) {
+                                foreach(ISymptom symptom in symptoms) {
+                                    if(symptom.ID == reader.GetInt32(2)) {
                                         disease.AddSymptoms(symptom);
                                         }
                                     }
@@ -169,6 +168,21 @@ namespace RareDiseasePredicter.Controller {
         public static async Task<bool> AddDiseaseAsync(IDisease disease) {
             var command = Connection.CreateCommand();
             if(CreateConnection()) {
+                command.CommandText = $"SELECT ID FROM Disease";
+                using (var reader = command.ExecuteReader()) {
+                    while(reader.Read()) {
+                        disease.ID = reader.GetInt32(0) + 1;
+                        }
+                    }
+                command.CommandText = $"INSERT INTO Disease (Description, Href, Name) VALUES ('{disease.Description}', '{disease.Href}', '{disease.Name}');";
+                command.ExecuteNonQuery();
+                foreach (ISymptom symptom in disease.symptoms) {
+                    command.CommandText = $"INSERT INTO DiseaseSymptomsReference (DiseaseID, SymptomID) VALUES ({disease.ID}, {symptom.ID});";
+                    }
+                command.ExecuteNonQuery();
+
+
+                /*
                 foreach(ISymptom symptom in disease.GetSymptoms()) {
                     command.CommandText = $"SELECT * FROM Symptoms WHERE ID = {symptom.ID};";
                     using (var reader = command.ExecuteReader()) {
@@ -184,12 +198,12 @@ namespace RareDiseasePredicter.Controller {
                     }
                 }
                 foreach(ISymptom symptom in disease.GetSymptoms()) {
-                    command.CommandText = $"INSERT INTO DiseaseSymptomsReference ({disease.ID}, {symptom.ID});";
-                    await command.ExecuteNonQueryAsync();
+                    command.CommandText = $"INSERT INTO DiseaseSymptomsReference (DiseaseID, SymptomID) VALUES ({disease.ID}, {symptom.ID});";
+                    command.ExecuteNonQuery();
                 }
-                command.CommandText = $"INSERT INTO Disease ({disease.ID}, {disease.Description}, {disease.Href}, {disease.Name});";
-                await command.ExecuteNonQueryAsync();
-            }
+                command.CommandText = $"INSERT INTO Disease (Description, Href, Name) VALUES ('{disease.Description}', '{disease.Href}', '{disease.Name}');";
+                command.ExecuteNonQuery();*/
+                }
             else {
                 _ = Log.Error(new Exception("Could not create connection to database"), "AddDiseaseAsync", "");
                 return false;
