@@ -7,14 +7,14 @@
 }
 
 .Results {
-  float: left;
-  margin-left: 20%;
-  margin-right: 3em;
+  float: right;
+  margin-right: 20%;
   max-width: 35%;
 }
 
 .Input {
-  margin-right: 20%;
-  float: right;
+  margin-left: 5%;
+  float: left;
+  min-width: 45%;
   
 }

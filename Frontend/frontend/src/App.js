@@ -8,11 +8,11 @@ function App() {
     <div className="App">
         <Header />
       <div className="Content">
-        <div className="Results">
-        <Results />
-        </div>
         <div className="Input">
         <Input />
+        </div>
+        <div className="Results">
+        <Results />
       </div>
     </div>
 
