@@ -3,6 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using RareDiseasePredicter.Implementations;
 
+/**
+ * 
+ * OWNER: Simon dos Reis Spedsbjerg
+ * Date: 26/04/2023
+ * Project: RareDiseasePredictor
+ * 
+ */
+
 namespace RareDiseasePredicter.Controller {
 
     [ApiController]
@@ -10,7 +18,7 @@ namespace RareDiseasePredicter.Controller {
     public class DataController : ControllerBase {
         
         [HttpGet]
-        [Route("/")]
+        [Route("/")]//Main page, this can be used to check connection
         public Task<string> NoRequest() {
             return Task.FromResult("200");
             }
@@ -33,10 +41,11 @@ namespace RareDiseasePredicter.Controller {
             if (success) {
                 return "200";
                 }
-            return "500";//update to fit with documentation
+            return "500";
             }
 
         //Takes name of symptoms and returns a list of diseases which is possible
+        //TODO: Add RDDeterminer
         [HttpGet]
         [Route("/GetSuggestion/{symptoms}")]
         public async Task<string> GetSuggestion([FromRoute]string symptoms) {
@@ -64,6 +73,9 @@ namespace RareDiseasePredicter.Controller {
             return jsonString;
             }
 
+        //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
+        //Adds Disease to the database
+        //TODO: Add weight for symptoms
         [HttpGet]
         [Route("/AddDisease/{name}+{description}+{href}+{symptomRef}")]
         public async Task<string> AddDisease([FromRoute]string name, string description, string href, string symptomRef) {
@@ -114,9 +126,11 @@ namespace RareDiseasePredicter.Controller {
             if (success) {
                 return "200";
                 }
-            return "400"; //update to fit with documentation
+            return "500";
             }
 
+        //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
+        //Adds symptom to database
         [HttpGet]
         [Route("/AddSymptom/{name}+{Description}+{Regions}")]
         public async Task<string> AddSymptom([FromRoute]string name, string description, string regions) {
@@ -163,9 +177,10 @@ namespace RareDiseasePredicter.Controller {
             if(success) {
                 return "200";
                 }
-            return $"400"; //update to fit with documentation
+            return "500";
             }
         
+        //Get symptoms
         [HttpGet]
         [Route("/Symptoms")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -176,12 +191,15 @@ namespace RareDiseasePredicter.Controller {
             return jsonString;
         }
 
+        //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
+        //DEPRECATED: THIS METHOD IS NO LONGER ALLOWED BUT EXIST INCASE OF SYSTEMS DEPENDS ON IT    
         [HttpDelete]
         [Route("/Drop")]
         public async Task<string> DropTables() {
-            return "500";
+            return "403";
             }
 
+        //Gets a list of regions
         [HttpGet]
         [Route("/Regions")]
         public async Task<string> GetRegions() {
@@ -190,6 +208,7 @@ namespace RareDiseasePredicter.Controller {
             return jsonString;
             }
 
+        //Gets a list of diseases
         [HttpGet]
         [Route("/Diseases")]
         public async Task<string> GetDiseases() {

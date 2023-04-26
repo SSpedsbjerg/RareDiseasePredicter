@@ -2,6 +2,14 @@
 using RareDiseasePredicter.Implementations;
 using RareDiseasePredicter.Interfaces;
 
+/**
+ * 
+ * OWNER: Simon dos Reis Spedsbjerg
+ * Date: 26/04/2023
+ * Project: RareDiseasePredictor
+ * 
+ */
+
 namespace RareDiseasePredicter.Controller {
     static class DatabaseController {
 
@@ -30,6 +38,7 @@ namespace RareDiseasePredicter.Controller {
             }
         }
 
+        //TODO: add weight to disease
         private static bool CreateTables() {
             try {
                 string createQuery;
@@ -80,18 +89,20 @@ namespace RareDiseasePredicter.Controller {
 
         }
 
+        //Gets all diseases along with the symptoms and regions
+        //TODO: See if the complexity can be improved
         public static async Task<ICollection<IDisease>> GetDiseaseAsync() {
             List<IDisease> diseaseList = new List<IDisease>();
-            //List<int> regionIDs = new List<int>();
             if(CreateConnection()) {
+                //Get all diseases
                 var command = Connection.CreateCommand();
                 command.CommandText = "SELECT * FROM Disease";
                 using(var reader = command.ExecuteReader()) {
                     while(reader.Read()) {
-                        string href = reader.GetString(2);
-                        int id = reader.GetInt32(0);
-                        string description = reader.GetString(1);
-                        string name = reader.GetString(3);
+                        string href = reader.GetString(2); //Href
+                        int id = reader.GetInt32(0); //ID
+                        string description = reader.GetString(1); //Description
+                        string name = reader.GetString(3); //Name
                         var disease = new Disease();
                         disease.SetID(id);
                         disease.Name = name;
@@ -100,14 +111,15 @@ namespace RareDiseasePredicter.Controller {
                         diseaseList.Add(disease);
                         }
                     }
+                //Get their symptoms
                 command.CommandText = "SELECT * FROM DiseaseSymptomsReference";
-                List<ISymptom> symptoms = (List<ISymptom>)await GetSymptomsAsync();
+                List<ISymptom> symptoms = (List<ISymptom>)await GetSymptomsAsync(); //This gets the symptoms regions aswell
                 using(var reader = command.ExecuteReader()) {
                     while(reader.Read()) {
                         foreach(IDisease disease in diseaseList) {
-                            if(reader.GetInt32(1) == disease.ID) {
+                            if(reader.GetInt32(1) == disease.ID) { //DiseaseSymoptomsReference DiseaseID
                                 foreach(ISymptom symptom in symptoms) {
-                                    if(symptom.ID == reader.GetInt32(2)) {
+                                    if(symptom.ID == reader.GetInt32(2)) { //DiseaseSymoptomsReference SymptomID
                                         disease.AddSymptoms(symptom);
                                         }
                                     }
@@ -123,6 +135,8 @@ namespace RareDiseasePredicter.Controller {
             return diseaseList;
             }
 
+        //Gets all symptoms alongside its regions
+        //TODO: see if complexity can be improved
         public static async Task<ICollection<ISymptom>> GetSymptomsAsync() {
             List<ISymptom> symptoms = new List<ISymptom>();
             if(CreateConnection()) {
@@ -163,10 +177,12 @@ namespace RareDiseasePredicter.Controller {
             return symptoms;
         }
 
+        //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
+        //Adds disease to the database
         public static async Task<bool> AddDiseaseAsync(IDisease disease) {
             var command = Connection.CreateCommand();
             if(CreateConnection()) {
-                command.CommandText = $"SELECT ID FROM Disease";
+                command.CommandText = "SELECT ID FROM Disease";
                 using (var reader = command.ExecuteReader()) {
                     while(reader.Read()) {
                         disease.ID = reader.GetInt32(0) + 1;
@@ -186,6 +202,8 @@ namespace RareDiseasePredicter.Controller {
             return true;
         }
 
+        //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
+        //Adds symptom to the database
         public static async Task<bool> AddSymptomAsync(ISymptom symptom) {
             if (!CreateConnection()) {
                 _ = Log.Error(new Exception("Could not create connection to database"), "AddSymptomAsync", "");
@@ -193,7 +211,7 @@ namespace RareDiseasePredicter.Controller {
                 }
             try {
                 var command = Connection.CreateCommand();
-                command.CommandText = "SELECT Symptom FROM RegionSymptoms";
+                command.CommandText = "SELECT Symptom FROM RegionSymptoms";//Get the reference of regions for the symptom
                 int lastRefID = -1;
                 bool hasData = false;
                 using(var reader = command.ExecuteReader()) {
@@ -201,11 +219,11 @@ namespace RareDiseasePredicter.Controller {
                         hasData = true;
                         lastRefID = reader.GetInt32(0);
                     }
-                    if (!hasData) {
+                    if (!hasData) {//If the database is empty
                         lastRefID= 0;
                         }
                 }
-                if (lastRefID == -1 ) {
+                if (lastRefID == -1 ) {//It should not end in here
                     _=Log.Error(new Exception($"lasRefID was {lastRefID}"), "AddSymptomAsync", "");
                     return false;
                     }
@@ -220,7 +238,6 @@ namespace RareDiseasePredicter.Controller {
             }
             catch (Exception ex) {
                 _ = Log.Error(ex, "AddSymptomAsync", "");
-                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -237,7 +254,9 @@ namespace RareDiseasePredicter.Controller {
             return true;
         }
 
+        //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
         //Read all of the regions and if any matches, don't add it
+        //possibility of wrong IDs comes from this, if any mismatch with regions pops up, check this
         public static async Task<bool> AddRegionAsync(IRegion region) {
             if(!CreateConnection()) {
                 _ = Log.Error(new Exception("Could not create connection to database"), "AddRegionAsync", "");
@@ -258,6 +277,7 @@ namespace RareDiseasePredicter.Controller {
             return true;
             }
 
+        //Gets regions
         public static async Task<ICollection<IRegion>> GetRegionsAsync() {
             if(!CreateConnection()) {
                 _ = Log.Error(new Exception("Could not create connection"), "GetRegionsAsync", "");
