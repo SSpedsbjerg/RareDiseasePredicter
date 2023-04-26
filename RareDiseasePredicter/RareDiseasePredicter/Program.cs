@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using RareDiseasePredicter;
 
 internal class Program {
     private static void Main(string[] args) {
@@ -11,12 +12,19 @@ internal class Program {
 
         var MyAllowSpecificOrigins = "AllowCore";
 
+        bool databaseSuccess = DatabaseController.Start();
+        if (!databaseSuccess) {
+            _ = Log.Error(new Exception("Could not start database"), "Program", "Unknow reason for not being able to start database");
+            Console.WriteLine("Could not start database");
+            return;
+            }
+
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,
                               policy => {
-                                  policy.WithOrigins("http://localhost:57694",
-                                                      "http://localhost:57693");
+                                  policy.WithOrigins("http://localhost:50000",
+                                                      "http://localhost:8080");
                               });
         });
 

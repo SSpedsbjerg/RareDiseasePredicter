@@ -7,7 +7,7 @@ namespace RareDiseasePredicter.Implementations {
         private string name = "";
         private string despription = null;
 
-        List<Region> regions = new List<Region>();
+        List<IRegion> regions = new List<IRegion>();
         int ID = -1;
 
         public string Name {
@@ -25,34 +25,34 @@ namespace RareDiseasePredicter.Implementations {
             set { this.ID = value; }
             }
 
-        public ICollection<Region> Regions {
+        public ICollection<IRegion> Regions {
             get { return regions; }
-            set { this.regions = (List<Region>)value; }
+            set { this.regions = (List<IRegion>)value; }
             }
 
         public Symptom(string name) {
             this.name = name;
             }
 
-        public Symptom(string name, ICollection<Region> regions) {
+        public Symptom(string name, ICollection<IRegion> regions) {
             this.name = name;
-            this.regions = (List<Region>)regions;
+            this.regions = (List<IRegion>)regions;
             }
 
-        public Symptom(string name, ICollection<Region> regions, int id) {
+        public Symptom(string name, ICollection<IRegion> regions, int id) {
             this.name = name;
-            this.regions = (List<Region>)regions;
+            this.regions = (List<IRegion>)regions;
             this.ID = id;
             }
 
-        public Symptom(string name, ICollection<Region> regions, int id, string description) {
+        public Symptom(string name, ICollection<IRegion> regions, int id, string description) {
             this.name = name;
-            this.regions = (List<Region>)regions;
+            this.regions = (List<IRegion>)regions;
             this.ID = id;
             this.despription = description;
             }
 
-        public bool AddRegion(Region region) {
+        public bool AddRegion(IRegion region) {
             regions.Add(region);
             return true;
             }
@@ -65,7 +65,7 @@ namespace RareDiseasePredicter.Implementations {
             return this.name;
             }
 
-        public ICollection<Region> GetRegions() {
+        public ICollection<IRegion> GetRegions() {
             return regions;
             }
 

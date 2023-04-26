@@ -13,7 +13,11 @@ namespace RareDiseasePredicter.Interfaces {
 
         int ID { get; set; }
 
-        ICollection<ISymptom> symptoms { get; set; }
+        float Weight { get; set; }
+
+        ICollection<ISymptom> Symptoms { get; set; }
+
+        ICollection<float> SymptomWeigts { get; set; }
 
         ICollection<ISymptom> GetSymptoms();
 

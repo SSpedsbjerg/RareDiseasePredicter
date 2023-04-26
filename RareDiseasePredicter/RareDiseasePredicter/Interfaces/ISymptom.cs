@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RareDiseasePredicter.Interfaces {
     interface ISymptom {
-        ICollection<Region> GetRegions();
+        ICollection<IRegion> GetRegions();
 
         public string Name {get;set;}
 
@@ -13,9 +13,9 @@ namespace RareDiseasePredicter.Interfaces {
 
         public int ID { get; set;}
 
-        public ICollection<Region> Regions { get; set;}
+        public ICollection<IRegion> Regions { get; set;}
 
-        bool AddRegion(Region region);
+        bool AddRegion(IRegion region);
 
         }
     }

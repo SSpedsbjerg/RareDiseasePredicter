@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+
+//Deprecated
 namespace RareDiseasePredicter.Enums {
     enum Region {
         Head,
