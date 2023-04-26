@@ -18,7 +18,17 @@ namespace RareDiseasePredicter.Controller {
         [HttpGet]
         [Route("/AddRegion/{name}")]
         public async Task<string> AddRegion([FromRoute]string name) {
-            Console.WriteLine(name);
+            try {
+                string[] nameSplit = name.Split("_");
+                name = "";
+                foreach(string nameSegment in nameSplit) {
+                    name += $"{nameSegment} ";
+                    }
+                name = name.Remove(name.Length - 1);
+                }
+            catch {
+                _ = Log.Warning("Couldn't split name of Symptom", "AddSymptom", "");
+                }
             bool success = await DatabaseController.AddRegionAsync(new Region(name, -1));
             if (success) {
                 return "200";
@@ -26,10 +36,61 @@ namespace RareDiseasePredicter.Controller {
             return "500";//update to fit with documentation
             }
 
+        //Takes name of symptoms and returns a list of diseases which is possible
+        [HttpGet]
+        [Route("/GetSuggestion/{symptoms}")]
+        public async Task<string> GetSuggestion([FromRoute]string symptoms) {
+            string[] symptomsString = symptoms.Split(',');
+            List<ISymptom> _symptoms = new List<ISymptom>();
+            foreach (string name in symptomsString) {
+                foreach (ISymptom symp in await DatabaseController.GetSymptomsAsync()) {
+                    if (symp.Name == name) {
+                        _symptoms.Add(symp);
+                        break;
+                        }
+                    }
+                }
+            List<IDisease> diseases = new List<IDisease>();
+            foreach (ISymptom symptom_ in _symptoms) {
+                foreach (IDisease disease in await DatabaseController.GetDiseaseAsync()) {
+                    foreach (ISymptom symptom1 in disease.GetSymptoms()) {
+                        if (symptom1.Name == symptom_.Name || symptom1.ID == symptom_.ID) {
+                            diseases.Add(disease);
+                            }
+                        }
+                    }
+                }
+            string jsonString = JsonSerializer.Serialize(diseases);
+            return jsonString;
+            }
+
         [HttpGet]
         [Route("/AddDisease/{name}+{description}+{href}+{symptomRef}")]
         public async Task<string> AddDisease([FromRoute]string name, string description, string href, string symptomRef) {
             //string name, List<ISymptom> symptoms, int id, string description, string href
+            try {
+                string[] nameSplit = name.Split("_");
+                name = "";
+                foreach(string nameSegment in nameSplit) {
+                    name += $"{nameSegment} ";
+                    }
+                name = name.Remove(name.Length - 1);
+                }
+            catch {
+                _ = Log.Warning("Couldn't split name of Symptom", "AddSymptom", "");
+                }
+
+            try {
+                string[] descriptionSplit = description.Split("_");
+                description = "";
+                foreach(string descriptionSegment in descriptionSplit) {
+                    description += $"{descriptionSegment} ";
+                    }
+                description = description.Remove(description.Length - 1);
+                }
+            catch {
+                _ = Log.Warning("Couldn't split description of Symptom", "AddSymptom", "");
+                }
             Task<ICollection<ISymptom>> dbSymptoms = DatabaseController.GetSymptomsAsync();
             IDisease disease = new Disease();
             disease.Name = name;
@@ -59,8 +120,30 @@ namespace RareDiseasePredicter.Controller {
         [HttpGet]
         [Route("/AddSymptom/{name}+{Description}+{Regions}")]
         public async Task<string> AddSymptom([FromRoute]string name, string description, string regions) {
-            Console.WriteLine($"{name}, {description}, {regions}");
             Task<ICollection<IRegion>> dbRegions = DatabaseController.GetRegionsAsync();
+            try {
+                string[] nameSplit = name.Split("_");
+                name = "";
+                foreach (string nameSegment in nameSplit) {
+                    name += $"{nameSegment} ";
+                    }
+                name = name.Remove(name.Length - 1);
+                }
+            catch {
+                _ = Log.Warning("Couldn't split name of Symptom", "AddSymptom", "");
+                }
+
+            try {
+                string[] descriptionSplit = description.Split("_");
+                description = "";
+                foreach (string descriptionSegment in descriptionSplit) {
+                    description += $"{descriptionSegment} ";
+                    }
+                description = description.Remove(description.Length - 1);
+                }
+            catch {
+                _ = Log.Warning("Couldn't split description of Symptom", "AddSymptom", "");
+                }
             ISymptom symptom = new Symptom(name);
             symptom.Description = description;
             string[] regionsArray = regions.Split(',');
