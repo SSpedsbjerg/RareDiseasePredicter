@@ -28,10 +28,19 @@ namespace RareDiseasePredicter.Implementations {
             set { this.ID = value; }
             }
 
-        ICollection<ISymptom> IDisease.symptoms {
+        ICollection<ISymptom> IDisease.Symptoms {
             get { return symptoms; }
             set { this.symptoms = (List<ISymptom>)value; }
             }
+
+        private float weight = 0f;
+
+        public float Weight { get { return weight; } set { weight = value; } }
+
+        List<float> symptomWeights = new List<float>();
+        public ICollection<float> SymptomWeigts { get { return symptomWeights; } set { symptomWeights = (List<float>)value; } }
+
+        public Disease(string Name) { this.Name = Name; }
 
         public Disease(string name, List<ISymptom> symptoms) {
             this.name = name;
