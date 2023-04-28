@@ -50,6 +50,8 @@ namespace RareDiseasePredicter.Controller {
         [Route("/GetSuggestion/")]
         public async Task<string> GetSuggestion([FromBody]string[] symptoms) {
             string[] symptomsString = symptoms;
+            RDDeterminer rDDeterminer = new RDDeterminer();
+            
             List<ISymptom> _symptoms = new List<ISymptom>();
             foreach (string name in symptomsString) {
                 foreach (ISymptom symp in await DatabaseController.GetSymptomsAsync()) {
@@ -59,6 +61,8 @@ namespace RareDiseasePredicter.Controller {
                         }
                     }
                 }
+            List<IDisease> diseases = (List<IDisease>)await rDDeterminer.CalculateDiseasesAsync(_symptoms);
+            /*
             List<IDisease> diseases = new List<IDisease>();
             foreach (ISymptom symptom_ in _symptoms) {
                 foreach (IDisease disease in await DatabaseController.GetDiseaseAsync()) {
@@ -68,7 +72,7 @@ namespace RareDiseasePredicter.Controller {
                             }
                         }
                     }
-                }
+                }*/
             string jsonString = JsonSerializer.Serialize(diseases);
             return jsonString;
             }
