@@ -26,8 +26,11 @@ internal class Program {
                                   policy.WithOrigins("http://localhost:50000",
                                                       "http://localhost:8080");
                               });
+            
         });
 
+        builder.Services.AddControllers().AddNewtonsoftJson();
+        
         // Add services to the container.
 
         builder.Services.AddControllers();
@@ -35,6 +38,8 @@ internal class Program {
         var app = builder.Build();
 
         app.UseHttpsRedirection();
+
+        app.UseCors(options => options.AllowAnyOrigin());
 
         app.UseCors(MyAllowSpecificOrigins);
 
