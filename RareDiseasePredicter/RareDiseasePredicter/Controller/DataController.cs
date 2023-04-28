@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using RareDiseasePredicter.Implementations;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 /**
  * 

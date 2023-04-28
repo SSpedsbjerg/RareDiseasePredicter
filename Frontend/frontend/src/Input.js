@@ -4,6 +4,8 @@ import { BodyComponent } from "reactjs-human-body";
 import Table from 'react-bootstrap/Table';
 import { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button'
+import { Autocomplete, TextField } from '@mui/material';
+
 
 function Input() {
     const [bodyState, setBodyState] = useState({
@@ -63,17 +65,41 @@ function Input() {
 
 
 
-      const [tableData, setTableData] = useState([]);
+    const [tableData, setTableData] = useState([]);
+
+    const [data, setData] = useState({});
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [error, setError] =useState(null);
+    const [value, setValue] = useState(null);
+  
+    
+  
+
+    useEffect(() => {
+      fetchMovies();
+      
+    }, []);
+
+    function fetchMovies() {
+      fetch(
+        `http://localhost:57693/symptoms`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setIsLoaded(true);
+          setData(data)
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+        );
+      }
 
     const showBodyPart = (e) => {
       const trueKeys = Object.entries(bodyState)
       .filter(([key, obj]) => obj.selected === true)
       .map(([key]) => key);
-      
-
-      console.log(trueKeys);
-      console.log(e);
-      
       };
 
 
@@ -81,19 +107,51 @@ function Input() {
        const regions = Object.entries(bodyState)
       .filter(([key, obj]) => obj.selected === true)
       .map(([key]) => key);
-      console.log(regions)
-          //TODO Formater hvordan teksten kommer tilbage så det ikke ligner lort og er på dansk og tilføj auto complete med fetch request fra backend som auto complete liste :D
-      return regions;
+
+      
+      const updatedRegions = regions.map((bodypart) => {
+        switch (bodypart) {
+          case "head":
+            return "Hoved";
+          case "left_shoulder":
+            return "Venstre Skulder";
+          case "right_shoulder":
+            return "Højre skulder";
+          case "left_arm":
+            return "Venstre arm";
+          case "right_arm":
+            return "Højre arm";
+          case "chest":
+            return "Bryst";
+          case "stomach":
+            return "Mave";
+          case "left_leg":
+            return "Venstre ben";
+          case "right_leg":
+            return "Højre ben";
+          case "left_hand":
+            return "Venstre hånd";
+          case "right_hand":
+            return "Højre hånd";
+          case "left_foot":
+            return "Venstre fod";
+          case "right_foot":
+            return "Højre fod";
+          default:
+            return bodypart;
+        }
+      });
+      
+      return updatedRegions.join(", ");
       }
 
      const addSymptom = (event) => {
         event.preventDefault();
         const newRowData = {
-          symptom: event.target.elements.newRowData.value,
+          symptom: value.Name,
           region: getRegions(),
         }
         setTableData([...tableData, newRowData ]);
-        
     }
 
     const removeSymptom = (index) => {
@@ -101,6 +159,8 @@ function Input() {
       newData.splice(index, 1);
       setTableData(newData);
     };
+
+
     return(
         <div>
             <div className="Human">
@@ -108,13 +168,41 @@ function Input() {
           partsInput={bodyState}
           onClick={(e) => showBodyPart(e)}
         />
+        <div>
+          <Button 
+          variant="success"
+          type="submit"
+          onClick={null}>
+            Find sygdom
+          </Button>
+        </div>
             </div>
             <form onSubmit={addSymptom}>
               <div className="InputArea">
-                  Symptom <br/>
-                  <input type="text" id="newRowData" placeholder="Symptom"></input> 
+                <div>
+                Symptom 
+                </div>
+                  
+                  <Autocomplete
+                  className="Autocomplete"
+                  options={data}
+                  getOptionLabel={(data) => data.Name}
+                  value={value}
+                  onChange={(event, newValue) => {
+                    setValue(newValue);
+                  }}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Symptom"
+                      variant="outlined"
+                    
+                    />
+                  )}
+                />
+
               </div>
-              <br/><br/><br/>
               <div>
                 <Button 
                 variant="success"
@@ -124,7 +212,7 @@ function Input() {
               </div><br/><br/>
             </form>
             <div className="TableView">
-            <Table className="SymptomTable">
+            <Table className="SymptomTable" striped >
         <thead>
           <tr>
             <th>Region</th>
@@ -134,11 +222,11 @@ function Input() {
         </thead>
         <tbody>
         {tableData.map((rowData, index) => (
-            <tr key={index}>
+            <tr key={index} >
               <td>{rowData.region}</td>
               <td>{rowData.symptom}</td>
               <td>
-                <button onClick={() => removeSymptom(index)}>Remove</button>
+                <Button className='removeButton' variant='danger' onClick={() => removeSymptom(index)}>Remove</Button>
               </td>
             </tr>
           ))}
