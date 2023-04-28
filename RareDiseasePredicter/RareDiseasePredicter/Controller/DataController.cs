@@ -46,10 +46,10 @@ namespace RareDiseasePredicter.Controller {
 
         //Takes name of symptoms and returns a list of diseases which is possible
         //TODO: Add RDDeterminer
-        [HttpGet]
-        [Route("/GetSuggestion/{symptoms}")]
-        public async Task<string> GetSuggestion([FromRoute]string symptoms) {
-            string[] symptomsString = symptoms.Split(',');
+        [HttpPost]
+        [Route("/GetSuggestion/")]
+        public async Task<string> GetSuggestion([FromBody]string[] symptoms) {
+            string[] symptomsString = symptoms;
             List<ISymptom> _symptoms = new List<ISymptom>();
             foreach (string name in symptomsString) {
                 foreach (ISymptom symp in await DatabaseController.GetSymptomsAsync()) {
