@@ -23,8 +23,7 @@ internal class Program {
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,
                               policy => {
-                                  policy.WithOrigins("http://localhost:50000",
-                                                      "http://localhost:8080");
+                                  policy.WithOrigins("http://localhost:3000", "http://localhost:8080").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                               });
             
         });
@@ -38,8 +37,6 @@ internal class Program {
         var app = builder.Build();
 
         app.UseHttpsRedirection();
-
-        app.UseCors(options => options.AllowAnyOrigin());
 
         app.UseCors(MyAllowSpecificOrigins);
 
