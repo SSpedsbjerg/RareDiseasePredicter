@@ -10,5 +10,6 @@ RUN dotnet publish -c Release -o /publish
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 as runtime
 WORKDIR /publish
 COPY --from=build-env /publish .
+COPY RareDiseasePredicter/RareDiseasePredicter/Database.db .
 EXPOSE 57693
 ENTRYPOINT ["dotnet", "RareDiseasePredicter.dll", "--urls", "http://*:57693"]

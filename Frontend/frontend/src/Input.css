@@ -1,0 +1,69 @@
+.autocomplete {
+    margin-top: 2em;
+    position: relative;
+    display: inline-block;
+  }
+  input {
+    border: 1px solid transparent;
+    background-color: #f1f1f1;
+    padding: 10px;
+    font-size: 16px;
+  }
+  input[type=text] {
+    background-color: #f1f1f1;
+    width: 100%;
+  }
+  input[type=submit] {
+    background-color: DodgerBlue;
+    color: #fff;
+  }
+
+  .InputArea {
+    margin-top: 2em;
+    text-align: left;
+    font-weight: bold;
+    float: left;
+    
+  }
+
+  .Human {
+    margin-left: 2em;
+    float: right;
+  }
+
+  .TableView {
+    width: 5em;
+    float: left;
+    text-align: left;
+    margin-top: 3em;
+    max-width: 50%;
+    position: fixed;
+    
+  }
+
+  .SymptomTable {
+    max-width: 25%;
+    float: left;
+    margin-top: 8em;
+    position: fixed;
+    border: none;
+    
+  }
+
+  .AddButton {
+    float: left;
+    text-align: left;
+    justify-content: left;
+    margin-left: 2em;
+    margin-top: 4em;
+  }
+  
+td {
+  border-width: 0.5px !important;
+  text-align: center;
+
+}
+
+.removeButton {
+  align-items: center;
+}
