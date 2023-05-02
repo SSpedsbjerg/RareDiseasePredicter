@@ -1,7 +1,9 @@
 import Table from 'react-bootstrap/Table';
 
-function Results() {
+function Results({ data }) {
     return(
+      <div>
+        {data && (
         <Table striped bordered hover>
         <thead>
           <tr>
@@ -10,13 +12,16 @@ function Results() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>PLACEHOLDER</td>
-            <td>PLACEHOLDER</td>
-          </tr>
+        {data.map(disease => (
+            <tr key={disease.id} >
+              <td>{disease.name}</td>
+              <td>{disease.chance}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
-
+      )}
+      </div>
     );
 }
 

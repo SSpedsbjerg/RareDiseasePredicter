@@ -68,9 +68,8 @@ function Input() {
     const [tableData, setTableData] = useState([]);
 
     const [data, setData] = useState({});
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [error, setError] =useState(null);
     const [value, setValue] = useState(null);
+    const [response, setResponse] = useState(null);
   
     
   
@@ -86,12 +85,7 @@ function Input() {
       )
         .then((response) => response.json())
         .then((data) => {
-          setIsLoaded(true);
           setData(data)
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
         }
         );
       }
@@ -160,6 +154,20 @@ function Input() {
       setTableData(newData);
     };
 
+    const postData = async () =>  {
+      const stringArray = tableData.map(data => data.symptom);
+      const response = await fetch('https://localhost:57693/GetSuggestion/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(stringArray)
+      });
+      const data = await response.json();
+      setResponse(data);
+        console.log(data);
+    }
+
 
     return(
         <div>
@@ -172,7 +180,7 @@ function Input() {
           <Button 
           variant="success"
           type="submit"
-          onClick={null}>
+          onClick={postData}>
             Find sygdom
           </Button>
         </div>
