@@ -81,7 +81,7 @@ function Input() {
 
     function fetchMovies() {
       fetch(
-        `http://localhost:57693/symptoms`
+        `http://83.92.23.39:57693/symptoms`
       )
         .then((response) => response.json())
         .then((data) => {
