@@ -218,31 +218,31 @@ namespace RareDiseasePredicter.Controller {
         public async Task<string> AddDummyData() {
             string returnstring = "200 ";
             List<IRegion> regions = new List<IRegion>();
-            Region region = new Region("head", -1);
+            Region region = new Region("head", -1);//0
             regions.Add(region);
-            region = new Region("left_shoulder", -1);
+            region = new Region("left_shoulder", -1);//1
             regions.Add(region);
-            region = new Region("right_shoulder", -1);
+            region = new Region("right_shoulder", -1);//2
             regions.Add(region);
-            region = new Region("left_arm", -1);
+            region = new Region("left_arm", -1);//3
             regions.Add(region);
-            region = new Region("right_arm", -1);
+            region = new Region("right_arm", -1);//4
             regions.Add(region);
-            region = new Region("chest", -1);
+            region = new Region("chest", -1);//5
             regions.Add(region);
-            region = new Region("stomach", -1);
+            region = new Region("stomach", -1);//6
             regions.Add(region);
-            region = new Region("left_leg", -1);
+            region = new Region("left_leg", -1);//7
             regions.Add(region);
-            region = new Region("right_leg", -1);
+            region = new Region("right_leg", -1);//8
             regions.Add(region);
-            region = new Region("left_hand", -1);
+            region = new Region("left_hand", -1);//9
             regions.Add(region);
-            region = new Region("right_hand", -1);
+            region = new Region("right_hand", -1);//10
             regions.Add(region);
-            region = new Region("left_foot", -1);
+            region = new Region("left_foot", -1);//11
             regions.Add(region);
-            region = new Region("right_foot", -1);
+            region = new Region("right_foot", -1);//12
             regions.Add(region);
             foreach(IRegion region_ in regions) {
                 await DatabaseController.AddRegionAsync(region_);
@@ -253,6 +253,7 @@ namespace RareDiseasePredicter.Controller {
             Symptom symptom = new Symptom("Tinnitus");//0
             symptom.Description = "Ronstant ringing in the ear";
             symptom.Regions.Add(regions[0]);
+            symptoms.Add(symptom);
             symptom = new Symptom("Dizziness");//1
             symptom.Description = "null";
             symptoms.Add(symptom);
@@ -280,43 +281,81 @@ namespace RareDiseasePredicter.Controller {
                 symptom.Regions.Add((Region)regions[i]);
                 }
             symptoms.Add(symptom);
-            symptom = new Symptom("Swallowing");//7
+            symptom = new Symptom("Hard to Swallow");//7
             symptom.Description = "null";
             symptom.Regions.Add(regions[0]);
             symptoms.Add(symptom);
-            /*
-            symptom = new Symptom("Test");
-            symptom.Description = "Test";
-            symptom.Regions.Add(regions[0]);
+
+
+            symptom = new Symptom("Coughing");//8
+            symptom.Description = "null";
+            symptom.Regions.Add(regions[5]);
             symptoms.Add(symptom);
-            symptom = new Symptom("Test");
-            symptom.Description = "Test";
-            symptom.Regions.Add(regions[0]);
+            symptom = new Symptom("Breathlessness");//9
+            symptom.Description = "null";
+            symptom.Regions.Add(regions[5]);
             symptoms.Add(symptom);
-            symptom = new Symptom("Test");
-            symptom.Description = "Test";
-            symptom.Regions.Add(regions[0]);
+            symptom = new Symptom("Dry coughing");//10
+            symptom.Description = "null";
+            symptom.Regions.Add(regions[5]);
             symptoms.Add(symptom);
-            symptom = new Symptom("Test");
-            symptom.Description = "Test";
-            symptom.Regions.Add(regions[0]);
+            symptom = new Symptom("Fatigue");//11
+            symptom.Description = "null";
             symptoms.Add(symptom);
-            symptom = new Symptom("Test");
-            symptom.Description = "Test";
-            symptom.Regions.Add(regions[0]);
+            symptom = new Symptom("Weight loss");//12
+            symptom.Description = "null";
             symptoms.Add(symptom);
-            symptom = new Symptom("Test");
-            symptom.Description = "Test";
-            symptom.Regions.Add(regions[0]);
+            symptom = new Symptom("Chest pain");//13
+            symptom.Description = "null";
+            symptom.Regions.Add(regions[5]);
             symptoms.Add(symptom);
-            symptom = new Symptom("Test");
-            symptom.Description = "Test";
-            symptom.Regions.Add(regions[0]);
+            symptom = new Symptom("Shortness of breath");//14
+            symptom.Description = "null";
+            symptom.Regions.Add(regions[5]);
             symptoms.Add(symptom);
-            symptom = new Symptom("Test");
-            symptom.Description = "Test";
-            symptom.Regions.Add(regions[0]);
-            symptoms.Add(symptom);*/
+
+            symptom = new Symptom("Diarrhea");//15
+            symptom.Description = "null";
+            symptom.Regions.Add(regions[6]);
+            symptoms.Add(symptom);
+
+            symptom = new Symptom("Malformation of the nails");//16
+            symptom.Description = "null";
+            symptom.Regions.Add(regions[9]);
+            symptom.Regions.Add(regions[10]);
+            symptoms.Add(symptom);
+            symptom = new Symptom("Malformation of bones");//17
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Retardation");//18
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Seizures");//19
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+
+            symptom = new Symptom("Skin lesions");//20
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Cognitive impairment");//21
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Developmental delays");//22
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Paralysis of one side of the body");//23
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Skeletal abnormalities");//24
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Abnormal curvature of the spine");//25
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Malformation of the hip");//26
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+
             foreach (ISymptom symptom_ in symptoms) {
                 await DatabaseController.AddSymptomAsync(symptom_);
                 returnstring += symptom_.Name + " ";
@@ -327,65 +366,52 @@ namespace RareDiseasePredicter.Controller {
             disease.Description = "Acoustic neuromas are slow-growing tumors that can eventually cause a variety of symptoms by pressing against the eighth cranial nerve. Hearing loss in one ear (the ear affected by the tumor) is the initial symptom in approximately 90 percent of patients. Hearing loss is usually gradual, although in some rare cases it can be sudden. In some cases, hearing loss can also fluctuate (worsen and then improve). Hearing loss may be accompanied by ringing in the ears, a condition known as tinnitus, or by a feeling of fullness in the affected ear. In some cases, affected individuals may have difficulty understanding speech that is disproportional to the amount of hearing loss.";
             disease.Href = "https://rarediseases.org/rare-diseases/acoustic-neuroma/#symptoms";
             disease.Name = "Acoustic Neuroma";
-            for (int i = 0; i != 7; i++) {
+            for (int i = 0; i != 8; i++) {
                 disease.AddSymptoms(symptoms[i]);
                 }
             diseases.Add(disease);
-            /*
-            disease = new Disease();
-            disease.Description = "Test";
-            disease.Href = "Test";
-            disease.Name = "Test";
-            disease.AddSymptoms(symptoms[0]);
+
+            disease = new Disease();//1
+            disease.Description = "Berylliosis is a form of metal poisoning caused by inhalation of beryllium dusts, vapors, or its compounds or implantation of the substance in the skin. The toxic effects of beryllium most commonly occur due to occupational exposure. Beryllium is a metallic element used in many industries, including electronics, high-technology ceramics, metals extraction, and dental alloy preparation.";
+            disease.Href = "https://rarediseases.org/rare-diseases/berylliosis/";
+            disease.Name = "Berylliosis";
+            for(int i = 8; i != 15; i++) {
+                disease.AddSymptoms(symptoms[i]);
+                }
             diseases.Add(disease);
-            disease = new Disease();
-            disease.Description = "Test";
-            disease.Href = "Test";
-            disease.Name = "Test";
-            disease.AddSymptoms(symptoms[0]);
+
+            disease = new Disease();//2
+            disease.Description = "Cholera is an acute infectious disease caused by the bacterium vibrio cholerae, which lives and multiples (colonizes) in the small intestine but does not destroy or invade the intestinal tissue (noninvasive). The major symptom of cholera is massive watery diarrhea that occurs because of a toxin secreted by the bacteria that stimulates the cells of the small intestine to secrete fluid. There are several strains of V. cholerae and the severity of the disease is based on the particular infectious strain.";
+            disease.Href = "https://rarediseases.org/rare-diseases/cholera/";
+            disease.Name = "Cholera";
+            disease.AddSymptoms(symptoms[15]);
             diseases.Add(disease);
-            disease = new Disease();
-            disease.Description = "Test";
-            disease.Href = "Test";
-            disease.Name = "Test";
-            disease.AddSymptoms(symptoms[0]);
+
+            disease = new Disease();//3
+            disease.Description = "DOOR syndrome is a rare genetic disorder that may be recognized shortly after birth. “DOOR,” an acronym for characteristic abnormalities associated with the syndrome, stands for (D)eafness due to a defect of the inner ear or auditory nerve (sensorineural hearing loss); (O)nychodystrophy or malformation of the nails; (O)steodystrophy, meaning malformation of certain bones; and mild to profound mental (R)etardation. In addition, in some cases, affected infants may have sudden episodes of uncontrolled electrical activity in the brain (seizures). Distinctive nail abnormalities may include underdeveloped, misshapen, or absent fingernails and/or toenails, while characteristic bone malformations may consist of an extra small bone in the thumbs and/or great toes (triphalangy) and/or underdevelopment (hypoplasia) of bones in other fingers and/or toes. DOOR syndrome is inherited as an autosomal recessive trait.";
+            disease.Href = "https://rarediseases.org/rare-diseases/door-syndrome/";
+            disease.Name = "DOOR Syndrome";
+            disease.AddSymptoms(symptoms[3]);
+            disease.AddSymptoms(symptoms[16]);
+            disease.AddSymptoms(symptoms[17]);
+            disease.AddSymptoms(symptoms[18]);
+            disease.AddSymptoms(symptoms[19]);
             diseases.Add(disease);
-            disease = new Disease();
-            disease.Description = "Test";
-            disease.Href = "Test";
-            disease.Name = "Test";
-            disease.AddSymptoms(symptoms[0]);
+
+            disease = new Disease();//4
+            disease.Description = "Epidermal nevus syndromes (ENSs) are a group of rare complex disorders characterized by the presence of skin lesions known as epidermal nevi associated with additional extra-cutaneous abnormalities, most often affecting the brain, eye and skeletal systems. Epidermal nevi are overgrowths of structures and tissue of the epidermis, the outermost layer of the skin.";
+            disease.Href = "https://rarediseases.org/rare-diseases/epidermal-nevus-syndromes/";
+            disease.Name = "Epidermal Nevus Syndromes";
+            disease.AddSymptoms(symptoms[19]);
+            disease.AddSymptoms(symptoms[20]);
+            disease.AddSymptoms(symptoms[21]);
+            disease.AddSymptoms(symptoms[22]);
+            disease.AddSymptoms(symptoms[23]);
+            disease.AddSymptoms(symptoms[24]);
+            disease.AddSymptoms(symptoms[25]);
+            disease.AddSymptoms(symptoms[26]);
             diseases.Add(disease);
-            disease = new Disease();
-            disease.Description = "Test";
-            disease.Href = "Test";
-            disease.Name = "Test";
-            disease.AddSymptoms(symptoms[0]);
-            diseases.Add(disease);
-            disease = new Disease();
-            disease.Description = "Test";
-            disease.Href = "Test";
-            disease.Name = "Test";
-            disease.AddSymptoms(symptoms[0]);
-            diseases.Add(disease);
-            disease = new Disease();
-            disease.Description = "Test";
-            disease.Href = "Test";
-            disease.Name = "Test";
-            disease.AddSymptoms(symptoms[0]);
-            diseases.Add(disease);
-            disease = new Disease();
-            disease.Description = "Test";
-            disease.Href = "Test";
-            disease.Name = "Test";
-            disease.AddSymptoms(symptoms[0]);
-            diseases.Add(disease);
-            disease = new Disease();
-            disease.Description = "Test";
-            disease.Href = "Test";
-            disease.Name = "Test";
-            disease.AddSymptoms(symptoms[0]);
-            diseases.Add(disease);*/
+
             foreach (IDisease disease_ in diseases) {
                 await DatabaseController.AddDiseaseAsync(disease_);
                 returnstring += disease_.Name + " ";
