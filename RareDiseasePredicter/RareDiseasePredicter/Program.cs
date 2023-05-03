@@ -23,7 +23,7 @@ internal class Program {
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,
                               policy => {
-                                  policy.WithOrigins("http://localhost:3000", "http://localhost:8080").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                                  policy.WithOrigins("http://83.92.23.39/:3000", "http://83.92.23.39/:8080").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                               });
             
         });
