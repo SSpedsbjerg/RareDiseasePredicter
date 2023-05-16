@@ -44,8 +44,8 @@ namespace RareDiseasePredicter.Controller {
                 string createQuery;
                 createQuery = "CREATE TABLE IF NOT EXISTS DiseaseSymptomsReference " +
                     "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "DiseaseID INTEGER NOT NULL, " +
-                    "SymptomID INTEGER NOT NULL);";
+                    "DiseaseID INTEGER, " +
+                    "SymptomID INTEGER);";
                 var command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
@@ -60,8 +60,8 @@ namespace RareDiseasePredicter.Controller {
                 command.ExecuteNonQuery();
                 createQuery = "CREATE TABLE IF NOT EXISTS RegionSymptoms (" +
                     "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "Symptom INTEGER NOT NULL, " +
-                    "Region INTEGER NOT NULL);";
+                    "Symptom INTEGER, " +
+                    "Region INTEGER);";
                 command = Connection.CreateCommand();
                 command.CommandText = createQuery;
                 command.ExecuteNonQuery();
@@ -74,7 +74,7 @@ namespace RareDiseasePredicter.Controller {
                 //TODO: Update Region to reference RegionSymptoms
                 createQuery = "CREATE TABLE IF NOT EXISTS Symptoms (" +
                     " ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    " Region INTEGER NOT NULL," +
+                    " Region INTEGER," +
                     " Name TEXT," +
                     " Description TEXT" +
                     " );";
@@ -151,7 +151,7 @@ namespace RareDiseasePredicter.Controller {
                             Description = description
                             };
                         symptom.ID = id;
-                        symptoms.Add(symptom); //Adds symptom
+                        symptoms.Add(symptom);
                         }
                     }
                 command.CommandText = "SELECT * FROM RegionSymptoms";
@@ -159,11 +159,9 @@ namespace RareDiseasePredicter.Controller {
                 using (var reader = command.ExecuteReader()) {
                     while(reader.Read()) {
                         foreach(ISymptom symptom in symptoms) {//search the symptoms
-                            if(reader.GetInt32(1) == symptom.ID) {//if a symptomreference matches with the symptoms' id  continue
-                                foreach(IRegion region in regions) {//search for all regions
-                                    if(region.ID == reader.GetInt32(2)) {//if a regions id matches with any the regions references add the region to the symptom
-                                        symptom.AddRegion(region);
-                                        }
+                            foreach(IRegion region in regions) {//search for all regions
+                                if(region.ID == reader.GetInt32(2) & reader.GetInt32(1) == symptom.ID) {//if a regions id matches with any the regions references add the region to the symptom
+                                    symptom.AddRegion(region);
                                     }
                                 }
                             }
@@ -183,6 +181,7 @@ namespace RareDiseasePredicter.Controller {
             var command = Connection.CreateCommand();
             if(CreateConnection()) {
                 command.CommandText = "SELECT ID FROM Disease";
+                disease.ID = 1;
                 using (var reader = command.ExecuteReader()) {
                     while(reader.Read()) {
                         disease.ID = reader.GetInt32(0) + 1;
@@ -192,8 +191,8 @@ namespace RareDiseasePredicter.Controller {
                 command.ExecuteNonQuery();
                 foreach (ISymptom symptom in disease.Symptoms) {
                     command.CommandText = $"INSERT INTO DiseaseSymptomsReference (DiseaseID, SymptomID) VALUES ({disease.ID}, {symptom.ID});";
+                    command.ExecuteNonQuery();
                     }
-                command.ExecuteNonQuery();
                 }
             else {
                 _ = Log.Error(new Exception("Could not create connection to database"), "AddDiseaseAsync", "");
@@ -223,15 +222,18 @@ namespace RareDiseasePredicter.Controller {
                         lastRefID= 0;
                         }
                 }
-                if (lastRefID == -1 ) {//It should not end in here
+                if (lastRefID == -1) {//It should not end in here
                     _=Log.Error(new Exception($"lasRefID was {lastRefID}"), "AddSymptomAsync", "");
                     return false;
                     }
-                lastRefID++;
+                lastRefID++;//ID always starts at 1
                 command.CommandText = $"INSERT INTO Symptoms (Region, Name, Description) VALUES ('{lastRefID}', '{symptom.Name}', '{symptom.Description}')";
                 var query = command.ExecuteNonQueryAsync();
                 foreach (IRegion region in symptom.Regions) {
-                        await AddSympRegionReferenceAsync(lastRefID, region.ID);
+                    await AddSympRegionReferenceAsync(lastRefID, region.ID);
+                    }
+                if (symptom.Regions.Count == 0) {
+                    await AddSympRegionReferenceAsync(lastRefID, 0);
                     }
                 await query;
                 return true;
@@ -248,7 +250,6 @@ namespace RareDiseasePredicter.Controller {
                 return false;
                 }
             var command = Connection.CreateCommand();
-            command.CommandText = "SELECT * FROM RegionSymptoms";
             command.CommandText = $"INSERT INTO RegionSymptoms (Symptom, Region) VALUES ({sympID}, {regionID})";
             command.ExecuteNonQuery();
             return true;

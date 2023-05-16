@@ -81,7 +81,7 @@ function Input() {
 
     function fetchMovies() {
       fetch(
-        `http://localhost:57693/symptoms`
+        `http://83.92.23.39:57693/symptoms`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -156,7 +156,7 @@ function Input() {
 
     const postData = async () =>  {
       const stringArray = tableData.map(data => data.symptom);
-      const response = await fetch('https://localhost:57693/GetSuggestion/', {
+      const response = await fetch('https://83.92.23.39:57693/GetSuggestion/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

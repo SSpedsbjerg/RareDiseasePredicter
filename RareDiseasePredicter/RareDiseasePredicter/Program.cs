@@ -21,12 +21,17 @@ internal class Program {
 
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy(name: MyAllowSpecificOrigins,
+            /*options.AddPolicy(name: MyAllowSpecificOrigins,
                               policy => {
-                                  policy.WithOrigins("http://localhost:3000", "http://localhost:8080").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-                              });
+                                  policy.WithOrigins("http://83.92.23.39/:3000", "http://83.92.23.39/:8080").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                              });*/
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                policy => {
+                    policy.AllowCredentials().AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true);
+                });
             
         });
+
 
         builder.Services.AddControllers().AddNewtonsoftJson();
         
