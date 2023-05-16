@@ -27,47 +27,24 @@ namespace RareDiseasePredicter.Implementations {
              * 
              **/
             
-            List<RDDisease> rDDiseases= new List<RDDisease>();
             List<ISymptom> dbSymptoms = (List<ISymptom>)await _symptoms;
             List<IDisease> diseases = (List<IDisease>)await _diseases;
 
             
             foreach (IDisease disease in diseases) {
-                RDDisease rD = new RDDisease(disease);
-                foreach (ISymptom diseaseSymptom in disease.Symptoms) {
-                    foreach (ISymptom symptom in symptoms) {
-                        if (symptom.Name == diseaseSymptom.Name) {
-                            rD.Symptoms.Add(new Tuple<ISymptom, bool>(symptom,true));
+                foreach (ISymptom symptom in dbSymptoms) {
+                    List<IDisease> matches = diseases.Where(p => p.Name == symptom.Name).ToList<IDisease>();
+                    foreach (IDisease match in matches) {
+                        if (match.Name == disease.Name) {
+                            disease.Weight += 1.0f / disease.Symptoms.Count;
                             }
                         else {
-                            rD.Symptoms.Add(new Tuple<ISymptom, bool>(symptom, false));
+                            disease.Weight -= 1.0f / disease.Symptoms.Count;
                             }
                         }
                     }
                 }
-
-            foreach (RDDisease rDDisease in rDDiseases) {
-                foreach (Tuple<ISymptom, bool> symptom in rDDisease.Symptoms) {
-                    if (symptom.Item2 == true) {
-                        rDDisease.Weight += 1f / rDDisease.Symptoms.Count;
-                        }
-                    else if (symptom.Item2 == false) {
-                        rDDisease.Weight -= 1f / rDDisease.Symptoms.Count;
-                        }
-                    }
-                }
-            List<IDisease> diseasesFinal = new List<IDisease>();
-            foreach (RDDisease rd in rDDiseases) {
-                IDisease disease = new Disease();
-                disease.Weight = rd.Weight;
-                disease.Href =rd.disease.Href;
-                disease.Description = rd.disease.Description;
-                disease.Name = rd.disease.Name;
-                disease.ID = rd.disease.ID;
-                disease.Symptoms = rd.disease.Symptoms;
-                diseasesFinal.Add(disease);
-                }
-            return diseasesFinal;
+            return diseases;
             }
         }
     }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using RareDiseasePredicter.Implementations;
+using System.Xml.Linq;
 
 /**
  * 
@@ -62,17 +63,6 @@ namespace RareDiseasePredicter.Controller {
                     }
                 }
             List<IDisease> diseases = (List<IDisease>)await rDDeterminer.CalculateDiseasesAsync(_symptoms);
-            /*
-            List<IDisease> diseases = new List<IDisease>();
-            foreach (ISymptom symptom_ in _symptoms) {
-                foreach (IDisease disease in await DatabaseController.GetDiseaseAsync()) {
-                    foreach (ISymptom symptom1 in disease.GetSymptoms()) {
-                        if (symptom1.Name == symptom_.Name || symptom1.ID == symptom_.ID) {
-                            diseases.Add(disease);
-                            }
-                        }
-                    }
-                }*/
             string jsonString = JsonSerializer.Serialize(diseases);
             return jsonString;
             }
@@ -133,46 +123,42 @@ namespace RareDiseasePredicter.Controller {
             return "500";
             }
 
+        string SplitString(string value) {
+            try {
+                string[] nameSplit = value.Split("_");
+                value = "";
+                foreach(string nameSegment in nameSplit) {
+                    value += $"{nameSegment} ";
+                    }
+                value = value.Remove(value.Length - 1);
+                }
+            catch {
+                _ = Log.Warning("Couldn't split string", "SplitString", "");
+                }
+            return value;
+            }
+
         //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
         //Adds symptom to database
         [HttpGet]
         [Route("/AddSymptom/{name}+{Description}+{Regions}")]
         public async Task<string> AddSymptom([FromRoute]string name, string description, string regions) {
             Task<ICollection<IRegion>> dbRegions = DatabaseController.GetRegionsAsync();
-            try {
-                string[] nameSplit = name.Split("_");
-                name = "";
-                foreach (string nameSegment in nameSplit) {
-                    name += $"{nameSegment} ";
-                    }
-                name = name.Remove(name.Length - 1);
-                }
-            catch {
-                _ = Log.Warning("Couldn't split name of Symptom", "AddSymptom", "");
-                }
-
-            try {
-                string[] descriptionSplit = description.Split("_");
-                description = "";
-                foreach (string descriptionSegment in descriptionSplit) {
-                    description += $"{descriptionSegment} ";
-                    }
-                description = description.Remove(description.Length - 1);
-                }
-            catch {
-                _ = Log.Warning("Couldn't split description of Symptom", "AddSymptom", "");
-                }
+            name = SplitString(name);
+            description = SplitString(description);
             ISymptom symptom = new Symptom(name);
             symptom.Description = description;
-            string[] regionsArray = regions.Split(',');
-            List<int> regionIDs = new List<int>();
-            foreach (string region in regionsArray) {
-                regionIDs.Add(int.Parse(region));
-                }
-            foreach (int regionID in regionIDs) {
-                foreach (IRegion region in await dbRegions) {
-                    if (regionID == region.ID) {
-                        symptom.AddRegion(region);
+            if(!regions.StartsWith('0')) {//This should allow for symptoms without any regions
+                string[] regionsArray = regions.Split(',');
+                List<int> regionIDs = new List<int>();
+                foreach(string region in regionsArray) {
+                    regionIDs.Add(int.Parse(region));
+                    }
+                foreach(int regionID in regionIDs) {
+                    foreach(IRegion region in await dbRegions) {
+                        if(regionID == region.ID) {
+                            symptom.AddRegion(region);
+                            }
                         }
                     }
                 }
@@ -212,8 +198,18 @@ namespace RareDiseasePredicter.Controller {
             return jsonString;
             }
 
-        //TODO: Delete before production
+        //Gets a list of diseases
         [HttpGet]
+        [Route("/Diseases")]
+        public async Task<string> GetDiseases() {
+            List<IDisease> diseases = await DatabaseController.GetDiseaseAsync() as List<IDisease>;
+            string jsonString = JsonSerializer.Serialize(diseases);
+            return jsonString;
+            }
+
+
+    //TODO: Delete before production
+    [HttpGet]
         [Route("/AddDummyData")]
         public async Task<string> AddDummyData() {
             string returnstring = "200 ";
@@ -245,13 +241,13 @@ namespace RareDiseasePredicter.Controller {
             region = new Region("right_foot", -1);//12
             regions.Add(region);
             foreach(IRegion region_ in regions) {
-                await DatabaseController.AddRegionAsync(region_);
+                await AddRegion(region_.Name);
                 returnstring += region_.Name + " ";
             }
 
             List<ISymptom> symptoms = new List<ISymptom>();
             Symptom symptom = new Symptom("Tinnitus");//0
-            symptom.Description = "Ronstant ringing in the ear";
+            symptom.Description = "Constant ringing in the ear";
             symptom.Regions.Add(regions[0]);
             symptoms.Add(symptom);
             symptom = new Symptom("Dizziness");//1
@@ -356,8 +352,56 @@ namespace RareDiseasePredicter.Controller {
             symptom.Description = "null";
             symptoms.Add(symptom);
 
-            foreach (ISymptom symptom_ in symptoms) {
-                await DatabaseController.AddSymptomAsync(symptom_);
+
+            //get regionsID
+            regions = (List<IRegion>)await DatabaseController.GetRegionsAsync();
+            foreach(ISymptom symptom_ in symptoms) {
+                foreach(IRegion region_ in regions) {
+                    foreach(IRegion reg in symptom_.Regions) {
+                        try {
+                            string[] nameSplit = reg.Name.Split("_");
+                            reg.Name = "";
+                            foreach(string nameSegment in nameSplit) {
+                                reg.Name += $"{nameSegment} ";
+                            }
+                            reg.Name = reg.Name.Remove(reg.Name.Length - 1);
+                            }
+                        catch {
+                            _ = Log.Warning("Couldn't split name of region", "DummyData", "");
+                            }
+                        if(region_.Name == reg.Name) {
+                            reg.ID = region_.ID;
+                            }
+                        else if(reg.ID == -1) {
+                            reg.ID = 0;
+                            }
+                        }
+                    }
+                }
+                
+
+            //List<IRegion> matches = regions.Where(p => p.Name == symptom_.Name).ToList<IRegion>();
+            
+            foreach(ISymptom symptom_ in symptoms) {
+                string re = "";
+                foreach(IRegion match in symptom_.Regions) {
+                    re += match.ID + ",";
+                    }
+                try {
+                    if (re == "") {
+                        re = "0";
+                        }
+                    else if(re != "-1") {
+                        re = re.Remove(re.Length - 1);
+                        }
+                    else {
+                        re = "0";
+                        }
+                    }
+                catch {
+                    re = "0";
+                    }
+                await AddSymptom(symptom_.Name, symptom_.Description, re);
                 returnstring += symptom_.Name + " ";
                 }
 
@@ -412,20 +456,69 @@ namespace RareDiseasePredicter.Controller {
             disease.AddSymptoms(symptoms[26]);
             diseases.Add(disease);
 
-            foreach (IDisease disease_ in diseases) {
-                await DatabaseController.AddDiseaseAsync(disease_);
+            //get symptomsID
+            symptoms = (List<ISymptom>)await DatabaseController.GetSymptomsAsync();
+            foreach(IDisease disease_ in diseases) {
+                foreach(ISymptom symptom_ in symptoms) {
+                    foreach(ISymptom sym in disease_.Symptoms) {
+                        try {
+                            string[] nameSplit = sym.Name.Split("_");
+                            sym.Name = "";
+                            foreach(string nameSegment in nameSplit) {
+                                sym.Name += $"{nameSegment} ";
+                                }
+                            sym.Name = sym.Name.Remove(sym.Name.Length - 1);
+                            }
+                        catch {
+                            _ = Log.Warning("Couldn't split name of symptom", "DummyData", "");
+                            }
+                        if(symptom_.Name == sym.Name) {
+                            sym.ID = symptom_.ID;
+                            }
+                        else if(sym.ID == -1) {
+                            sym.ID = 0;
+                            }
+                        }
+                    }
+                }
+
+
+            foreach(IDisease disease_ in diseases) {
+                string sy = "";
+                foreach(ISymptom match in disease_.Symptoms) {
+                    sy += match.ID + ",";
+                    }
+                try {
+                    if(sy == "") {
+                        sy = "0";
+                        }
+                    else if(sy != "-1") {
+                        sy = sy.Remove(sy.Length - 1);
+                        }
+                    else {
+                        sy = "0";
+                        }
+                    }
+                catch {
+                    sy = "0";
+                    }
+                await AddDisease(disease_.Name, disease_.Description, disease_.Href, sy);
                 returnstring += disease_.Name + " ";
                 }
-            return returnstring;
-            }
 
-        //Gets a list of diseases
-        [HttpGet]
-        [Route("/Diseases")]
-        public async Task<string> GetDiseases() {
-            List<IDisease> diseases = await DatabaseController.GetDiseaseAsync() as List<IDisease>;
-            string jsonString = JsonSerializer.Serialize(diseases);
-            return jsonString;
+            /*
+            foreach (IDisease disease_ in diseases) {
+                symptoms = (List<ISymptom>)await DatabaseController.GetSymptomsAsync();
+                string sy = "";
+                foreach(ISymptom symptom_ in symptoms) {
+                    sy += symptom_.ID + ",";
+                    }
+                sy = sy.Remove(sy.Length - 1);
+                Console.WriteLine(sy);
+                await AddDisease(disease.Name, disease.Description, disease.Href, sy);
+                returnstring += disease_.Name + " ";
+                }*/
+            return returnstring;
             }
         }
     }
