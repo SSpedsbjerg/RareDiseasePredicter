@@ -30,21 +30,56 @@ namespace RareDiseasePredicter.Implementations {
             List<ISymptom> dbSymptoms = (List<ISymptom>)await _symptoms;
             List<IDisease> diseases = (List<IDisease>)await _diseases;
 
-            
+            List<IDisease> matches = new List<IDisease>();
             foreach (IDisease disease in diseases) {
                 foreach (ISymptom symptom in dbSymptoms) {
-                    List<IDisease> matches = diseases.Where(p => p.Name == symptom.Name).ToList<IDisease>();
-                    foreach (IDisease match in matches) {
-                        if (match.Name == disease.Name) {
-                            disease.Weight += 1.0f / disease.Symptoms.Count;
-                            }
-                        else {
-                            disease.Weight -= 1.0f / disease.Symptoms.Count;
+                    foreach (ISymptom symp in disease.Symptoms) {
+                        foreach (ISymptom sym in symptoms) {
+                            if (symp.Name.Equals(sym.Name) & !matches.Contains(disease)) {
+                                matches.Add(disease);
+                                }
                             }
                         }
                     }
                 }
-            return diseases;
+            foreach (IDisease disease in matches) {
+                foreach (ISymptom symptom in disease.Symptoms) {
+                    foreach (ISymptom userSymptom in symptoms) {
+                        if(userSymptom.Name.Equals(symptom.Name)) {
+                            disease.Weight += 1.0f / symptoms.Count;
+                            }
+                        else {
+                            disease.Weight -= 0.05f / symptoms.Count;
+                            }
+                        }
+                    }
+                }
+            matches = matches.OrderByDescending(x => x.Weight).ToList();
+            int index = matches.Count - 1;
+            while(index != 0) {
+                if(matches[index].Weight < 0) {
+                    matches.Remove(matches[index]);
+                    }
+                index--;
+                }
+            if(matches[0].Weight < 0) {
+                matches.Remove(matches[index]);
+                }
+            float totalWeight = 0;
+            foreach(IDisease disease in matches) {
+                totalWeight += disease.Weight;
+                }
+
+            foreach(IDisease disease in matches) {
+                disease.Weight /= totalWeight;
+                disease.Weight *= 100;
+                }
+            return matches;
             }
         }
     }
+
+/*
+
+
+*/
