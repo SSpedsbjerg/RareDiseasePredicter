@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button'
 import { Autocomplete, TextField } from '@mui/material';
 
 
-function Input() {
+function Input({handleData}) {
     const [bodyState, setBodyState] = useState({
         head: {
           show: true,
@@ -63,23 +63,17 @@ function Input() {
         }
       });
 
-
-
     const [tableData, setTableData] = useState([]);
 
     const [data, setData] = useState({});
     const [value, setValue] = useState(null);
-    const [response, setResponse] = useState(null);
   
-    
-  
-
     useEffect(() => {
-      fetchMovies();
+      fetchSymptoms();
       
     }, []);
 
-    function fetchMovies() {
+    function fetchSymptoms() {
       fetch(
         `http://83.92.23.39:57693/symptoms`
       )
@@ -154,19 +148,7 @@ function Input() {
       setTableData(newData);
     };
 
-    const postData = async () =>  {
-      const stringArray = tableData.map(data => data.symptom);
-      const response = await fetch('https://83.92.23.39:57693/GetSuggestion/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(stringArray)
-      });
-      const data = await response.json();
-      setResponse(data);
-        console.log(data);
-    }
+    
 
 
     return(
@@ -180,7 +162,7 @@ function Input() {
           <Button 
           variant="success"
           type="submit"
-          onClick={postData}>
+          onClick={() => handleData(tableData.map(data => data.symptom))}>
             Find sygdom
           </Button>
         </div>

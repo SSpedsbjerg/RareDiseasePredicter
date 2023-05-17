@@ -1,6 +1,11 @@
 import Table from 'react-bootstrap/Table';
 
-function Results({ data }) {
+function Results({data}) {
+  if (!Array.isArray(data)) {
+    console.log(data);
+    return <div>No data available</div>;
+  }
+
     return(
       <div>
         {data && (
@@ -9,13 +14,15 @@ function Results({ data }) {
           <tr>
             <th>Sygdom</th>
             <th>Sandsynlighed</th>
+            <th>Link</th>
           </tr>
         </thead>
         <tbody>
         {data.map(disease => (
-            <tr key={disease.id} >
-              <td>{disease.name}</td>
-              <td>{disease.chance}</td>
+            <tr key={disease.ID} >
+              <td>{disease.Name}</td>
+              <td>{disease.Weight}</td>
+              <td><a href={disease.Href} rel="noreferrer">Info</a></td>
             </tr>
           ))}
         </tbody>
