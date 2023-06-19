@@ -351,6 +351,78 @@ namespace RareDiseasePredicter.Controller {
             symptom = new Symptom("Malformation of the hip");//26
             symptom.Description = "null";
             symptoms.Add(symptom);
+            symptom = new Symptom("Vomiting");//27
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Dehydration");//28
+            symptom.Description= "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Muscle cramps");//29
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Weakness");//30
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Excessive Daytime Sleepiness");//31
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Loss of muscle control");//32
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Hallutinations");//33
+            symptom.Description = "null";
+            symptoms.Add (symptom);
+            symptom = new Symptom("Sleep paralysis");//34
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Lethargy");//35
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Loss of appetite");//36
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Headache");//37
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Muscle ache");//38
+            symptom.Description= "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Fever");//39
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Spasms");//40
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Nausea");//41
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Anorexia");//42
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Malaise");//43
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Rapid Heartbeat");//44
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Nervousness");//45
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Anxeity");//46
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Insomnia");//47
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Depression");//48
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Chills");//49
+            symptom.Description = "null";
+            symptoms.Add(symptom);
+            symptom = new Symptom("Sore throat");//50
+            symptom.Description = "null";
+            symptoms.Add(symptom);
 
 
             //get regionsID
@@ -408,7 +480,7 @@ namespace RareDiseasePredicter.Controller {
             List<IDisease> diseases = new List<IDisease>();
             Disease disease = new Disease();//0
             disease.Description = "Acoustic neuromas are slow-growing tumors that can eventually cause a variety of symptoms by pressing against the eighth cranial nerve. Hearing loss in one ear (the ear affected by the tumor) is the initial symptom in approximately 90 percent of patients. Hearing loss is usually gradual, although in some rare cases it can be sudden. In some cases, hearing loss can also fluctuate (worsen and then improve). Hearing loss may be accompanied by ringing in the ears, a condition known as tinnitus, or by a feeling of fullness in the affected ear. In some cases, affected individuals may have difficulty understanding speech that is disproportional to the amount of hearing loss.";
-            disease.Href = "https://rarediseases.org/rare-diseases/acoustic-neuroma/#symptoms";
+            disease.Href = "https://rarediseases.org/rare-diseases/acoustic-neuroma/";
             disease.Name = "Acoustic Neuroma";
             for (int i = 0; i != 8; i++) {
                 disease.AddSymptoms(symptoms[i]);
@@ -429,17 +501,21 @@ namespace RareDiseasePredicter.Controller {
             disease.Href = "https://rarediseases.org/rare-diseases/cholera/";
             disease.Name = "Cholera";
             disease.AddSymptoms(symptoms[15]);
+            disease.AddSymptoms(symptoms[27]);
+            disease.AddSymptoms(symptoms[28]);
+            disease.AddSymptoms(symptoms[29]);
+            disease.AddSymptoms(symptoms[30]);
             diseases.Add(disease);
 
             disease = new Disease();//3
             disease.Description = "DOOR syndrome is a rare genetic disorder that may be recognized shortly after birth. “DOOR,” an acronym for characteristic abnormalities associated with the syndrome, stands for (D)eafness due to a defect of the inner ear or auditory nerve (sensorineural hearing loss); (O)nychodystrophy or malformation of the nails; (O)steodystrophy, meaning malformation of certain bones; and mild to profound mental (R)etardation. In addition, in some cases, affected infants may have sudden episodes of uncontrolled electrical activity in the brain (seizures). Distinctive nail abnormalities may include underdeveloped, misshapen, or absent fingernails and/or toenails, while characteristic bone malformations may consist of an extra small bone in the thumbs and/or great toes (triphalangy) and/or underdevelopment (hypoplasia) of bones in other fingers and/or toes. DOOR syndrome is inherited as an autosomal recessive trait.";
             disease.Href = "https://rarediseases.org/rare-diseases/door-syndrome/";
             disease.Name = "DOOR Syndrome";
-            disease.AddSymptoms(symptoms[3]);
-            disease.AddSymptoms(symptoms[16]);
-            disease.AddSymptoms(symptoms[17]);
-            disease.AddSymptoms(symptoms[18]);
-            disease.AddSymptoms(symptoms[19]);
+            disease.AddSymptoms(symptoms[3]);//Hearing loss
+            disease.AddSymptoms(symptoms[16]);//Nail malform
+            disease.AddSymptoms(symptoms[17]);//malform bones
+            disease.AddSymptoms(symptoms[18]);//Retarded
+            disease.AddSymptoms(symptoms[19]);//Seizures
             diseases.Add(disease);
 
             disease = new Disease();//4
@@ -455,6 +531,71 @@ namespace RareDiseasePredicter.Controller {
             disease.AddSymptoms(symptoms[25]);
             disease.AddSymptoms(symptoms[26]);
             diseases.Add(disease);
+
+            disease = new Disease();//4
+            disease.Description = "Narcolepsy is a neurological sleep disorder characterized by chronic, excessive attacks of drowsiness during the day, sometimes called excessive daytime sleepiness (EDS).";
+            disease.Href = "https://rarediseases.org/rare-diseases/narcolepsy/";
+            disease.Name = "Narcolepsy";
+            for (int i = 30; i != 35; i++)
+            {
+                disease.AddSymptoms(symptoms[i]);
+            }
+            diseases.Add(disease);
+
+            disease = new Disease();//5
+            disease.Description = "Malaria is a communicable parasitic disorder spread through the bite of the Anopheles mosquito. ";
+            disease.Href = "https://rarediseases.org/rare-diseases/malaria/";
+            disease.Name = "Malaria";
+            disease.AddSymptoms(symptoms[35]);
+            disease.AddSymptoms(symptoms[36]);
+            disease.AddSymptoms(symptoms[37]);
+            disease.AddSymptoms(symptoms[38]);
+            disease.AddSymptoms(symptoms[39]);
+            disease.AddSymptoms(symptoms[40]);
+            disease.AddSymptoms(symptoms[15]);
+            disease.AddSymptoms(symptoms[27]);
+            diseases.Add(disease);
+
+            disease = new Disease();
+            disease.Description = "Radiation sickness describes the harmful effects–acute, delayed, or chronic–produced by exposure to ionizing radiation.";
+            disease.Href = "https://rarediseases.org/rare-diseases/radiation-sickness/";
+            disease.Name = "Radiation Sickness";
+            disease.AddSymptoms(symptoms[15]);
+            disease.AddSymptoms(symptoms[41]);
+            disease.AddSymptoms(symptoms[27]);
+            disease.AddSymptoms(symptoms[42]);
+            disease.AddSymptoms(symptoms[37]);
+            disease.AddSymptoms(symptoms[43]);
+            disease.AddSymptoms(symptoms[44]);
+            diseases.Add(disease);
+
+            disease = new Disease();
+            disease.Description = "Rabies is an infectious disease that can affect all species of warmblooded animals, including man. This disorder is transmitted by the saliva of an infected animal and is caused by a virus (Neurotropic lyssavirus) that affects the salivary glands and the central nervous system.";
+            disease.Href = "https://rarediseases.org/rare-diseases/rabies/";
+            disease.Name = "Rabies";
+            disease.AddSymptoms(symptoms[43]);
+            disease.AddSymptoms(symptoms[45]);
+            disease.AddSymptoms(symptoms[46]);
+            disease.AddSymptoms(symptoms[47]);
+            disease.AddSymptoms(symptoms[48]);
+            disease.AddSymptoms(symptoms[36]);
+            disease.AddSymptoms(symptoms[39]);
+            disease.AddSymptoms(symptoms[49]);
+            disease.AddSymptoms(symptoms[8]);
+            disease.AddSymptoms(symptoms[50]);
+            disease.AddSymptoms(symptoms[37]);
+            disease.AddSymptoms(symptoms[41]);
+            disease.AddSymptoms(symptoms[27]);
+            diseases.Add(disease);
+
+            disease = new Disease();
+            disease.Description = "Schinzel syndrome, also known as ulnar-mammary syndrome, is a rare inherited disorder characterized by abnormalities of the bones of the hands and forearms in association with underdevelopment (hypoplasia) and dysfunction of certain sweat (apocrine) glands and/or the breasts (mammary glands). ";
+            disease.Href = "https://rarediseases.org/rare-diseases/schinzel-syndrome/";
+            disease.Name = "Schinzel Syndrome";
+            disease.AddSymptoms(symptoms[17]);
+            disease.AddSymptoms(symptoms[24]);
+            diseases.Add(disease);
+
 
             //get symptomsID
             symptoms = (List<ISymptom>)await DatabaseController.GetSymptomsAsync();
