@@ -29,9 +29,6 @@ WORKDIR /publish
 # Copies the dotnet build files from the previous stage to the publish folder
 COPY --from=build-env /publish .
 
-# Copies the preset database data provided to the backend
-COPY RareDiseasePredicter/RareDiseasePredicter/Database.db .
-
 # Expose port 57693 for API calls
 EXPOSE 57693
 
