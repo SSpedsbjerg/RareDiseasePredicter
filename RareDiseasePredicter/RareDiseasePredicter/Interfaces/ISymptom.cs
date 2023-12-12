@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace RareDiseasePredicter.Interfaces {
-    interface ISymptom {
+    public interface ISymptom {
         ICollection<IRegion> GetRegions();
 
         public string Name {get;set;}

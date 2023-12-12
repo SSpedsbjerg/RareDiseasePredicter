@@ -1,0 +1,3 @@
+RegionsPath:/regions
+SymptomsPath:/symptoms
+DiseasePath:/diseases

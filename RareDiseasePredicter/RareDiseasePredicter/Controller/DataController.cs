@@ -214,32 +214,27 @@ namespace RareDiseasePredicter.Controller {
         public async Task<string> AddDummyData() {
             string returnstring = "200 ";
             List<IRegion> regions = new List<IRegion>();
-            Region region = new Region("head", -1);//0
-            regions.Add(region);
-            region = new Region("left_shoulder", -1);//1
-            regions.Add(region);
-            region = new Region("right_shoulder", -1);//2
-            regions.Add(region);
-            region = new Region("left_arm", -1);//3
-            regions.Add(region);
-            region = new Region("right_arm", -1);//4
-            regions.Add(region);
-            region = new Region("chest", -1);//5
-            regions.Add(region);
-            region = new Region("stomach", -1);//6
-            regions.Add(region);
-            region = new Region("left_leg", -1);//7
-            regions.Add(region);
-            region = new Region("right_leg", -1);//8
-            regions.Add(region);
-            region = new Region("left_hand", -1);//9
-            regions.Add(region);
-            region = new Region("right_hand", -1);//10
-            regions.Add(region);
-            region = new Region("left_foot", -1);//11
-            regions.Add(region);
-            region = new Region("right_foot", -1);//12
-            regions.Add(region);
+            string[] regionNames = {
+                "head",
+                "left_shoulder",
+                "right_shoulder",
+                "left_arm",
+                "right_arm",
+                "chest",
+                "stomach",
+                "left_leg",
+                "right_leg",
+                "left_hand",
+                "right_hand",
+                "left_foot",
+                "right_foot"
+            };
+            int i = 0;
+            while (regions.Count != 13) {
+                regions.Add(new Region(regionNames[i], -1));
+                i++;
+            }
+
             foreach(IRegion region_ in regions) {
                 await AddRegion(region_.Name);
                 returnstring += region_.Name + " ";
@@ -261,19 +256,19 @@ namespace RareDiseasePredicter.Controller {
             symptoms.Add(symptom);
             symptom = new Symptom("Paralysis");//4
             symptom.Description = "Unable to move in the region";
-            for(int i = 0; i < regions.Count; i++) {
+            for(i = 0; i < regions.Count; i++) {
                 symptom.Regions.Add((Region)regions[i]);
                 }
             symptoms.Add(symptom);
             symptom = new Symptom("Numbness");//5
             symptom.Description = "null";
-            for(int i = 0; i < regions.Count; i++) {
+            for(i = 0; i < regions.Count; i++) {
                 symptom.Regions.Add((Region)regions[i]);
                 }
             symptoms.Add(symptom);
             symptom = new Symptom("Tingling");//6
             symptom.Description = "null";
-            for(int i = 0; i < regions.Count; i++) {
+            for(i = 0; i < regions.Count; i++) {
                 symptom.Regions.Add((Region)regions[i]);
                 }
             symptoms.Add(symptom);
@@ -482,7 +477,7 @@ namespace RareDiseasePredicter.Controller {
             disease.Description = "Acoustic neuromas are slow-growing tumors that can eventually cause a variety of symptoms by pressing against the eighth cranial nerve. Hearing loss in one ear (the ear affected by the tumor) is the initial symptom in approximately 90 percent of patients. Hearing loss is usually gradual, although in some rare cases it can be sudden. In some cases, hearing loss can also fluctuate (worsen and then improve). Hearing loss may be accompanied by ringing in the ears, a condition known as tinnitus, or by a feeling of fullness in the affected ear. In some cases, affected individuals may have difficulty understanding speech that is disproportional to the amount of hearing loss.";
             disease.Href = "https://rarediseases.org/rare-diseases/acoustic-neuroma/";
             disease.Name = "Acoustic Neuroma";
-            for (int i = 0; i != 8; i++) {
+            for (i = 0; i != 8; i++) {
                 disease.AddSymptoms(symptoms[i]);
                 }
             diseases.Add(disease);
@@ -491,7 +486,7 @@ namespace RareDiseasePredicter.Controller {
             disease.Description = "Berylliosis is a form of metal poisoning caused by inhalation of beryllium dusts, vapors, or its compounds or implantation of the substance in the skin. The toxic effects of beryllium most commonly occur due to occupational exposure. Beryllium is a metallic element used in many industries, including electronics, high-technology ceramics, metals extraction, and dental alloy preparation.";
             disease.Href = "https://rarediseases.org/rare-diseases/berylliosis/";
             disease.Name = "Berylliosis";
-            for(int i = 8; i != 15; i++) {
+            for(i = 8; i != 15; i++) {
                 disease.AddSymptoms(symptoms[i]);
                 }
             diseases.Add(disease);
@@ -536,7 +531,7 @@ namespace RareDiseasePredicter.Controller {
             disease.Description = "Narcolepsy is a neurological sleep disorder characterized by chronic, excessive attacks of drowsiness during the day, sometimes called excessive daytime sleepiness (EDS).";
             disease.Href = "https://rarediseases.org/rare-diseases/narcolepsy/";
             disease.Name = "Narcolepsy";
-            for (int i = 30; i != 35; i++)
+            for (i = 30; i != 35; i++)
             {
                 disease.AddSymptoms(symptoms[i]);
             }
