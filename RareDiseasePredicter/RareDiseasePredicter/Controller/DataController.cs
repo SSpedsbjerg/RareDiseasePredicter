@@ -26,7 +26,7 @@ namespace RareDiseasePredicter.Controller {
 
         [HttpGet]
         [Route("/AddRegion/{name}")]
-        public async Task<string> AddRegion([FromRoute]string name) {
+        public async Task<string> AddRegionFromRoute([FromRoute]string name) {
             try {
                 string[] nameSplit = name.Split("_");
                 name = "";
@@ -122,6 +122,52 @@ namespace RareDiseasePredicter.Controller {
                 }
             return "500";
             }
+
+        [HttpPost]
+        [Route("/AddDisease/")]
+        public async Task<string> AddDisease([FromBody] string body) {
+            IDisease disease = null;
+            try {
+                disease = JsonSerializer.Deserialize<Disease>(body);
+            }
+            catch (Exception ex) {
+                _= Log.Error(ex, "DataController", "HTTPPOST ADDDISEASE");
+                return "500";
+            }
+            DatabaseController.AddDiseaseAsync(disease).Wait();
+            return "200";
+        }
+
+        [HttpPost]
+        [Route("/AddSymptom/")]
+        public async Task<string> AddSymptom([FromBody] string body) {
+            ISymptom symptom = null;
+            try {
+                symptom = JsonSerializer.Deserialize<Symptom>(body);
+            }
+            catch(Exception ex) {
+                _ = Log.Error(ex, "DataController", "HTTPPOST ADDsymptom");
+                return "500";
+            }
+            DatabaseController.AddSymptomAsync(symptom).Wait();
+            return "200";
+        }
+
+        [HttpPost]
+        [Route("/AddRegion/")]
+        public async Task<string> AddRegion([FromBody] string body) {
+            IRegion region = null;
+            try {
+                region = JsonSerializer.Deserialize<Region>(body);
+            }
+            catch(Exception ex) {
+                _ = Log.Error(ex, "DataController", "HTTPPOST ADDregion");
+                return "500";
+            }
+            DatabaseController.AddRegionAsync(region).Wait();
+            return "200";
+        }
+
 
         string SplitString(string value) {
             try {
