@@ -57,6 +57,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./RareDiseasePredicter
+          file: ./RareDiseasePredicter/Dockerfile
           push: true
           tags: spedsbjerg/rarediseasepredicter:Backend
   
