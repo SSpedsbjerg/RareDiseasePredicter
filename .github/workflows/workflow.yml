@@ -56,8 +56,8 @@ jobs:
       - name: Build And Push BackendImage
         uses: docker/build-push-action@v2
         with:
-          context: ./RareDiseasePredicter
-          file: ./RareDiseasePredicter/Dockerfile
+          context: ./
+          file: ./Dockerfile
           push: true
           tags: spedsbjerg/rarediseasepredicter:Backend
   
