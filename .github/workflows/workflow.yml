@@ -5,12 +5,18 @@ name: .NET
 
 on:
   push:
-    branches: [ "dev", "main" ]
+    branches: [ "dev", "main", "Iteration-2" ]
   pull_request:
-    branches: [ "dev", "main" ]
+    branches: [ "dev", "main", "Iteration-2" ]
+
+env:
+  docker_username: spedsbjerg
+  docker_password: ${{ secrets.DOCKER_PASSWORD }}
+  docker_repo: rarediseasepredicter
+  GIT_COMMIT: ${{ github.sha }}
 
 jobs:
-  build:
+  BuildBackend:
 
     runs-on: ubuntu-latest
     defaults:
@@ -26,3 +32,24 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+
+  PushToDucker:
+    runs-on: ubuntu-lastest
+    needs: BuildBackend
+    steps:
+      - name: Check out Repo
+        uses: actions/checkout@v3
+
+      - name: Login To DockerHub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{env.docker_username}}
+          password: ${{env.docker_password}}
+
+      - name: BuildBackend
+        uses: docker/build-push-action@v2
+        with:
+          context: ./RareDiseasePredicter/RareDiseasePredicter
+          push: true
+          tags: Rare_Disease_Predicter:Backend
+  
