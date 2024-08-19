@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Use the official dotnet sdk version 7.0 as base image for building the app
-FROM mcr.microsoft.com/dotnet/sdk:7.0 as build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as build-env
 
 # Set workdir to /RareDiseasePredictor/RareDiseasePredictor
 WORKDIR /RareDiseasePredicter/RareDiseasePredicter
@@ -21,7 +21,7 @@ RUN dotnet publish -c Release -o /publish
 
 
 # Use the official dotnet aspnet for serving the backend
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 as runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 as runtime
 
 # Sets workdir to /publish
 WORKDIR /publish
