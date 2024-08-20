@@ -1,0 +1,60 @@
+name: LTSWorkFlow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  docker_username: spedsbjerg
+  docker_password: ${{ secrets.DOCKER_PASSWORD }}
+  docker_repo: rarediseasepredicter
+  GIT_COMMIT: ${{ github.sha }}
+
+jobs:
+  BuildBackend:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./RareDiseasePredicter/RareDiseasePredicter
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+
+  PushToDocker:
+    runs-on: ubuntu-latest
+    needs: BuildBackend
+    steps:
+      - name: Check out Repo
+        uses: actions/checkout@v3
+
+      - name: Login To DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{env.docker_username}}
+          password: ${{env.docker_password}}
+
+      - name: Extract Meta-data
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ghcr.io/backend
+
+
+      - name: Build And Push BackendImage
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: spedsbjerg/rarediseasepredicter:LTSBackend
+  
