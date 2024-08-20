@@ -1,0 +1,86 @@
+﻿@page "/admin"
+@using RareDiseasePredictor.Models
+@using static System.Net.WebRequestMethods
+@inject ILogger<Admin> Logger
+
+<h1>Admin Control Board</h1>
+
+<PageTitle>Admin Board</PageTitle>
+
+<EditForm Model="@disease" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Disease Navn</label>
+        <InputText id="Name" @bind-Value="disease.Name" />
+    </div>
+
+    <div>
+        <label>Disease Beskrivelse</label>
+        <InputText id="Description" @bind-Value="disease.Description" />
+    </div>
+
+    <div>
+        <label>Disease Href</label>
+        <InputText id="Href" @bind-Value="disease.Href" />
+    </div>
+    <div>
+        <label>Symptomer</label>
+
+            <div>
+                @for (int i = 0; i < disease.Symptoms.Count; i++)
+                {
+                    <div>
+                        <InputText @bind-Value="disease.Symptoms[i]" />
+                        <button type="button" @onclick="() => RemoveSymptom(i)">Remove</button>
+                    </div>
+                }
+            </div>
+        
+
+
+
+        <div>
+            <InputText @bind-Value="newSymptom" placeholder="Add new symptom" />
+            <button type="button" @onclick="AddSymptom">Add Symptom</button>
+        </div>
+    </div>
+
+
+    <button type="submit">Submit</button>
+</EditForm>
+
+
+
+
+
+@code {
+    private Disease disease = new Disease();
+
+    private string newSymptom = string.Empty;
+
+    private void AddSymptom()
+    {
+        if (!string.IsNullOrWhiteSpace(newSymptom))
+        {
+            disease.Symptoms.Add(newSymptom);
+            newSymptom = string.Empty;
+            StateHasChanged();
+            Logger.LogWarning(disease.Symptoms.);
+        }
+    }
+
+    private void RemoveSymptom(int index)
+    {
+        disease.Symptoms.RemoveAt(index);
+        StateHasChanged();
+    }
+
+
+    private async Task HandleValidSubmit()
+    {
+        // Example of sending a POST request using HttpClient
+
+    }
+}
