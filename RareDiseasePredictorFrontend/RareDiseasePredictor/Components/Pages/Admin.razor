@@ -1,58 +1,21 @@
 ﻿@page "/admin"
 @using RareDiseasePredictor.Models
+@using System.Text.Json
 @using static System.Net.WebRequestMethods
 @inject ILogger<Admin> Logger
+@rendermode InteractiveServer
 
 <h1>Admin Control Board</h1>
 
 <PageTitle>Admin Board</PageTitle>
 
-<EditForm Model="@disease" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div>
-        <label>Disease Navn</label>
-        <InputText id="Name" @bind-Value="disease.Name" />
-    </div>
-
-    <div>
-        <label>Disease Beskrivelse</label>
-        <InputText id="Description" @bind-Value="disease.Description" />
-    </div>
-
-    <div>
-        <label>Disease Href</label>
-        <InputText id="Href" @bind-Value="disease.Href" />
-    </div>
-    <div>
-        <label>Symptomer</label>
-
-            <div>
-                @for (int i = 0; i < disease.Symptoms.Count; i++)
-                {
-                    <div>
-                        <InputText @bind-Value="disease.Symptoms[i]" />
-                        <button type="button" @onclick="() => RemoveSymptom(i)">Remove</button>
-                    </div>
-                }
-            </div>
-        
 
 
 
-        <div>
-            <InputText @bind-Value="newSymptom" placeholder="Add new symptom" />
-            <button type="button" @onclick="AddSymptom">Add Symptom</button>
-        </div>
-    </div>
+<button type="button" class="btn btn-outline-primary" @onclick="ShowModal">Add Disease</button>
 
 
-    <button type="submit">Submit</button>
-</EditForm>
-
-
-
+<ModalDisease @ref="modal" IsVisible = "false"/>
 
 
 @code {
@@ -62,25 +25,50 @@
 
     private void AddSymptom()
     {
+        Logger.LogInformation("Attempting to add symptom");
         if (!string.IsNullOrWhiteSpace(newSymptom))
         {
             disease.Symptoms.Add(newSymptom);
             newSymptom = string.Empty;
-            StateHasChanged();
-            Logger.LogWarning(disease.Symptoms.);
+
         }
     }
 
     private void RemoveSymptom(int index)
     {
+        Logger.LogWarning("Index Value: "+index.ToString());
+        Logger.LogWarning("Amount of symptoms: "+disease.Symptoms.Count().ToString());
         disease.Symptoms.RemoveAt(index);
-        StateHasChanged();
+
     }
 
 
-    private async Task HandleValidSubmit()
+    private async Task SubmitData()
     {
-        // Example of sending a POST request using HttpClient
+        var jsonString = JsonSerializer.Serialize(disease, new JsonSerializerOptions { WriteIndented = true });
+        Logger.LogInformation("Json File: " + jsonString);
+        var httpClient = new HttpClient();
+        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/AddDisease/", disease);
 
+        if (response.IsSuccessStatusCode)
+        {
+            Logger.LogInformation("Sucessfully added disease");
+        }
+        else
+        {
+            Logger.LogError("Error trying to post data: " + response.StatusCode);
+        }
+
+    }
+
+
+    private ModalDisease modal = new ModalDisease();
+
+
+    private void ShowModal()
+    {
+        Logger.LogInformation("Attempting to open modal...");
+        modal.Show();
+        StateHasChanged();
     }
 }

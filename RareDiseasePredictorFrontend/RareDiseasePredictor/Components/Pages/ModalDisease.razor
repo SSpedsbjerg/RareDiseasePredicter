@@ -1,26 +1,135 @@
-﻿
-    <div class="modal-backdrop" @onclick="CloseModal">
-        <div class="modal-content" @onclick:stopPropagation>
-            <h2>Popup Title</h2>
-            <p>This is the content of the popup.</p>
-            <button @onclick="CloseModal">Close</button>
+﻿@rendermode InteractiveServer
+@inject ILogger<Admin> Logger
+@using RareDiseasePredictor.Models
+@using System.Text.Json
+@using static System.Net.WebRequestMethods
+
+    @{
+        var showClass = IsVisible ? "d-block" : "d-none";
+    }
+<div class="toast-container p-3 @showClass" data-bs-autohide="true" data-bs-delay="5000">
+    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
+        
+
+        <div >
+            <EditForm Model="@disease" OnValidSubmit="@SubmitData">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Disease Name</label>
+                    <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="disease.Name" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Disease Description</label>
+                    <InputText id="Description" class="form-control" placeholder="Description" @bind-Value="disease.Description" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fs-6">Disease Href</label>
+                    <InputText id="Href" class="form-control" placeholder="Href" @bind-Value="disease.Href" />
+                </div>
+                <div>
+                    @if (disease.Symptoms.Count() != 0)
+                    {
+                        <label class="form-label mb-3 fs-6">Symptomer</label>
+                    }
+                   
+                    <div class="mb-3">
+                        @for (int i = 0; i < disease.Symptoms.Count; i++)
+                        {
+                            int b = i;
+                            <div class="row">
+                                <div class="col-md-2"><button type="button" class="btn btn-danger" @onclick="() => RemoveSymptom(b)">X</button></div>
+                                <div class="col-md-1 fs-4"><p>@disease.Symptoms[i]</p></div>
+                            </div>
+                        }
+                    </div>
+
+
+
+
+                    <div class="mb-3">
+                        <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" /> 
+                        <button type="button" class="btn btn-secondary mt-3" @onclick="AddSymptom">Add Symptom</button>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary mb-3">Submit</button>
+            </EditForm>
         </div>
     </div>
+</div>
 
 
 @code {
-    [Parameter, EditorRequired]
+    [Parameter]
     public bool IsVisible { get; set; }
 
     [Parameter]
     public EventCallback OnClose { get; set; }
 
-    private void CloseModal()
+    public void Show()
     {
+        Logger.LogInformation("Attempting to Show Modal...");
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    private void Close()
+    {
+        Logger.LogInformation("Attempting to Close Modal...");
         IsVisible = false;
         if (OnClose.HasDelegate)
         {
             OnClose.InvokeAsync();
         }
+        StateHasChanged();
+    }
+
+
+    private Disease disease = new Disease();
+
+    private string newSymptom = string.Empty;
+
+    private void AddSymptom()
+    {
+        Logger.LogInformation("Attempting to add symptom");
+        if (!string.IsNullOrWhiteSpace(newSymptom))
+        {
+            disease.Symptoms.Add(newSymptom);
+            newSymptom = string.Empty;
+
+        }
+    }
+
+    private void RemoveSymptom(int index)
+    {
+        Logger.LogWarning("Index Value: " + index.ToString());
+        Logger.LogWarning("Amount of symptoms: " + disease.Symptoms.Count().ToString());
+        disease.Symptoms.RemoveAt(index);
+
+    }
+
+
+    private async Task SubmitData()
+    {
+        var jsonString = JsonSerializer.Serialize(disease, new JsonSerializerOptions { WriteIndented = true });
+        Logger.LogInformation("Json File: " + jsonString);
+        var httpClient = new HttpClient();
+        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/AddDisease/", disease);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Logger.LogInformation("Sucessfully added disease");
+        }
+        else
+        {
+            Logger.LogError("Error trying to post data: " + response.StatusCode);
+        }
+
     }
 }
