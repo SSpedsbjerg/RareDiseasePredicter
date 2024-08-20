@@ -1,10 +1,10 @@
-name: LTSWorkFlow
+name: DevelopmentWorkflow
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "dev" ]
 
 env:
   docker_username: spedsbjerg
@@ -56,5 +56,5 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: spedsbjerg/rarediseasepredicter:LTSBackend
+          tags: spedsbjerg/rarediseasepredicter:developmentBackend
   

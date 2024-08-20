@@ -1,10 +1,10 @@
-name: LTSWorkFlow
+name: ExperimentalWorkflow
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "iteration-2" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "iteration-2" ]
 
 env:
   docker_username: spedsbjerg
@@ -56,5 +56,5 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: spedsbjerg/rarediseasepredicter:LTSBackend
+          tags: spedsbjerg/rarediseasepredicter:ExperimentalBackend
   
