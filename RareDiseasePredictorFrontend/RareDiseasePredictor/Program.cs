@@ -1,9 +1,11 @@
 using RareDiseasePredictor.Components;
+using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-
+builder.Services.AddHttpClient();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
