@@ -50,21 +50,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 6,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ISymptom.cs",
-              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Interfaces\\ISymptom.cs",
-              "RelativeDocumentMoniker": "RareDiseasePredicter\\Interfaces\\ISymptom.cs",
-              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Interfaces\\ISymptom.cs",
-              "RelativeToolTip": "RareDiseasePredicter\\Interfaces\\ISymptom.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-21T10:49:28.742Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
@@ -149,6 +136,19 @@
               "ViewState": "AgIAAOcAAAAAAAAAAAAkwKwCAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2023-04-27T21:47:05.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ISymptom.cs",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Interfaces\\ISymptom.cs",
+              "RelativeDocumentMoniker": "RareDiseasePredicter\\Interfaces\\ISymptom.cs",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Interfaces\\ISymptom.cs",
+              "RelativeToolTip": "RareDiseasePredicter\\Interfaces\\ISymptom.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-21T10:49:28.742Z",
               "EditorCaption": ""
             },
             {

@@ -4,13 +4,13 @@
 @using System.Text.Json
 @using static System.Net.WebRequestMethods
 @inject HttpClient Http
-
+@inject ApiDiseaseData diseaseData
 
 
 <div class="toast-container p-3 @(IsVisible ? "d-block" : "d-none")" data-bs-autohide="true" data-bs-delay="5000">
     <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
             <button type="button" class="btn-close btn-danger" aria-label="Close" @onclick="Close"></button>
-        @if (diseases == null)
+        @if (diseaseData.diseases == null)
         {
             <p>Loading...</p>
         }
@@ -20,7 +20,7 @@
             <div class="mt-3 mb-2">
                 <label class="form-label fs-6">Disease Selector</label>
                 <select class="form-select" @bind="selectedDiseaseName">
-                    @foreach (var disease in diseases)
+                    @foreach (var disease in diseaseData.diseases)
                     {
                         <option value="@disease.Name">@disease.Name</option>
                     }
@@ -70,7 +70,7 @@
                             <div class="mb-3">
                                 <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" list="symptomdatalist" />
                                 <datalist id="symptomdatalist">
-                                    @foreach (var symptom in symptoms)
+                                    @foreach (var symptom in diseaseData.symptoms)
                                     {
                                         <option value="@symptom.Name">@symptom.Name</option>
                                     }
@@ -92,20 +92,13 @@
 
 @code {
 
-
-    [Parameter]
-    public List<Disease> diseases { get; set; }
-
-    [Parameter]
-    public List<Symptom> symptoms { get; set; }
-
     [Parameter]
     public bool IsVisible { get; set; }
 
     [Parameter]
     public EventCallback OnClose { get; set; }
 
-    private Disease selectedDisease => diseases?.FirstOrDefault(f => f.Name == selectedDiseaseName);
+    private Disease selectedDisease => diseaseData.diseases?.FirstOrDefault(f => f.Name == selectedDiseaseName);
     private string selectedDiseaseName;
 
     public void Show()
@@ -135,7 +128,7 @@
         Logger.LogInformation("Attempting to add symptom");
         if (!string.IsNullOrWhiteSpace(newSymptom))
         {
-            var symptom = symptoms.FirstOrDefault(symp => symp.Name == newSymptom);
+            var symptom = diseaseData.symptoms.FirstOrDefault(symp => symp.Name == newSymptom);
 
             if (symptom != null)
             {

@@ -4,6 +4,7 @@
 @using System.Text.Json
 @using static System.Net.WebRequestMethods
 @inject HttpClient Http
+@inject ApiDiseaseData diseaseData
 
 
     @{
@@ -13,7 +14,7 @@
     <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
             <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
         
-        @if (symptoms == null)
+        @if (diseaseData.symptoms == null)
         {
             <p>Loading...</p>
         }
@@ -61,7 +62,7 @@
                         <div class="mb-3">
                             <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" list="symptomdatalist" />
                             <datalist id="symptomdatalist">
-                                @foreach (var symptom in symptoms)
+                                @foreach (var symptom in diseaseData.symptoms)
                                 {
                                     <option value="@symptom.Name">@symptom.Name</option>
                                 }
@@ -86,10 +87,7 @@
 
     [Parameter]
     public EventCallback OnClose { get; set; }
-
-    [Parameter]
-    public List<Symptom> symptoms { get; set; }
-
+ 
     public void Show()
     {
         Logger.LogInformation("Attempting to Show Add Disease Modal...");
@@ -118,7 +116,7 @@
         Logger.LogInformation("Attempting to add symptom");
         if (!string.IsNullOrWhiteSpace(newSymptom))
         {
-            var symptom = symptoms.FirstOrDefault(symp => symp.Name == newSymptom);
+            var symptom = diseaseData.symptoms.FirstOrDefault(symp => symp.Name == newSymptom);
 
             if (symptom != null)
             {

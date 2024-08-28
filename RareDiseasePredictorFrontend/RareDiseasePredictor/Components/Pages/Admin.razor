@@ -5,6 +5,7 @@
 @using static System.Net.WebRequestMethods
 @inject ILogger<Admin> Logger
 @inject HttpClient Http
+@inject ApiDiseaseData diseaseData
 @rendermode InteractiveServer
 
 <h1>Admin Control Board</h1>
@@ -18,8 +19,8 @@
 
     <button type="button" class="btn btn-success" @onclick="ShowAddDiseaseModal">Add Disease</button>
     <button type="button" class="btn btn-warning" @onclick="ShowEditDiseaseModal">Edit Disease</button>
-    <ModalAddDisease @ref="modalAddDisease" IsVisible="false" symptoms="@symptoms"/>
-    <ModalEditDisease @ref="modalEditDisease" IsVisible="false" symptoms="@symptoms" diseases="@diseases" />
+    <ModalAddDisease @ref="modalAddDisease" IsVisible="false"/>
+    <ModalEditDisease @ref="modalEditDisease" IsVisible="false"/>
 
 
 
@@ -50,25 +51,34 @@
     protected override async Task OnInitializedAsync()
     {
 
-        try
+        if(diseaseData.symptoms == null)
         {
-            symptoms = await Http.GetFromJsonAsync<List<Symptom>>("https://localhost:57693/symptoms");
+            try
+            {
+                await diseaseData.LoadSymptomsData(Http, "https://localhost:57693/symptoms");
+                Logger.LogInformation("Sucessfully got API info for symptoms");
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
+            }
+        }
+
+        if(diseaseData.diseases == null)
+        {
+            try
+            {
+                await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
+                Logger.LogInformation("Sucessfully got API info for diseases");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+            }
 
         }
-        catch (Exception ex)
-        {
-            Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
-        }
 
-        try
-        {
-            diseases = await Http.GetFromJsonAsync<List<Disease>>("https://localhost:57693/diseases");
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
-        }
-       
-        Logger.LogInformation("Sucessfully got API info");
+        
     }
 }
