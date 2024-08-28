@@ -1,15 +1,13 @@
 ﻿@rendermode InteractiveServer
-@inject ILogger<Admin> Logger
+@inject ILogger<ModalEditDisease> Logger
 @using RareDiseasePredictor.Models
 @using System.Text.Json
 @using static System.Net.WebRequestMethods
 @inject HttpClient Http
 
 
-    @{
-        var showClass = IsVisible ? "d-block" : "d-none";
-    }
-<div class="toast-container p-3 @showClass" data-bs-autohide="true" data-bs-delay="5000">
+
+<div class="toast-container p-3 @(IsVisible ? "d-block" : "d-none")" data-bs-autohide="true" data-bs-delay="5000">
     <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
             <button type="button" class="btn-close btn-danger" aria-label="Close" @onclick="Close"></button>
         @if (diseases == null)
@@ -94,10 +92,12 @@
 
 @code {
 
-    private List<Disease> diseases = new List<Disease>();
-    private Disease selectedDisease => diseases?.FirstOrDefault(f => f.Name == selectedDiseaseName);
-    private string selectedDiseaseName;
 
+    [Parameter]
+    public List<Disease> diseases { get; set; }
+
+    [Parameter]
+    public List<Symptom> symptoms { get; set; }
 
     [Parameter]
     public bool IsVisible { get; set; }
@@ -105,11 +105,15 @@
     [Parameter]
     public EventCallback OnClose { get; set; }
 
+    private Disease selectedDisease => diseases?.FirstOrDefault(f => f.Name == selectedDiseaseName);
+    private string selectedDiseaseName;
+
     public void Show()
     {
-        Logger.LogInformation("Attempting to Show Modal...");
+        Logger.LogInformation("Attempting to Show Edit Disease Modal...");
         IsVisible = true;
         StateHasChanged();
+        Logger.LogInformation("Value to check after states XDD");
     }
 
     private void Close()
@@ -124,8 +128,6 @@
     }
 
 
-    private Disease disease = new Disease();
-
     private string newSymptom = string.Empty;
 
     private void AddSymptom()
@@ -137,7 +139,7 @@
 
             if (symptom != null)
             {
-                disease.Symptoms.Add(symptom);
+                selectedDisease.Symptoms.Add(symptom);
                 newSymptom = string.Empty;
             }
 
@@ -147,62 +149,20 @@
     private void RemoveSymptom(int index)
     {
         Logger.LogWarning("Index Value: " + index.ToString());
-        Logger.LogWarning("Amount of symptoms: " + disease.Symptoms.Count().ToString());
-        disease.Symptoms.RemoveAt(index);
+        Logger.LogWarning("Amount of symptoms: " + selectedDisease.Symptoms.Count().ToString());
+        selectedDisease.Symptoms.RemoveAt(index);
 
     }
     private void DeleteDisease(Disease disease)
     {
-        //TODO DELETE DISEASE METHOD
+        //TODO MAKE DELETE DISEASE METHOD
     }
 
 
     private async Task SubmitData()
     {
-        var jsonString = JsonSerializer.Serialize(disease, new JsonSerializerOptions { WriteIndented = true });
-        Logger.LogInformation("Json File: " + jsonString);
-        var httpClient = new HttpClient();
-        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/AddDisease/", disease);
+        //TODO MAKE PUT/UPDATE DISEASE METHOD
 
-        if (response.IsSuccessStatusCode)
-        {
-            Logger.LogInformation("Sucessfully added disease");
-        }
-        else
-        {
-            Logger.LogError("Error trying to post data: " + response.StatusCode);
-        }
-
-    }
-
-    private List<Symptom> symptoms = new List<Symptom>();
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        try
-        {
-            symptoms = await Http.GetFromJsonAsync<List<Symptom>>("https://localhost:57693/symptoms");
-
-        }
-        catch(Exception ex)
-        {
-            Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
-        }
-
-
-
-        try
-        {
-            diseases = await Http.GetFromJsonAsync<List<Disease>>("https://localhost:57693/diseases");
-        }
-        catch(Exception ex)
-        {
-            Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
-        }
-
-
-        
     }
 
 }

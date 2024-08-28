@@ -1,5 +1,5 @@
 ﻿@rendermode InteractiveServer
-@inject ILogger<Admin> Logger
+@inject ILogger<ModalAddDisease> Logger
 @using RareDiseasePredictor.Models
 @using System.Text.Json
 @using static System.Net.WebRequestMethods
@@ -13,62 +13,69 @@
     <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
             <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
         
+        @if (symptoms == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <div>
+                <EditForm Model="@disease" OnValidSubmit="@SubmitData">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-        <div >
-            <EditForm Model="@disease" OnValidSubmit="@SubmitData">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-
-                <div class="mb-3">
-                    <label class="form-label fs-6">Disease Name</label>
-                    <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="disease.Name" />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fs-6">Disease Description</label>
-                    <InputText id="Description" class="form-control" placeholder="Description" @bind-Value="disease.Description" />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fs-6">Disease Href</label>
-                    <InputText id="Href" class="form-control" placeholder="Href" @bind-Value="disease.Href" />
-                </div>
-                <div>
-                    @if (disease.Symptoms.Count() != 0)
-                    {
-                        <label class="form-label mb-3 fs-6">Symptomer</label>
-                    }
-                   
                     <div class="mb-3">
-                        @for (int i = 0; i < disease.Symptoms.Count; i++)
+                        <label class="form-label fs-6">Disease Name</label>
+                        <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="disease.Name" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fs-6">Disease Description</label>
+                        <InputText id="Description" class="form-control" placeholder="Description" @bind-Value="disease.Description" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fs-6">Disease Href</label>
+                        <InputText id="Href" class="form-control" placeholder="Href" @bind-Value="disease.Href" />
+                    </div>
+                    <div>
+                        @if (disease.Symptoms.Count() != 0)
                         {
-                            int b = i;
-                            <div class="row">
-                                <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveSymptom(b)">X</button></div>
-                                <div class="col col fs-5"><p>@disease.Symptoms[i].Name</p></div>
-                            </div>
+                            <label class="form-label mb-3 fs-6">Symptomer</label>
                         }
-                    </div>
 
-
-
-
-                    <div class="mb-3">
-                        <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" list="symptomdatalist" />
-                        <datalist id="symptomdatalist">
-                            @foreach (var symptom in symptoms)
+                        <div class="mb-3">
+                            @for (int i = 0; i < disease.Symptoms.Count; i++)
                             {
-                                <option value="@symptom.Name">@symptom.Name</option>
+                                int b = i;
+                                <div class="row">
+                                    <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveSymptom(b)">X</button></div>
+                                    <div class="col col fs-5"><p>@disease.Symptoms[i].Name</p></div>
+                                </div>
                             }
-                        </datalist>
-                        <button type="button" class="btn btn-secondary mt-3" @onclick="AddSymptom">Add Symptom</button>
+                        </div>
+
+
+
+
+                        <div class="mb-3">
+                            <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" list="symptomdatalist" />
+                            <datalist id="symptomdatalist">
+                                @foreach (var symptom in symptoms)
+                                {
+                                    <option value="@symptom.Name">@symptom.Name</option>
+                                }
+                            </datalist>
+                            <button type="button" class="btn btn-secondary mt-3" @onclick="AddSymptom">Add Symptom</button>
+                        </div>
                     </div>
-                </div>
 
 
-                <button type="submit" class="btn btn-primary mb-3">Submit</button>
-            </EditForm>
-        </div>
+                    <button type="submit" class="btn btn-primary mb-3">Submit</button>
+                </EditForm>
+            </div>
+        }
+
     </div>
 </div>
 
@@ -80,9 +87,12 @@
     [Parameter]
     public EventCallback OnClose { get; set; }
 
+    [Parameter]
+    public List<Symptom> symptoms { get; set; }
+
     public void Show()
     {
-        Logger.LogInformation("Attempting to Show Modal...");
+        Logger.LogInformation("Attempting to Show Add Disease Modal...");
         IsVisible = true;
         StateHasChanged();
     }
@@ -146,16 +156,6 @@
 
     }
 
-    private List<Symptom> symptoms = new List<Symptom>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        var response = await Http.GetFromJsonAsync<List<Symptom>>("https://localhost:57693/symptoms");
-
-        if(response != null)
-        {
-            symptoms = response;
-        }
-    }
+    
 
 }

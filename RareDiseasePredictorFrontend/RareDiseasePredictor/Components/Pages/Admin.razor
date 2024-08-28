@@ -4,6 +4,7 @@
 @using System.Text.Json
 @using static System.Net.WebRequestMethods
 @inject ILogger<Admin> Logger
+@inject HttpClient Http
 @rendermode InteractiveServer
 
 <h1>Admin Control Board</h1>
@@ -11,19 +12,25 @@
 <PageTitle>Admin Board</PageTitle>
 
 
-<button type="button" class="btn btn-success" @onclick="ShowAddDiseaseModal">Add Disease</button>
-<button type="button" class="btn btn-warning" @onclick="ShowEditDiseaseModal">Edit Disease</button>
 
 
 
-<ModalAddDisease @ref="modalAddDisease" IsVisible="false" />
-<ModalEditDisease @ref="modalEditDisease" IsVisible="false" />
+
+    <button type="button" class="btn btn-success" @onclick="ShowAddDiseaseModal">Add Disease</button>
+    <button type="button" class="btn btn-warning" @onclick="ShowEditDiseaseModal">Edit Disease</button>
+    <ModalAddDisease @ref="modalAddDisease" IsVisible="false" symptoms="@symptoms"/>
+    <ModalEditDisease @ref="modalEditDisease" IsVisible="false" symptoms="@symptoms" diseases="@diseases" />
+
+
 
 
 @code {
 
     private ModalAddDisease modalAddDisease = new ModalAddDisease();
     private ModalEditDisease modalEditDisease = new ModalEditDisease();
+    private List<Symptom> symptoms;
+    private List<Disease> diseases;
+
 
 
     private void ShowAddDiseaseModal()
@@ -38,5 +45,30 @@
         Logger.LogInformation("Attempting to open Edit Disease modal...");
         modalEditDisease.Show();
         StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        try
+        {
+            symptoms = await Http.GetFromJsonAsync<List<Symptom>>("https://localhost:57693/symptoms");
+
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
+        }
+
+        try
+        {
+            diseases = await Http.GetFromJsonAsync<List<Disease>>("https://localhost:57693/diseases");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+        }
+       
+        Logger.LogInformation("Sucessfully got API info");
     }
 }
