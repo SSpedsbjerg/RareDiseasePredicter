@@ -1,6 +1,7 @@
 using RareDiseasePredictor.Components;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
+using RareDiseasePredictor.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
@@ -9,6 +10,7 @@ builder.Services.AddHttpClient();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddSingleton<ApiDiseaseData>();
 
 var app = builder.Build();
 
