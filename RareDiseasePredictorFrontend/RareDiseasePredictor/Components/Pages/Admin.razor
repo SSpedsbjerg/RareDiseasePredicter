@@ -14,9 +14,6 @@
 
 
 
-
-
-
     <button type="button" class="btn btn-success" @onclick="ShowAddDiseaseModal">Add Disease</button>
     <button type="button" class="btn btn-warning" @onclick="ShowEditDiseaseModal">Edit Disease</button>
     <ModalAddDisease @ref="modalAddDisease" IsVisible="false"/>
@@ -31,27 +28,52 @@
     private ModalEditDisease modalEditDisease = new ModalEditDisease();
     private List<Symptom> symptoms;
     private List<Disease> diseases;
+    private string currentModal;
 
-
-
+    //TODO: Ændre hardcodet string tekst til et parent object med Modals og et navn
     private void ShowAddDiseaseModal()
     {
         Logger.LogInformation("Attempting to open Add Disease modal...");
+        if (currentModal != "adddiseasemodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
         modalAddDisease.Show();
+        currentModal = "adddiseasemodal";
         StateHasChanged();
     }
 
     private void ShowEditDiseaseModal()
     {
         Logger.LogInformation("Attempting to open Edit Disease modal...");
+        if (currentModal != "editdiseasemodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
         modalEditDisease.Show();
+        currentModal = "editdiseasemodal";
         StateHasChanged();
+    }
+
+    private void modalCloser(string currentModal)
+    {
+        switch (currentModal)
+        {
+            case "editdiseasemodal":
+                modalEditDisease.Close();
+                break;
+            case "adddiseasemodal":
+                modalAddDisease.Close();
+                break;
+        }
+
+            
     }
 
     protected override async Task OnInitializedAsync()
     {
 
-        if(diseaseData.symptoms == null)
+        if(diseaseData.symptoms is null)
         {
             try
             {
@@ -65,7 +87,7 @@
             }
         }
 
-        if(diseaseData.diseases == null)
+        if(diseaseData.diseases is null)
         {
             try
             {
