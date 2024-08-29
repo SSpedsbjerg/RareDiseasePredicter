@@ -28,7 +28,7 @@ namespace RareDiseasePredicter.Implementations {
             set { this.ID = value; }
             }
 
-        ICollection<ISymptom> IDisease.Symptoms {
+        public ICollection<ISymptom> Symptoms {
             get { return symptoms; }
             set { this.symptoms = (List<ISymptom>)value; }
             }

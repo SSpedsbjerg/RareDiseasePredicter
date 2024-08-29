@@ -16,7 +16,7 @@ namespace RareDiseasePredicter.Implementations {
 
             }
 
-        public async Task<IList<IDisease>> CalculateDiseasesAsync(IList<ISymptom> symptoms) {
+        public async Task<IList<Disease>> CalculateDiseasesAsync(IList<ISymptom> symptoms) {
             var _diseases = DatabaseController.GetDiseaseAsync();
             var _symptoms = DatabaseController.GetSymptomsAsync();
 
@@ -28,10 +28,10 @@ namespace RareDiseasePredicter.Implementations {
              **/
             
             List<ISymptom> dbSymptoms = (List<ISymptom>)await _symptoms;
-            List<IDisease> diseases = (List<IDisease>)await _diseases;
+            List<Disease> diseases = (List<Disease>)await _diseases;
 
-            List<IDisease> matches = new List<IDisease>();
-            foreach (IDisease disease in diseases) {
+            List<Disease> matches = new List<Disease>();
+            foreach (Disease disease in diseases) {
                 foreach (ISymptom symptom in dbSymptoms) {
                     foreach (ISymptom symp in disease.Symptoms) {
                         foreach (ISymptom sym in symptoms) {
@@ -42,7 +42,7 @@ namespace RareDiseasePredicter.Implementations {
                         }
                     }
                 }
-            foreach (IDisease disease in matches) {
+            foreach (Disease disease in matches) {
                 foreach (ISymptom symptom in disease.Symptoms) {
                     foreach (ISymptom userSymptom in symptoms) {
                         if(userSymptom.Name.Equals(symptom.Name)) {
@@ -66,11 +66,11 @@ namespace RareDiseasePredicter.Implementations {
                 matches.Remove(matches[index]);
                 }
             float totalWeight = 0;
-            foreach(IDisease disease in matches) {
+            foreach(Disease disease in matches) {
                 totalWeight += disease.Weight;
                 }
 
-            foreach(IDisease disease in matches) {
+            foreach(Disease disease in matches) {
                 disease.Weight /= totalWeight;
                 disease.Weight *= 100;
                 }

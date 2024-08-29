@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using RareDiseasePredicter.Implementations;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 /**
  * 
@@ -123,12 +124,18 @@ namespace RareDiseasePredicter.Controller {
             return "500";
             }
 
+        //TODO: Fjern *add* og brug post, put, delete osv.
         [HttpPost]
         [Route("/AddDisease/")]
-        public async Task<string> AddDisease([FromBody] string body) {
+        public async Task<string> AddDisease([FromBody] JObject body) {
             IDisease disease = null;
             try {
-                disease = JsonSerializer.Deserialize<Disease>(body);
+                disease = new Disease();
+                disease.ID = -1;
+                disease.Name = body.GetValue("Name").ToString();
+                disease.Description = body.GetValue("Description").ToString();
+                disease.Href = body.GetValue("Href").ToString();
+                int[] intArray = body["Symptoms"].ToObject<int[]>();
             }
             catch (Exception ex) {
                 _= Log.Error(ex, "DataController", "HTTPPOST ADDDISEASE");
