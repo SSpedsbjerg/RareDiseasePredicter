@@ -52,6 +52,9 @@ namespace RareDiseasePredicter.Implementations {
             this.despription = description;
             }
 
+        public Symptom() {
+        }
+
         public bool AddRegion(IRegion region) {
             regions.Add(region);
             return true;

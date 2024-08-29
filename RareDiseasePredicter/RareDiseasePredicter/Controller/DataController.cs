@@ -126,7 +126,7 @@ namespace RareDiseasePredicter.Controller {
 
         //TODO: Fjern *add* og brug post, put, delete osv.
         [HttpPost]
-        [Route("/AddDisease/")]
+        [Route("/Disease/")]
         public async Task<string> AddDisease([FromBody] JObject body) {
             IDisease disease = null;
             try {
@@ -136,6 +136,14 @@ namespace RareDiseasePredicter.Controller {
                 disease.Description = body.GetValue("Description").ToString();
                 disease.Href = body.GetValue("Href").ToString();
                 int[] intArray = body["Symptoms"].ToObject<int[]>();
+                ICollection<ISymptom> symptoms = await DatabaseController.GetSymptomsAsync();
+                foreach(ISymptom symptom in symptoms) {
+                    foreach(int i in intArray) {
+                        if(symptom.ID == i) {
+                            disease.AddSymptoms(symptom as Symptom);
+                        }
+                    }
+                }
             }
             catch (Exception ex) {
                 _= Log.Error(ex, "DataController", "HTTPPOST ADDDISEASE");
@@ -146,11 +154,23 @@ namespace RareDiseasePredicter.Controller {
         }
 
         [HttpPost]
-        [Route("/AddSymptom/")]
-        public async Task<string> AddSymptom([FromBody] string body) {
+        [Route("/Symptom/")]
+        public async Task<string> AddSymptom([FromBody] JObject body) {
             ISymptom symptom = null;
             try {
-                symptom = JsonSerializer.Deserialize<Symptom>(body);
+                symptom = new Symptom();
+                symptom.ID = -1;
+                symptom.Name = body.GetValue("Name").ToString();
+                symptom.Description = body.GetValue("Description").ToString();
+                int[] regionsIDArray = body["Regions"].ToObject<int[]>();
+                ICollection<IRegion> regions = await DatabaseController.GetRegionsAsync();
+                foreach (IRegion region in regions) {
+                    foreach (int i in regionsIDArray) {
+                        if(region.ID == i) {
+                            symptom.AddRegion(region);
+                        }
+                    }
+                }
             }
             catch(Exception ex) {
                 _ = Log.Error(ex, "DataController", "HTTPPOST ADDsymptom");
@@ -161,11 +181,11 @@ namespace RareDiseasePredicter.Controller {
         }
 
         [HttpPost]
-        [Route("/AddRegion/")]
-        public async Task<string> AddRegion([FromBody] string body) {
+        [Route("/Region/")]
+        public async Task<string> AddRegion([FromBody] JObject body) {
             IRegion region = null;
             try {
-                region = JsonSerializer.Deserialize<Region>(body);
+                region = new Region(body.GetValue("Name").ToString() , - 1);
             }
             catch(Exception ex) {
                 _ = Log.Error(ex, "DataController", "HTTPPOST ADDregion");
