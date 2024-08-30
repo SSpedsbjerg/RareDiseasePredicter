@@ -11,11 +11,11 @@
     <div class="modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5">Edit Disease</h1>
+                <h1 class="modal-title fs-5">Edit Symptom</h1>
                 <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
             </div>
             <div class="modal-body">
-                @if (diseaseData.diseases == null)
+                @if (diseaseData.symptoms == null)
                 {
                     <p>Loading...</p>
                 }
@@ -23,48 +23,44 @@
                 else
                 {
                     <div class="mb-3">
-                        <label class="form-label fs-6">Disease Selector</label>
-                        <select class="form-select" @bind="selectedDiseaseName">
-                            @foreach (var disease in diseaseData.diseases)
+                        <label class="form-label fs-6">Symptom Selector</label>
+                        <select class="form-select" @bind="selectedSymptomName">
+                            @foreach (var symptom in diseaseData.symptoms)
                             {
-                                <option value="@disease.Name">@disease.Name</option>
+                                <option value="@symptom.Name">@symptom.Name</option>
                             }
                         </select>
                     </div>
-                    if (selectedDisease != null)
+                    if (selectedSymptom != null)
                     {
                         <div>
-                            <EditForm Model="@selectedDisease" OnValidSubmit="@UpdateDisease">
+                            <EditForm Model="@selectedSymptom" OnValidSubmit="@UpdateSymptom">
                                 <DataAnnotationsValidator />
                                 <ValidationSummary />
 
                                 <div class="mb-3">
-                                    <label class="form-label fs-6">Disease Name</label>
-                                    <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="selectedDisease.Name" />
+                                    <label class="form-label fs-6">Symptom Name</label>
+                                    <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="selectedSymptom.Name" />
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label fs-6">Disease Description</label>
-                                    <InputTextArea id="Description" style="height: 250px;" class="form-control" placeholder="Description" @bind-Value="selectedDisease.Description" />
+                                    <label class="form-label fs-6">Symptom Description</label>
+                                    <InputTextArea id="Description" style="height: 250px;" class="form-control" placeholder="Description" @bind-Value="selectedSymptom.Description" />
                                 </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label fs-6">Disease Href</label>
-                                    <InputText id="Href" class="form-control" placeholder="Href" @bind-Value="selectedDisease.Href" />
-                                </div>
                                 <div>
-                                    @if (selectedDisease.Symptoms.Count() != 0)
+                                    @if (selectedSymptom.Regions.Count() != 0)
                                     {
                                         <label class="form-label mb-3 fs-6">Symptomer</label>
                                     }
 
                                     <div class="mb-3">
-                                        @for (int i = 0; i < selectedDisease.Symptoms.Count; i++)
+                                        @for (int i = 0; i < selectedSymptom.Regions.Count; i++)
                                         {
                                             int b = i;
                                             <div class="row">
-                                                <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveSymptom(b)">X</button></div>
-                                                <div class="col col fs-5"><p>@selectedDisease.Symptoms[i].Name</p></div>
+                                                <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveRegion(b)">X</button></div>
+                                                <div class="col col fs-5"><p>@selectedSymptom.Regions[i].Name</p></div>
                                             </div>
                                         }
                                     </div>
@@ -73,20 +69,20 @@
 
 
                                     <div class="mb-3">
-                                        <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" list="symptomdatalist" />
-                                        <datalist id="symptomdatalist">
-                                            @foreach (var symptom in diseaseData.symptoms)
+                                        <InputText @bind-Value="newRegion" class="form-control" placeholder="Add new region" list="regiondatalist" />
+                                        <datalist id="regiondatalist">
+                                            @foreach (var region in diseaseData.regions)
                                             {
-                                                <option value="@symptom.Name">@symptom.Name</option>
+                                                <option value="@region.Name">@region.Name</option>
                                             }
                                         </datalist>
-                                        <button type="button" class="btn btn-secondary mt-3" @onclick="AddSymptom">Add Symptom</button>
+                                        <button type="button" class="btn btn-secondary mt-3" @onclick="AddRegion">Add Region</button>
                                     </div>
                                 </div>
 
 
                                 <button type="submit" class="btn btn-primary mb-3">Update</button>
-                                <button type="button" class="btn btn-danger mb-3" @onclick="()   => DeleteDisease(selectedDisease)">Delete</button>
+                                <button type="button" class="btn btn-danger mb-3" @onclick="()   => DeleteSymptom(selectedSymptom)">Delete</button>
                             </EditForm>
                         </div>
                     }
@@ -104,9 +100,13 @@
 
     [Parameter]
     public EventCallback OnClose { get; set; }
-    //Maybe make clone of this, or just accept it has a pointer to the simpelton xd.
-    private Disease selectedDisease => diseaseData.diseases?.FirstOrDefault(f => f.Name == selectedDiseaseName);
-    private string selectedDiseaseName;
+    
+    //This prevents the selectedDisease to edit the simpelton.
+    private Symptom selectedSymptom => diseaseData.symptoms?.FirstOrDefault(f => f.Name == selectedSymptomName);
+    private string selectedSymptomName;
+
+    private Disease tempDisease = new Disease();
+
 
     //Opens modal
     public void Show()
@@ -129,40 +129,39 @@
     }
 
 
-    private string newSymptom = string.Empty;
+    private string newRegion = string.Empty;
 
-    //Adds symptom to disease
-    private void AddSymptom()
+    //Adds region to symptom
+    private void AddRegion()
     {
         Logger.LogInformation("Attempting to add symptom");
-        if (!string.IsNullOrWhiteSpace(newSymptom))
+        if (!string.IsNullOrWhiteSpace(newRegion))
         {
-            var symptom = diseaseData.symptoms.FirstOrDefault(symp => symp.Name == newSymptom);
+            var region = diseaseData.regions.FirstOrDefault(regi => regi.Name == newRegion);
 
-            if (symptom != null)
+            if (region != null)
             {
-                selectedDisease.Symptoms.Add(symptom);
-                newSymptom = string.Empty;
+                selectedSymptom.Regions.Add(region);
+                newRegion = string.Empty;
             }
 
         }
     }
-    //Removes symptom from disease
-    private void RemoveSymptom(int index)
+    //Removes region from symptom
+    private void RemoveRegion(int index)
     {
         Logger.LogWarning("Index Value: " + index.ToString());
-        Logger.LogWarning("Amount of symptoms: " + selectedDisease.Symptoms.Count().ToString());
-        selectedDisease.Symptoms.RemoveAt(index);
+        Logger.LogWarning("Amount of symptoms: " + selectedSymptom.Regions.Count().ToString());
+        selectedSymptom.Regions.RemoveAt(index);
 
     }
-
     //Deletes disease based on id, URL is subject to change
-    private async Task DeleteDisease(Disease disease)
+    private async Task DeleteSymptom(Symptom symptom)
     {
-        var response = await Http.DeleteAsync($"https://localhost:57693/Diseases/{disease.Id}");
+        var response = await Http.DeleteAsync($"https://localhost:57693/Symptoms/{symptom.Id}");
         if (response.IsSuccessStatusCode)
         {
-            Logger.LogInformation("Sucessfully Updated " + selectedDisease.Name);
+            Logger.LogInformation("Sucessfully Updated " + selectedSymptom.Name);
         }
         else
         {
@@ -173,17 +172,17 @@
     //Only issue is every individual disease gets edited, so if you remove a symptom and go to another disease and go back to the original disease you removed a symptom for.
     //It will not restore the disease to the original state in the DB, but the edited state you left it in.
     //This will ONLY make a put request with the currently selected disease, for now if you need to restore the disease list to original, use force get button(soon tm).
-    private async Task UpdateDisease()
+    private async Task UpdateSymptom()
     {
-        var jsonString = JsonSerializer.Serialize(selectedDisease, new JsonSerializerOptions { WriteIndented = true });
+        var jsonString = JsonSerializer.Serialize(selectedSymptom, new JsonSerializerOptions { WriteIndented = true });
         //Logger.LogInformation("Json File: " + jsonString);
         var httpClient = new HttpClient();
         //Might have to change HTTP, for now keep as is
-        var response = await httpClient.PutAsJsonAsync("https://localhost:57693/AddDisease/", selectedDisease);
+        var response = await httpClient.PutAsJsonAsync("https://localhost:57693/AddDisease/", selectedSymptom);
 
         if (response.IsSuccessStatusCode)
         {
-            Logger.LogInformation("Sucessfully Updated "+selectedDisease.Name);
+            Logger.LogInformation("Sucessfully Updated " + selectedSymptom.Name);
         }
         else
         {
