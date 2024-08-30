@@ -294,5 +294,32 @@ namespace RareDiseasePredicter.Controller {
             }
             return regions;
         }
+
+        public static async Task<bool> ModifyDiseaseAsync(IDisease disease) {
+            if(!CreateConnection()) {
+                _ = Log.Error(new Exception("Could not create connection to database"), "ModifyDiseaseAsync", "DatabaseController");
+                return false;
+            }
+            throw new NotImplementedException();
+            return true;
+        }
+
+        public static async Task<bool> ModifySymptomAsync(ISymptom symptom) {
+            if(!CreateConnection()) {
+                _ = Log.Error(new Exception("Could not create connection to database"), "ModifySymptomAsync", "DatabaseController");
+                return false;
+            }
+            throw new NotImplementedException();
+            return true;
+        }
+
+        public static async Task<bool> ModifyRegionAsync(IRegion region) {
+            if(!CreateConnection()) {
+                _ = Log.Error(new Exception("Could not create connection to database"), "ModifyRegionAsync", "DatabaseController");
+                return false;
+            }
+            throw new NotImplementedException();
+            return true;
+        }
     }
 }

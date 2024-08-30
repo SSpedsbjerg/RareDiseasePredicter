@@ -124,7 +124,6 @@ namespace RareDiseasePredicter.Controller {
             return "500";
             }
 
-        //TODO: Fjern *add* og brug post, put, delete osv.
         [HttpPost]
         [Route("/Disease/")]
         public async Task<string> AddDisease([FromBody] JObject body) {
@@ -150,6 +149,39 @@ namespace RareDiseasePredicter.Controller {
                 return "500";
             }
             DatabaseController.AddDiseaseAsync(disease).Wait();
+            return "200";
+        }
+
+        [HttpPut]
+        [Route("/Disease/")]
+        public async Task<string> ModifyDisease([FromBody] JObject body) {
+            IDisease disease = null;
+            try {
+                disease = new Disease();
+                disease.ID = body["ID"].ToObject<int>();
+                disease.Name = body.GetValue("Name").ToString();
+                disease.Description = body.GetValue("Description").ToString();
+                disease.Href = body.GetValue("Href").ToString();
+                int[] intArray = body["Symptoms"].ToObject<int[]>();
+                ICollection<ISymptom> symptoms = await DatabaseController.GetSymptomsAsync();
+                foreach(ISymptom symptom in symptoms) {
+                    foreach(int i in intArray) {
+                        if(symptom.ID == i) {
+                            disease.AddSymptoms(symptom as Symptom);
+                        }
+                    }
+                }
+            }
+            catch(Exception ex) {
+                _ = Log.Error(ex, "DataController", "HTTPPUT DISEASE");
+                return "500";
+            }
+            try {
+                DatabaseController.ModifyDiseaseAsync(disease).Wait();
+            }
+            catch(NotImplementedException exception) {
+                return "501";
+            }
             return "200";
         }
 
@@ -180,6 +212,38 @@ namespace RareDiseasePredicter.Controller {
             return "200";
         }
 
+        [HttpPut]
+        [Route("/Symptom/")]
+        public async Task<string> ModifySymptom([FromBody] JObject body) {
+            ISymptom symptom = null;
+            try {
+                symptom = new Symptom();
+                symptom.ID = -1;
+                symptom.Name = body.GetValue("Name").ToString();
+                symptom.Description = body.GetValue("Description").ToString();
+                int[] regionsIDArray = body["Regions"].ToObject<int[]>();
+                ICollection<IRegion> regions = await DatabaseController.GetRegionsAsync();
+                foreach(IRegion region in regions) {
+                    foreach(int i in regionsIDArray) {
+                        if(region.ID == i) {
+                            symptom.AddRegion(region);
+                        }
+                    }
+                }
+            }
+            catch(Exception ex) {
+                _ = Log.Error(ex, "DataController", "HTTPPUT Symptom");
+                return "500";
+            }
+            try {
+                DatabaseController.ModifySymptomAsync(symptom).Wait();
+            }
+            catch(NotImplementedException exception) {
+                return "501";
+            }
+            return "200";
+        }
+
         [HttpPost]
         [Route("/Region/")]
         public async Task<string> AddRegion([FromBody] JObject body) {
@@ -192,6 +256,26 @@ namespace RareDiseasePredicter.Controller {
                 return "500";
             }
             DatabaseController.AddRegionAsync(region).Wait();
+            return "200";
+        }
+
+        [HttpPut]
+        [Route("/Region/")]
+        public async Task<string> ModifyRegion([FromBody] JObject body) {
+            IRegion region = null;
+            try {
+                region = new Region(body.GetValue("Name").ToString(), -1);
+            }
+            catch(Exception ex) {
+                _ = Log.Error(ex, "DataController", "HTTPPUT Region");
+                return "500";
+            }
+            try {
+                DatabaseController.ModifyRegionAsync(region).Wait();
+            }
+            catch(NotImplementedException exception) {
+                return "501";
+            }
             return "200";
         }
 
