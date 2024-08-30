@@ -13,11 +13,19 @@
 <PageTitle>Admin Board</PageTitle>
 
 
+    <div>
+        <button type="button" class="btn btn-success" @onclick="ShowAddDiseaseModal">Add Disease</button>
+        <button type="button" class="btn btn-warning" @onclick="ShowEditDiseaseModal">Edit Disease</button>
+    </div>
+    <div class="mt-2">
+    <button type="button" class="btn btn-success" @onclick="ShowAddSymptomModal">Add Symptom</button>
+    <button type="button" class="btn btn-warning" @onclick="ShowEditSymptomModal">Edit Symptom</button>
+    </div>
 
-    <button type="button" class="btn btn-success" @onclick="ShowAddDiseaseModal">Add Disease</button>
-    <button type="button" class="btn btn-warning" @onclick="ShowEditDiseaseModal">Edit Disease</button>
     <ModalAddDisease @ref="modalAddDisease" IsVisible="false"/>
     <ModalEditDisease @ref="modalEditDisease" IsVisible="false"/>
+    <ModalAddSymptom @ref="modalAddSymptom" IsVisible="false"/>
+    <ModalEditSymptom @ref="modalEditSymptom" IsVisible="false" />
 
 
 
@@ -26,8 +34,8 @@
 
     private ModalAddDisease modalAddDisease = new ModalAddDisease();
     private ModalEditDisease modalEditDisease = new ModalEditDisease();
-    private List<Symptom> symptoms;
-    private List<Disease> diseases;
+    private ModalAddSymptom modalAddSymptom = new ModalAddSymptom();
+    private ModalEditSymptom modalEditSymptom = new ModalEditSymptom();
     private string currentModal;
 
     //TODO: Ændre hardcodet string tekst til et parent object med Modals og et navn
@@ -55,6 +63,30 @@
         StateHasChanged();
     }
 
+    private void ShowAddSymptomModal()
+    {
+        Logger.LogInformation("Attempting to open Add Symptom modal...");
+        if (currentModal != "addsymptommodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
+        modalAddSymptom.Show();
+        currentModal = "addsymptommodal";
+        StateHasChanged();
+    }
+
+    private void ShowEditSymptomModal()
+    {
+        Logger.LogInformation("Attempting to open Edit Symptom modal...");
+        if (currentModal != "editsymptommodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
+        modalEditSymptom.Show();
+        currentModal = "editsymptommodal";
+        StateHasChanged();
+    }
+
     private void modalCloser(string currentModal)
     {
         switch (currentModal)
@@ -64,6 +96,12 @@
                 break;
             case "adddiseasemodal":
                 modalAddDisease.Close();
+                break;
+            case "addsymptommodal":
+                modalAddSymptom.Close();
+                break;
+            case "editsymptommodal":
+                modalEditSymptom.Close();
                 break;
         }
 
@@ -93,6 +131,20 @@
             {
                 await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
                 Logger.LogInformation("Sucessfully got API info for diseases");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+            }
+
+        }
+
+        if (diseaseData.regions is null)
+        {
+            try
+            {
+                await diseaseData.LoadRegionsData(Http, "https://localhost:57693/regions");
+                Logger.LogInformation("Sucessfully got API info for regions");
             }
             catch (Exception ex)
             {
