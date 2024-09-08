@@ -68,62 +68,6 @@ namespace RareDiseasePredicter.Controller {
             return jsonString;
             }
 
-        //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
-        //Adds Disease to the database
-        //TODO: Add weight for symptoms
-        [HttpGet]
-        [Route("/AddDisease/{name}+{description}+{href}+{symptomRef}")]
-        public async Task<string> AddDisease([FromRoute]string name, string description, string href, string symptomRef) {
-            //string name, List<ISymptom> symptoms, int id, string description, string href
-            try {
-                string[] nameSplit = name.Split("_");
-                name = "";
-                foreach(string nameSegment in nameSplit) {
-                    name += $"{nameSegment} ";
-                    }
-                name = name.Remove(name.Length - 1);
-                }
-            catch {
-                _ = Log.Warning("Couldn't split name of Symptom", "AddSymptom", "");
-                }
-
-            try {
-                string[] descriptionSplit = description.Split("_");
-                description = "";
-                foreach(string descriptionSegment in descriptionSplit) {
-                    description += $"{descriptionSegment} ";
-                    }
-                description = description.Remove(description.Length - 1);
-                }
-            catch {
-                _ = Log.Warning("Couldn't split description of Symptom", "AddSymptom", "");
-                }
-            Task<ICollection<ISymptom>> dbSymptoms = DatabaseController.GetSymptomsAsync();
-            IDisease disease = new Disease();
-            disease.Name = name;
-            disease.Description = description;
-            disease.Href = href;
-            disease.ID = -1;
-            string[] symptomsArray = symptomRef.Split(',');
-            List<int> symptomsIDs = new List<int>();
-            foreach (string symptomString in symptomsArray) {
-                symptomsIDs.Add(int.Parse(symptomString));
-                }
-            foreach (int symptomID in symptomsIDs) {
-                foreach (ISymptom symptom in await dbSymptoms) {
-                    if (symptomID == symptom.ID) {
-                        disease.AddSymptoms(symptom);
-                        }
-                    }
-                }
-
-            bool success = await DatabaseController.AddDiseaseAsync(disease);
-            if (success) {
-                return "200";
-                }
-            return "500";
-            }
-
         [HttpPost]
         [Route("/Disease/")]
         public async Task<string> AddDisease([FromBody] JObject body) {
@@ -294,38 +238,6 @@ namespace RareDiseasePredicter.Controller {
                 }
             return value;
             }
-
-        //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
-        //Adds symptom to database
-        [HttpGet]
-        [Route("/AddSymptom/{name}+{Description}+{Regions}")]
-        public async Task<string> AddSymptom([FromRoute]string name, string description, string regions) {
-            Task<ICollection<IRegion>> dbRegions = DatabaseController.GetRegionsAsync();
-            name = SplitString(name);
-            description = SplitString(description);
-            ISymptom symptom = new Symptom(name);
-            symptom.Description = description;
-            if(!regions.StartsWith('0')) {//This should allow for symptoms without any regions
-                string[] regionsArray = regions.Split(',');
-                List<int> regionIDs = new List<int>();
-                foreach(string region in regionsArray) {
-                    regionIDs.Add(int.Parse(region));
-                    }
-                foreach(int regionID in regionIDs) {
-                    foreach(IRegion region in await dbRegions) {
-                        if(regionID == region.ID) {
-                            symptom.AddRegion(region);
-                            }
-                        }
-                    }
-                }
-            symptom.ID = -1;
-            bool success = await DatabaseController.AddSymptomAsync(symptom);
-            if(success) {
-                return "200";
-                }
-            return "500";
-            }
         
         //Get symptoms
         [HttpGet]
@@ -365,8 +277,93 @@ namespace RareDiseasePredicter.Controller {
             }
 
 
-    //TODO: Delete before production
-    [HttpGet]
+        //Deprecated Methods
+        [HttpGet]
+        [Route("/AddSymptom/{name}+{Description}+{Regions}")]
+        public async Task<string> AddSymptom([FromRoute] string name, string description, string regions) {
+            Task<ICollection<IRegion>> dbRegions = DatabaseController.GetRegionsAsync();
+            name = SplitString(name);
+            description = SplitString(description);
+            ISymptom symptom = new Symptom(name);
+            symptom.Description = description;
+            if(!regions.StartsWith('0')) {//This should allow for symptoms without any regions
+                string[] regionsArray = regions.Split(',');
+                List<int> regionIDs = new List<int>();
+                foreach(string region in regionsArray) {
+                    regionIDs.Add(int.Parse(region));
+                }
+                foreach(int regionID in regionIDs) {
+                    foreach(IRegion region in await dbRegions) {
+                        if(regionID == region.ID) {
+                            symptom.AddRegion(region);
+                        }
+                    }
+                }
+            }
+            symptom.ID = -1;
+            bool success = await DatabaseController.AddSymptomAsync(symptom);
+            if(success) {
+                return "209 : Accepted, but method is deprecated";
+            }
+            return "500";
+        }
+
+        [HttpGet]
+        [Route("/AddDisease/{name}+{description}+{href}+{symptomRef}")]
+        public async Task<string> AddDisease([FromRoute] string name, string description, string href, string symptomRef) {
+            //string name, List<ISymptom> symptoms, int id, string description, string href
+            try {
+                string[] nameSplit = name.Split("_");
+                name = "";
+                foreach(string nameSegment in nameSplit) {
+                    name += $"{nameSegment} ";
+                }
+                name = name.Remove(name.Length - 1);
+            }
+            catch {
+                _ = Log.Warning("Couldn't split name of Symptom", "AddSymptom", "");
+            }
+
+            try {
+                string[] descriptionSplit = description.Split("_");
+                description = "";
+                foreach(string descriptionSegment in descriptionSplit) {
+                    description += $"{descriptionSegment} ";
+                }
+                description = description.Remove(description.Length - 1);
+            }
+            catch {
+                _ = Log.Warning("Couldn't split description of Symptom", "AddSymptom", "");
+            }
+            Task<ICollection<ISymptom>> dbSymptoms = DatabaseController.GetSymptomsAsync();
+            IDisease disease = new Disease();
+            disease.Name = name;
+            disease.Description = description;
+            disease.Href = href;
+            disease.ID = -1;
+            string[] symptomsArray = symptomRef.Split(',');
+            List<int> symptomsIDs = new List<int>();
+            foreach(string symptomString in symptomsArray) {
+                symptomsIDs.Add(int.Parse(symptomString));
+            }
+            foreach(int symptomID in symptomsIDs) {
+                foreach(ISymptom symptom in await dbSymptoms) {
+                    if(symptomID == symptom.ID) {
+                        disease.AddSymptoms(symptom);
+                    }
+                }
+            }
+
+            bool success = await DatabaseController.AddDiseaseAsync(disease);
+            if(success) {
+                return "209 : Accepted, but method is deprecated";
+            }
+            return "500";
+        }
+
+
+        //TODO: Delete before production
+        [HttpGet]
         [Route("/AddDummyData")]
         public async Task<string> AddDummyData() {
             string returnstring = "200 ";
