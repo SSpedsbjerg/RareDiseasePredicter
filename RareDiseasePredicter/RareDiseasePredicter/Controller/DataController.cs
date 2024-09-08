@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 /**
  * 
  * OWNER: Simon dos Reis Spedsbjerg
- * Date: 26/04/2023
+ * Date: 26/04/2023 - 08/09/2024
  * Project: RareDiseasePredictor
  * 
  */
@@ -210,6 +210,24 @@ namespace RareDiseasePredicter.Controller {
             return jsonString;
         }
 
+        [HttpDelete]
+        [Route("/Disease")]
+        public async Task<string> DeleteDisease([FromHeader] JObject body) {
+            return "403";
+        }
+
+        [HttpDelete]
+        [Route("/Symptom")]
+        public async Task<string> DeleteSymptom([FromHeader] JObject body) {
+            return "403";
+        }
+
+        [HttpDelete]
+        [Route("/Region")]
+        public async Task<string> DeleteRegion([FromHeader] JObject body) {
+            return "403";
+        }
+
         //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
         //DEPRECATED: THIS METHOD IS NO LONGER ALLOWED BUT EXIST INCASE OF SYSTEMS DEPENDS ON IT    
         [HttpDelete]
@@ -217,6 +235,8 @@ namespace RareDiseasePredicter.Controller {
         public async Task<string> DropTables() {
             return "403";
             }
+
+
 
         //Gets a list of regions
         [HttpGet]
