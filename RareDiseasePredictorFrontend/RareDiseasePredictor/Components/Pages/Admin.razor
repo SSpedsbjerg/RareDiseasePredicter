@@ -18,14 +18,23 @@
         <button type="button" class="btn btn-warning" @onclick="ShowEditDiseaseModal">Edit Disease</button>
     </div>
     <div class="mt-2">
-    <button type="button" class="btn btn-success" @onclick="ShowAddSymptomModal">Add Symptom</button>
-    <button type="button" class="btn btn-warning" @onclick="ShowEditSymptomModal">Edit Symptom</button>
+        <button type="button" class="btn btn-success" @onclick="ShowAddSymptomModal">Add Symptom</button>
+        <button type="button" class="btn btn-warning" @onclick="ShowEditSymptomModal">Edit Symptom</button>
+    </div>
+    <div class="mt-2">
+        <button type="button" class="btn btn-success" @onclick="ShowAddRegionModal">Add Region</button>
+        <button type="button" class="btn btn-warning" @onclick="ShowEditRegionModal">Edit Region</button>
+    </div>
+    <div class="mt-2">
+        <button type="button" class="btn btn-primary" @onclick="ForceApiRefresh">Force API Refresh</button>
     </div>
 
     <ModalAddDisease @ref="modalAddDisease" IsVisible="false"/>
     <ModalEditDisease @ref="modalEditDisease" IsVisible="false"/>
     <ModalAddSymptom @ref="modalAddSymptom" IsVisible="false"/>
     <ModalEditSymptom @ref="modalEditSymptom" IsVisible="false" />
+    <ModalAddRegion @ref="modalAddRegion" IsVisible="false" />
+    <ModalEditRegion @ref="modalEditRegion" IsVisible="false" />
 
 
 
@@ -36,9 +45,11 @@
     private ModalEditDisease modalEditDisease = new ModalEditDisease();
     private ModalAddSymptom modalAddSymptom = new ModalAddSymptom();
     private ModalEditSymptom modalEditSymptom = new ModalEditSymptom();
+    private ModalAddRegion modalAddRegion = new ModalAddRegion();
+    private ModalEditRegion modalEditRegion = new ModalEditRegion();
     private string currentModal;
 
-    //TODO: Ændre hardcodet string tekst til et parent object med Modals og et navn
+
     private void ShowAddDiseaseModal()
     {
         Logger.LogInformation("Attempting to open Add Disease modal...");
@@ -87,6 +98,30 @@
         StateHasChanged();
     }
 
+    private void ShowAddRegionModal()
+    {
+        Logger.LogInformation("Attempting to open Add Region modal...");
+        if (currentModal != "addregionmodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
+        modalAddRegion.Show();
+        currentModal = "addregionmodal";
+        StateHasChanged();
+    }
+
+    private void ShowEditRegionModal()
+    {
+        Logger.LogInformation("Attempting to open Edit Region modal...");
+        if (currentModal != "editregionmodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
+        modalEditRegion.Show();
+        currentModal = "editregionmodal";
+        StateHasChanged();
+    }
+
     private void modalCloser(string currentModal)
     {
         switch (currentModal)
@@ -103,9 +138,25 @@
             case "editsymptommodal":
                 modalEditSymptom.Close();
                 break;
+            case "addregionmodal":
+                modalAddRegion.Close();
+                break;
+            case "editregionmodal":
+                modalEditRegion.Close();
+                break;
+
         }
 
-            
+
+    }
+
+    private async Task ForceApiRefresh()
+    {
+        await diseaseData.LoadSymptomsData(Http, "https://localhost:57693/symptoms");
+        await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
+        await diseaseData.LoadRegionsData(Http, "https://localhost:57693/regions");
+        Logger.LogInformation("Forced API Refresh...");
+
     }
 
     protected override async Task OnInitializedAsync()

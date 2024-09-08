@@ -158,7 +158,7 @@
     //Deletes disease based on id, URL is subject to change
     private async Task DeleteSymptom(Symptom symptom)
     {
-        var response = await Http.DeleteAsync($"https://localhost:57693/Symptoms/{symptom.Id}");
+        var response = await Http.DeleteAsync($"https://localhost:57693/Symptoms/{symptom.ID}");
         if (response.IsSuccessStatusCode)
         {
             Logger.LogInformation("Sucessfully Updated " + selectedSymptom.Name);
