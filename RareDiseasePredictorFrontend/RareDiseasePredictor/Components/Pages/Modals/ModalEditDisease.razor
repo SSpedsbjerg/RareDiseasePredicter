@@ -1,0 +1,161 @@
+﻿@rendermode InteractiveServer
+@inject ILogger<ModalEditDisease> Logger
+@using RareDiseasePredictor.Models
+@using System.Text.Json
+@using static System.Net.WebRequestMethods
+@inject HttpClient Http
+@inject ApiDiseaseData diseaseData
+
+
+<div class="toast-container p-3 @(IsVisible ? "d-block" : "d-none")" data-bs-autohide="true" data-bs-delay="5000">
+    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <button type="button" class="btn-close btn-danger" aria-label="Close" @onclick="Close"></button>
+        @if (diseaseData.diseases == null)
+        {
+            <p>Loading...</p>
+        }
+
+        else
+        {
+            <div class="mt-3 mb-2">
+                <label class="form-label fs-6">Disease Selector</label>
+                <select class="form-select" @bind="selectedDiseaseName">
+                    @foreach (var disease in diseaseData.diseases)
+                    {
+                        <option value="@disease.Name">@disease.Name</option>
+                    }
+                </select>
+            </div>
+            if(selectedDisease != null)
+            {
+                <div>
+                    <EditForm Model="@selectedDisease" OnValidSubmit="@SubmitData">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="mb-3">
+                            <label class="form-label fs-6">Disease Name</label>
+                            <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="selectedDisease.Name"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fs-6">Disease Description</label>
+                            <InputTextArea id="Description" style="height: 250px;" class="form-control" placeholder="Description" @bind-Value="selectedDisease.Description" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fs-6">Disease Href</label>
+                            <InputText id="Href" class="form-control" placeholder="Href" @bind-Value="selectedDisease.Href" />
+                        </div>
+                        <div>
+                            @if (selectedDisease.Symptoms.Count() != 0)
+                            {
+                                <label class="form-label mb-3 fs-6">Symptomer</label>
+                            }
+
+                            <div class="mb-3">
+                                @for (int i = 0; i < selectedDisease.Symptoms.Count; i++)
+                                {
+                                    int b = i;
+                                    <div class="row">
+                                        <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveSymptom(b)">X</button></div>
+                                        <div class="col col fs-5"><p>@selectedDisease.Symptoms[i].Name</p></div>
+                                    </div>
+                                }
+                            </div>
+
+
+
+
+                            <div class="mb-3">
+                                <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" list="symptomdatalist" />
+                                <datalist id="symptomdatalist">
+                                    @foreach (var symptom in diseaseData.symptoms)
+                                    {
+                                        <option value="@symptom.Name">@symptom.Name</option>
+                                    }
+                                </datalist>
+                                <button type="button" class="btn btn-secondary mt-3" @onclick="AddSymptom">Add Symptom</button>
+                            </div>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary mb-3">Update</button>
+                        <button type="button" class="btn btn-danger mb-3" @onclick="()   => DeleteDisease(selectedDisease)">Delete</button>
+                    </EditForm>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private Disease selectedDisease => diseaseData.diseases?.FirstOrDefault(f => f.Name == selectedDiseaseName);
+    private string selectedDiseaseName;
+
+    public void Show()
+    {
+        Logger.LogInformation("Attempting to Show Edit Disease Modal...");
+        IsVisible = true;
+        StateHasChanged();
+        Logger.LogInformation("Value to check after states XDD");
+    }
+
+    private void Close()
+    {
+        Logger.LogInformation("Attempting to Close Modal...");
+        IsVisible = false;
+        if (OnClose.HasDelegate)
+        {
+            OnClose.InvokeAsync();
+        }
+        StateHasChanged();
+    }
+
+
+    private string newSymptom = string.Empty;
+
+    private void AddSymptom()
+    {
+        Logger.LogInformation("Attempting to add symptom");
+        if (!string.IsNullOrWhiteSpace(newSymptom))
+        {
+            var symptom = diseaseData.symptoms.FirstOrDefault(symp => symp.Name == newSymptom);
+
+            if (symptom != null)
+            {
+                selectedDisease.Symptoms.Add(symptom);
+                newSymptom = string.Empty;
+            }
+
+        }
+    }
+
+    private void RemoveSymptom(int index)
+    {
+        Logger.LogWarning("Index Value: " + index.ToString());
+        Logger.LogWarning("Amount of symptoms: " + selectedDisease.Symptoms.Count().ToString());
+        selectedDisease.Symptoms.RemoveAt(index);
+
+    }
+    private void DeleteDisease(Disease disease)
+    {
+        //TODO MAKE DELETE DISEASE METHOD
+    }
+
+
+    private async Task SubmitData()
+    {
+        //TODO MAKE PUT/UPDATE DISEASE METHOD
+
+    }
+
+}
