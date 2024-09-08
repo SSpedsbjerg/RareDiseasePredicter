@@ -159,7 +159,7 @@
     //Deletes disease based on id, URL is subject to change
     private async Task DeleteDisease(Disease disease)
     {
-        var response = await Http.DeleteAsync($"https://localhost:57693/Diseases/{disease.Id}");
+        var response = await Http.DeleteAsync($"https://localhost:57693/Diseases/{disease.ID}");
         if (response.IsSuccessStatusCode)
         {
             Logger.LogInformation("Sucessfully Updated " + selectedDisease.Name);
