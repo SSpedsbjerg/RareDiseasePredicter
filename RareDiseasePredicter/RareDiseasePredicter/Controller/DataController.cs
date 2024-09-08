@@ -25,27 +25,6 @@ namespace RareDiseasePredicter.Controller {
             return Task.FromResult("200");
             }
 
-        [HttpGet]
-        [Route("/AddRegion/{name}")]
-        public async Task<string> AddRegionFromRoute([FromRoute]string name) {
-            try {
-                string[] nameSplit = name.Split("_");
-                name = "";
-                foreach(string nameSegment in nameSplit) {
-                    name += $"{nameSegment} ";
-                    }
-                name = name.Remove(name.Length - 1);
-                }
-            catch {
-                _ = Log.Warning("Couldn't split name of Symptom", "AddSymptom", "");
-                }
-            bool success = await DatabaseController.AddRegionAsync(new Region(name, -1));
-            if (success) {
-                return "200";
-                }
-            return "500";
-            }
-
         //Takes name of symptoms and returns a list of diseases which is possible
         //TODO: Add RDDeterminer
         [HttpPost]
@@ -259,6 +238,27 @@ namespace RareDiseasePredicter.Controller {
 
 
         //Deprecated Methods
+        [HttpGet]
+        [Route("/AddRegion/{name}")]
+        public async Task<string> AddRegionFromRoute([FromRoute] string name) {
+            try {
+                string[] nameSplit = name.Split("_");
+                name = "";
+                foreach(string nameSegment in nameSplit) {
+                    name += $"{nameSegment} ";
+                }
+                name = name.Remove(name.Length - 1);
+            }
+            catch {
+                _ = Log.Warning("Couldn't split name of Symptom", "AddSymptom", "");
+            }
+            bool success = await DatabaseController.AddRegionAsync(new Region(name, -1));
+            if(success) {
+                return "200";
+            }
+            return "500";
+        }
+
         [HttpGet]
         [Route("/AddSymptom/{name}+{Description}+{Regions}")]
         public async Task<string> AddSymptom([FromRoute] string name, string description, string regions) {
