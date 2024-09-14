@@ -1,4 +1,5 @@
 ﻿@page "/admin"
+@using Microsoft.AspNetCore.Authorization
 @using RareDiseasePredictor.Models
 @using RareDiseasePredictor.Components.Pages.Modals
 @using System.Text.Json
@@ -8,22 +9,24 @@
 @inject ApiDiseaseData diseaseData
 @rendermode InteractiveServer
 
+
 <h1>Admin Control Board</h1>
 
 <PageTitle>Admin Board</PageTitle>
 
+    
 
     <div>
-        <button type="button" class="btn btn-success" @onclick="ShowAddDiseaseModal">Add Disease</button>
-        <button type="button" class="btn btn-warning" @onclick="ShowEditDiseaseModal">Edit Disease</button>
+    <button type="button" class="btn btn-success me-2" @onclick="ShowAddDiseaseModal">Add Disease</button>
+    <button type="button" class="btn btn-warning " @onclick="ShowEditDiseaseModal">Edit Disease</button>
     </div>
     <div class="mt-2">
-        <button type="button" class="btn btn-success" @onclick="ShowAddSymptomModal">Add Symptom</button>
-        <button type="button" class="btn btn-warning" @onclick="ShowEditSymptomModal">Edit Symptom</button>
+    <button type="button" class="btn btn-success me-2" @onclick="ShowAddSymptomModal">Add Symptom</button>
+    <button type="button" class="btn btn-warning " @onclick="ShowEditSymptomModal">Edit Symptom</button>
     </div>
     <div class="mt-2">
-        <button type="button" class="btn btn-success" @onclick="ShowAddRegionModal">Add Region</button>
-        <button type="button" class="btn btn-warning" @onclick="ShowEditRegionModal">Edit Region</button>
+        <button type="button" class="btn btn-success me-2" @onclick="ShowAddRegionModal">Add Region</button>
+    <button type="button" class="btn btn-warning " @onclick="ShowEditRegionModal">Edit Region</button>
     </div>
     <div class="mt-2">
         <button type="button" class="btn btn-primary" @onclick="ForceApiRefresh">Force API Refresh</button>

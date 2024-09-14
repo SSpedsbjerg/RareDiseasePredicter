@@ -6,4 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Components\Pages\Admin.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Components\Pages\Admin.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+  </ItemGroup>
+
 </Project>

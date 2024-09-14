@@ -1,0 +1,52 @@
+﻿@page "/login"
+@inject HttpClient Http;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage;
+@inject NavigationManager Navigation;
+
+<h3>Login</h3>
+
+<EditForm Model="@loginModel" OnValidSubmit="@HandleLogin" FormName="loginForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3 col-2">
+        <label class="form-label fs-6">Username:</label>
+        <InputText id="Username" class="form-control" placeholder="Username" @bind-Value="loginModel.Username" />
+    </div>
+
+    <div class="mb-3 col-2">
+        <label class="form-label fs-6">Password:</label>
+        <InputText id="Password" class="form-control" placeholder="Password" @bind-Value="loginModel.Password" type="password" />
+    </div>
+
+    <button type="submit" class="btn btn-info">Login</button>
+</EditForm>
+
+@code {
+    private LoginModel loginModel = new();
+
+    private async Task HandleLogin()
+    {
+        var response = await Http.PostAsJsonAsync("https://localhost:57693/Login/", loginModel);
+        if (response.IsSuccessStatusCode)
+        {
+            var token = await response.Content.ReadAsStringAsync();
+
+            // Store the token in local storage
+            await localStorage.SetItemAsync("authToken", token);
+
+            // Navigate to the home page or an authorized page
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            // Handle failed login attempt (e.g., show an error message)
+        }
+    }
+
+    public class LoginModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+}
