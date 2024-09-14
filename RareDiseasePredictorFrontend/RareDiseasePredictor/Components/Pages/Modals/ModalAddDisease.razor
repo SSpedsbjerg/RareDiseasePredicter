@@ -144,7 +144,7 @@
         var jsonString = JsonSerializer.Serialize(disease, new JsonSerializerOptions { WriteIndented = true });
         Logger.LogInformation("Json File: " + jsonString);
         var httpClient = new HttpClient();
-        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/AddDisease/", disease);
+        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Disease/", disease);
 
         if (response.IsSuccessStatusCode)
         {

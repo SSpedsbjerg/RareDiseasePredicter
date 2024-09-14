@@ -3,8 +3,80 @@
   "WorkspaceRootPath": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\modals\\modaladddisease.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\modals\\modaladddisease.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\admin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\admin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\error.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\error.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\authentication\\apiauthenticationstateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\authentication\\apiauthenticationstateprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\modals\\modaladdsymptom.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\modals\\modaladdsymptom.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\models\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\models\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\models\\disease.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\models\\disease.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\admin.razor.css||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\admin.razor.css||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\layout\\navmenu.razor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\layout\\navmenu.razor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\routes.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\routes.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\counter.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\counter.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\modals\\modaleditdisease.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\modals\\modaleditdisease.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\modals\\modaladdregion.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\modals\\modaladdregion.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\models\\region.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -15,10 +87,6 @@
       "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\models\\symptom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\modals\\modaladddisease.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\modals\\modaladddisease.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\models\\modaldatacomponent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\models\\modaldatacomponent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -27,28 +95,12 @@
       "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\models\\apidiseasedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\modals\\modaladdregion.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\modals\\modaladdregion.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\modals\\modaleditregion.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\modals\\modaleditregion.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\modals\\modaladdsymptom.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\modals\\modaladdsymptom.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\modals\\modaleditsymptom.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\modals\\modaleditsymptom.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\admin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\admin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\counter.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|solutionrelative:rarediseasepredictor\\components\\pages\\counter.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5F48DD4A-A606-4BEE-BFA4-A00C686A52EC}|RareDiseasePredictor\\RareDiseasePredictor.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredictorfrontend\\rarediseasepredictor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -66,7 +118,46 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\appsettings.json",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\appsettings.json",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\appsettings.json",
+              "RelativeToolTip": "RareDiseasePredictor\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-09-14T09:23:28.985Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Login.cs",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\Login.cs",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Models\\Login.cs",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\Login.cs",
+              "RelativeToolTip": "RareDiseasePredictor\\Models\\Login.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-14T08:45:33.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "NavMenu.razor",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Layout\\NavMenu.razor",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Layout\\NavMenu.razor",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Layout\\NavMenu.razor",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Layout\\NavMenu.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-08T11:13:18.538Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
               "Title": "ApiDiseaseData.cs",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\ApiDiseaseData.cs",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Models\\ApiDiseaseData.cs",
@@ -79,33 +170,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 18,
               "Title": "ModalAddRegion.razor",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddRegion.razor",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddRegion.razor",
               "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddRegion.razor",
               "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddRegion.razor",
-              "ViewState": "AgIAABsAAAAAAAAAAAAAACEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADwAAAAAAAAAAIBJwCEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-08-30T08:23:22.741Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "ModalAddDisease.razor",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddDisease.razor",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddDisease.razor",
               "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddDisease.razor",
               "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddDisease.razor",
-              "ViewState": "AgIAAHQAAAAAAAAAAAAUwJEAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAABkAAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-08-19T09:09:32.17Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 25,
               "Title": "Home.razor",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Home.razor",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Home.razor",
@@ -113,11 +204,155 @@
               "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Home.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-19T08:36:27.166Z"
+              "WhenOpened": "2024-08-19T08:36:27.166Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
+              "Title": "NavMenu.razor.css",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Layout\\NavMenu.razor.css",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Layout\\NavMenu.razor.css",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Layout\\NavMenu.razor.css",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Layout\\NavMenu.razor.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-09-08T11:17:52.736Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Admin.razor",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Admin.razor",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Admin.razor",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Admin.razor",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Admin.razor",
+              "ViewState": "AgIAAIoAAAAAAAAAAAAAAAkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-19T08:41:33.854Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Login.razor",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Login.razor",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Login.razor",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Login.razor",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Login.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-08T11:13:12.637Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Error.razor",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Error.razor",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Error.razor",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Error.razor",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Error.razor",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAABEAAABlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-08T11:12:21.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Program.cs",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Program.cs",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Program.cs",
+              "RelativeToolTip": "RareDiseasePredictor\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-14T08:51:11.755Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ApiAuthenticationStateProvider.cs",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Authentication\\ApiAuthenticationStateProvider.cs",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Authentication\\ApiAuthenticationStateProvider.cs",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Authentication\\ApiAuthenticationStateProvider.cs",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Authentication\\ApiAuthenticationStateProvider.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-14T08:58:47.007Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Routes.razor",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Routes.razor",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Routes.razor",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Routes.razor",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Routes.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-08T11:16:30.06Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "App.razor",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\App.razor",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\App.razor",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\App.razor",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\App.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-08T11:16:33.704Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ModalAddSymptom.razor",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddSymptom.razor",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddSymptom.razor",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddSymptom.razor",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddSymptom.razor",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAAAI4AAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-30T00:12:09.49Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ModalEditDisease.razor",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditDisease.razor",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditDisease.razor",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditDisease.razor",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditDisease.razor",
+              "ViewState": "AgIAAJYAAAAAAAAAAIBJwKMAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-08T10:52:47.57Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "MainLayout.razor",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Layout\\MainLayout.razor",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Layout\\MainLayout.razor",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Layout\\MainLayout.razor",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Layout\\MainLayout.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-08T11:12:37.89Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "Counter.razor",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Counter.razor",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Counter.razor",
@@ -125,11 +360,38 @@
               "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Counter.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-19T08:32:28.394Z"
+              "WhenOpened": "2024-08-19T08:32:28.394Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 10,
+              "Title": "Disease.cs",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\Disease.cs",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Models\\Disease.cs",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\Disease.cs",
+              "RelativeToolTip": "RareDiseasePredictor\\Models\\Disease.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-19T10:50:21.472Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Admin.razor.css",
+              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Admin.razor.css",
+              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Admin.razor.css",
+              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Admin.razor.css",
+              "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Admin.razor.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-09-08T11:31:51.406Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
               "Title": "Symptom.cs",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\Symptom.cs",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Models\\Symptom.cs",
@@ -142,33 +404,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Admin.razor",
-              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Admin.razor",
-              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Admin.razor",
-              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Admin.razor",
-              "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Admin.razor",
-              "ViewState": "AgIAAKwAAAAAAAAAAAAAANAAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-19T08:41:33.854Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ModalAddSymptom.razor",
-              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddSymptom.razor",
-              "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddSymptom.razor",
-              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddSymptom.razor",
-              "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalAddSymptom.razor",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAAACgAAAA7AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-30T00:12:09.49Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 21,
               "Title": "ModalDataComponent.cs",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\ModalDataComponent.cs",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Models\\ModalDataComponent.cs",
@@ -181,20 +417,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Disease.cs",
-              "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\Disease.cs",
-              "RelativeDocumentMoniker": "RareDiseasePredictor\\Models\\Disease.cs",
-              "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\Disease.cs*",
-              "RelativeToolTip": "RareDiseasePredictor\\Models\\Disease.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-19T10:50:21.472Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 19,
               "Title": "Region.cs",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Models\\Region.cs",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Models\\Region.cs",
@@ -207,26 +430,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 23,
               "Title": "ModalEditRegion.razor",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditRegion.razor",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditRegion.razor",
               "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditRegion.razor",
               "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditRegion.razor",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAACsAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAIBJwCsAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-08-30T08:28:09.752Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 24,
               "Title": "ModalEditSymptom.razor",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditSymptom.razor",
               "RelativeDocumentMoniker": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditSymptom.razor",
               "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredictorFrontend\\RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditSymptom.razor",
               "RelativeToolTip": "RareDiseasePredictor\\Components\\Pages\\Modals\\ModalEditSymptom.razor",
-              "ViewState": "AgIAAHsAAAAAAAAAAAAAAHsAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAHgAAAAAAAAAAIBJwHsAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-08-30T00:08:11.446Z",
               "EditorCaption": ""
