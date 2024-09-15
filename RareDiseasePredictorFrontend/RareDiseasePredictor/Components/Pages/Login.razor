@@ -2,7 +2,7 @@
 @inject HttpClient Http;
 @inject Blazored.LocalStorage.ILocalStorageService localStorage;
 @inject NavigationManager Navigation;
-
+@inject ILogger<Login> Logger
 <h3>Login</h3>
 
 <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin" FormName="loginForm">
@@ -19,15 +19,16 @@
         <InputText id="Password" class="form-control" placeholder="Password" @bind-Value="loginModel.Password" type="password" />
     </div>
 
-    <button type="submit" class="btn btn-info">Login</button>
+    <button type="submit" class="btn btn-info mb-3">Login</button>
 </EditForm>
+<a href="https://localhost:7028/register">No Account?, Click here to register!</a>
 
 @code {
     private LoginModel loginModel = new();
 
     private async Task HandleLogin()
     {
-        var response = await Http.PostAsJsonAsync("https://localhost:57693/Login/", loginModel);
+        var response = await Http.PostAsJsonAsync("https://localhost:57693/login/", loginModel);
         if (response.IsSuccessStatusCode)
         {
             var token = await response.Content.ReadAsStringAsync();
@@ -40,7 +41,7 @@
         }
         else
         {
-            // Handle failed login attempt (e.g., show an error message)
+            Logger.LogError("Error attempting to login: " + response.StatusCode + response.Content);
         }
     }
 

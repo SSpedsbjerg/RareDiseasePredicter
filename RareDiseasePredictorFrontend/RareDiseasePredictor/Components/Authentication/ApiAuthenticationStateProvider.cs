@@ -5,11 +5,13 @@
     using System.Text.Json;
     using Microsoft.AspNetCore.Components.Authorization;
     using Blazored.LocalStorage;
+    using Microsoft.JSInterop;
 
     public class ApiAuthenticationStateProvider : AuthenticationStateProvider
     {
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
+        private AuthenticationState anonymousState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
         public ApiAuthenticationStateProvider(HttpClient httpClient, ILocalStorageService localStorage)
         {
@@ -19,16 +21,27 @@
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var token = await _localStorage.GetItemAsync<string>("authToken");
+            string token = null;
+
+            try
+            {
+                // Attempt to get the token from local storage
+                token = await _localStorage.GetItemAsync<string>("authToken");
+            }
+            catch (InvalidOperationException)
+            {
+                // Handle the case where JSInterop is not available (e.g., during prerendering)
+                return anonymousState;
+            }
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+                return anonymousState;
             }
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Decode token to extract claims
+            // Decode the token to extract claims
             var claims = ParseClaimsFromJwt(token);
             var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt"));
 
@@ -60,4 +73,5 @@
             return claims;
         }
     }
+
 }

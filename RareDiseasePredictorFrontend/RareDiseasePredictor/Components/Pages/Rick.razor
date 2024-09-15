@@ -1,0 +1,17 @@
+﻿@page "/rick"
+@inject NavigationManager Navigation
+@inject IJSRuntime jsRuntime
+@using System.Web
+@using System.Net
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+
+        await Task.Delay(100);
+
+        Navigation.NavigateTo("https://www.youtube.com/watch?v=dQw4w9WgXcQ", true);
+    }
+
+}
