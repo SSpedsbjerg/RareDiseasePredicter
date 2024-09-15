@@ -1,0 +1,51 @@
+﻿@page "/register"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject ILogger<Register> Logger
+<h3>Register</h3>
+
+<EditForm Model="registerModel" OnValidSubmit="HandleRegistration" FormName="registerForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3 col-2">
+        <label>Username:</label>
+        <InputText id="Username" class="form-control" placeholder="Username" @bind-Value="registerModel.Username" />
+    </div>
+
+    <div class="mb-3 col-2">
+        <label>Password:</label>
+        <InputText id="Password" class="form-control" placeholder="Password" @bind-Value="registerModel.Password" type="password" />
+    </div>
+
+    <div class="mb-3 col-2">
+        <label>Confirm Password:</label>
+        <InputText id="ConfirmPassword" class="form-control" placeholder="Confirm Password" @bind-Value="registerModel.ConfirmPassword" type="password" />
+    </div>
+
+    <button class="btn btn-info" type="submit">Register</button>
+</EditForm>
+
+@code {
+    private RegisterModel registerModel = new();
+
+    private async Task HandleRegistration()
+    {
+        var response = await Http.PostAsJsonAsync("https://localhost:57693/register/", registerModel);
+        if (response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            Logger.LogError("Error attempting to register: " + response.StatusCode + response.Content);
+        }
+    }
+
+    public class RegisterModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
+    }
+}
