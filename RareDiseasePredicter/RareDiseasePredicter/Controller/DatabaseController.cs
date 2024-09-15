@@ -1,11 +1,12 @@
-﻿using Microsoft.Data.Sqlite;
-using RareDiseasePredicter.Implementations;
+﻿using RareDiseasePredicter.Implementations;
 using RareDiseasePredicter.Interfaces;
+using MySql.Data;
+using MySql.Data.MySqlClient;
 
 /**
  * 
  * OWNER: Simon dos Reis Spedsbjerg
- * Date: 26/04/2023
+ * Date: 15/09/2024
  * Project: RareDiseasePredictor
  * 
  */
@@ -13,164 +14,192 @@ using RareDiseasePredicter.Interfaces;
 namespace RareDiseasePredicter.Controller {
     static class DatabaseController {
 
-        private static SqliteConnection Connection;
+
+        private static string Server = "localhost";
+        private static string DatabaseName = "Local instance MySQL84";
+        private static string port = "3307";
+        private static string userName;
+        private static string password;
+
+        public static string UserName {
+            get {
+                return userName;
+            }
+            set {
+                userName = value;
+            } 
+        }
+
+        public static string Password {
+            private get {
+                return password;
+            }
+            set {
+                password = value;
+            }
+        }
+
+        private static MySqlConnection connection;
+
+        public static bool isConnected = false;
+
+        public static bool ConnectDatabase() {
+            if(connection is null) {
+                try {
+                    string connstring = string.Format("Server={0}; port={1}; database={1}; UID={2}; password={3}", Server, port, DatabaseName, UserName, Password);
+                    connection = new MySqlConnection(connstring);
+                    connection.Open();
+                    isConnected = true;
+                    return true;
+                }
+                catch {
+                    isConnected = false;
+                    _ = Log.Error(new Exception("Unable to open connection to MYSQL database"), "DatabaseController", "ConnectDatabase");
+                }
+            }
+            return false;
+        }
+
+        public static void CloseDatabase() {
+            if(connection is null) {
+                return;
+            }
+            connection.Close();
+        }
 
         public static bool Start() {
-            if (!CreateConnection()) return false;
+            if (!ConnectDatabase()) return false;
             if (!CreateTables()) return false;
             return true;
             }
-
-        private static bool CreateConnection() {
-            if (Connection == null) {
-                try {
-                    Connection = new SqliteConnection("Data Source = Database.db");
-                    Connection.Open();
-                    return true;
-                }
-                catch(Exception e) {
-                    _ = Log.Error(e, "CreateConnection", e.Message);
-                    return false;
-                }
-            }
-            else {
-                return true;
-            }
-        }
 
         //TODO: add weight to disease
         private static bool CreateTables() {
             try {
                 string createQuery;
                 createQuery = "CREATE TABLE IF NOT EXISTS DiseaseSymptomsReference " +
-                    "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "DiseaseID INTEGER, " +
-                    "SymptomID INTEGER);";
-                var command = Connection.CreateCommand();
-                command.CommandText = createQuery;
-                command.ExecuteNonQuery();
-                createQuery = "CREATE TABLE IF NOT EXISTS Disease" +
-                    " (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    " Description TEXT," +
-                    " Href TEXT," +
-                    " Name TEXT" +
-                    " );";
-                command = Connection.CreateCommand();
-                command.CommandText = createQuery;
-                command.ExecuteNonQuery();
-                createQuery = "CREATE TABLE IF NOT EXISTS RegionSymptoms (" +
-                    "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "Symptom INTEGER, " +
-                    "Region INTEGER);";
-                command = Connection.CreateCommand();
-                command.CommandText = createQuery;
-                command.ExecuteNonQuery();
+                    "(ID INT PRIMARY KEY AUTO_INCREMENT, " +
+                    "DiseaseID INT, " +
+                    "SymptomID INT," +
+                    "FOREIGN KEY (DiseaseID) REFERENCES Disease(ID)," +
+                    "FOREIGN KEY (SymptomID) REFERENCES Symptoms(ID)" +
+                    ");";
+                var reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+                createQuery = "CREATE TABLE IF NOT EXISTS Disease " +
+                    "(ID INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "Description TEXT, " +
+                    "Href TEXT, " +
+                    "Name TEXT " +
+                    ");";
+                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+                createQuery = "CREATE TABLE IF NOT EXISTS SymptomRegionsReference (" +
+                    "ID INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "Symptom INT, " +
+                    "Region INT, " +
+                    "FOREIGN KEY (Symptom) REFERENCES Symptoms(ID), " +
+                    "FOREIGN KEY (Region) REFERENCES Regions(ID)" +
+                    ");";
+                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
                 createQuery = "CREATE TABLE IF NOT EXISTS Regions (" +
-                    " ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    " Name TEXT);";
-                command = Connection.CreateCommand();
-                command.CommandText = createQuery;
-                command.ExecuteNonQuery();
-                //TODO: Update Region to reference RegionSymptoms
+                    "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                    "Name TEXT" +
+                    ");";
+                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
                 createQuery = "CREATE TABLE IF NOT EXISTS Symptoms (" +
-                    " ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                    " Region INTEGER," +
-                    " Name TEXT," +
-                    " Description TEXT" +
-                    " );";
-                command = Connection.CreateCommand();
-                command.CommandText = createQuery;
-                command.ExecuteNonQuery();
+                    "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                    "Region INT, " +
+                    "Name TEXT, " +
+                    "Description TEXT" +
+                    ");";
+                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+                createQuery = "CREATE TABLE IF NOT EXISTS Users (" +
+                    "ID INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "Username VARCHAR(255) NOT NULL, " +
+                    "Password VARBINARY(256) NOT NULL, " +
+                    "UNIQUE (Username)" +
+                    ");";
+                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
                 return true;
             }
             catch {
+                _ = Log.Error(new Exception("Failed to create tables"), "DatabaseController", "");
                 return false;
             }
 
         }
 
         //Gets all diseases along with the symptoms and regions
-        //TODO: See if the complexity can be improved
         public static async Task<ICollection<IDisease>> GetDiseaseAsync() {
             List<IDisease> diseaseList = new List<IDisease>();
-            if(CreateConnection()) {
-                //Get all diseases
-                var command = Connection.CreateCommand();
-                command.CommandText = "SELECT * FROM Disease";
-                using(var reader = command.ExecuteReader()) {
-                    while(reader.Read()) {
-                        string href = reader.GetString(2); //Href
-                        int id = reader.GetInt32(0); //ID
-                        string description = reader.GetString(1); //Description
-                        string name = reader.GetString(3); //Name
-                        var disease = new Disease();
-                        disease.SetID(id);
-                        disease.Name = name;
-                        disease.Href = href;
-                        disease.Description = description;
-                        diseaseList.Add(disease);
-                        }
-                    }
-                //Get their symptoms
-                command.CommandText = "SELECT * FROM DiseaseSymptomsReference";
-                List<ISymptom> symptoms = (List<ISymptom>)await GetSymptomsAsync(); //This gets the symptoms regions aswell
-                using(var reader = command.ExecuteReader()) {
-                    while(reader.Read()) {
-                        foreach(IDisease disease in diseaseList) {
-                            if(reader.GetInt32(1) == disease.ID) { //DiseaseSymoptomsReference DiseaseID
-                                foreach(ISymptom symptom in symptoms) {
-                                    if(symptom.ID == reader.GetInt32(2)) { //DiseaseSymoptomsReference SymptomID
-                                        disease.AddSymptoms(symptom);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            else {
-                _ = Log.Error(new Exception("Could not create Connection"), "GetSymptomsAsync", "");
-                return null;
-                }
-            return diseaseList;
+            //Get all diseases
+            string query = "SELECT * FROM Disease";
+            var reader = new MySqlCommand(query, connection).ExecuteReader();
+            while(reader.Read()) {
+                string href = reader.GetString(2); //Href
+                int id = reader.GetInt32(0); //ID
+                string description = reader.GetString(1); //Description
+                string name = reader.GetString(3); //Name
+                var disease = new Disease();
+                disease.SetID(id);
+                disease.Name = name;
+                disease.Href = href;
+                disease.Description = description;
+                diseaseList.Add(disease);
             }
 
+            //Get their symptoms
+            List<ISymptom> symptoms = (List<ISymptom>)await GetSymptomsAsync(); //This gets the symptoms regions aswell
+
+            query = "SELECT * FROM DiseaseSymptomsReference";
+
+            Dictionary<int, ISymptom> symptomDic = symptoms.ToDictionary(symptom => symptom.ID);
+
+            Dictionary<int, IDisease> diseaseDic = diseaseList.ToDictionary(disease => disease.ID);
+
+            while(reader.Read()) {
+                int diseaseID = reader.GetInt32(1);
+                int symptomID = reader.GetInt32(2);
+
+                if(diseaseDic.TryGetValue(diseaseID, out IDisease disease) &&
+                    symptomDic.TryGetValue(symptomID, out ISymptom symptom)) {
+                    disease.AddSymptoms(symptom);
+                }
+            }
+            return diseaseList;
+        }
+
         //Gets all symptoms alongside its regions
-        //TODO: see if complexity can be improved
         public static async Task<ICollection<ISymptom>> GetSymptomsAsync() {
             List<ISymptom> symptoms = new List<ISymptom>();
-            if(CreateConnection()) {
-                var command = Connection.CreateCommand();
-                command.CommandText = "SELECT * FROM Symptoms";
-                using (var reader = command.ExecuteReader()) {
-                    while (reader.Read()) {
-                        string name = reader.GetString(2);
-                        int id = reader.GetInt32(0);
-                        string description = reader.GetString(3);
-                        ISymptom symptom = new Symptom(name) {
-                            Description = description
-                            };
-                        symptom.ID = id;
-                        symptoms.Add(symptom);
-                        }
-                    }
-                command.CommandText = "SELECT * FROM RegionSymptoms";
-                List<IRegion> regions = (List<IRegion>)await GetRegionsAsync();
-                using (var reader = command.ExecuteReader()) {
-                    while(reader.Read()) {
-                        foreach(ISymptom symptom in symptoms) {//search the symptoms
-                            foreach(IRegion region in regions) {//search for all regions
-                                if(region.ID == reader.GetInt32(2) & reader.GetInt32(1) == symptom.ID) {//if a regions id matches with any the regions references add the region to the symptom
-                                    symptom.AddRegion(region);
-                                    }
-                                }
-                            }
-                        }
-                    }
-            }
-            else {
-                _ = Log.Error(new Exception("Could not create Connection"), "GetSymptomsAsync", "");
-                return null;
+            string query = "SELECT * FROM Symptoms";
+            var reader = new MySqlCommand(query, connection).ExecuteReader();
+            while (reader.Read()) {
+                string name = reader.GetString(2);
+                int id = reader.GetInt32(0);
+                string description = reader.GetString(3);
+                ISymptom symptom = new Symptom(name) {
+                    Description = description
+                    };
+                symptom.ID = id;
+                symptoms.Add(symptom);
+                }
+
+
+            query = "SELECT * FROM RegionSymptoms";
+
+            List<IRegion> regions = (List<IRegion>)await GetRegionsAsync();
+
+            Dictionary<int, IRegion> regionDic = regions.ToDictionary(region => region.ID);
+
+            Dictionary<int, ISymptom> symptomDic = symptoms.ToDictionary(symptom => symptom.ID);
+
+            while(reader.Read()) {
+                int symptomID = reader.GetInt32(1);
+                int regionID = reader.GetInt32(2);
+
+                if(symptomDic.TryGetValue(symptomID, out ISymptom symptom) && regionDic.TryGetValue(regionID, out IRegion region)) {
+                    symptom.AddRegion(region);
+                }
             }
             return symptoms;
         }
@@ -178,64 +207,52 @@ namespace RareDiseasePredicter.Controller {
         //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
         //Adds disease to the database
         public static async Task<bool> AddDiseaseAsync(IDisease disease) {
-            var command = Connection.CreateCommand();
-            if(CreateConnection()) {
-                command.CommandText = "SELECT ID FROM Disease";
-                disease.ID = 1;
-                using (var reader = command.ExecuteReader()) {
-                    while(reader.Read()) {
-                        disease.ID = reader.GetInt32(0) + 1;
-                        }
-                    }
-                command.CommandText = $"INSERT INTO Disease (Description, Href, Name) VALUES ('{disease.Description}', '{disease.Href}', '{disease.Name}');";
-                command.ExecuteNonQuery();
-                foreach (ISymptom symptom in disease.Symptoms) {
-                    command.CommandText = $"INSERT INTO DiseaseSymptomsReference (DiseaseID, SymptomID) VALUES ({disease.ID}, {symptom.ID});";
-                    command.ExecuteNonQuery();
-                    }
+            disease.ID = 1;
+            string query = "SELECT ID FROM Disease";
+            var reader = new MySqlCommand(query, connection).ExecuteReader();
+            while(reader.Read()) {
+                disease.ID = reader.GetInt32(0) + 1;
                 }
-            else {
-                _ = Log.Error(new Exception("Could not create connection to database"), "AddDiseaseAsync", "");
-                return false;
-            }
+
+            query = $"INSERT INTO Disease (Description, Href, Name) VALUES ('{disease.Description}', '{disease.Href}', '{disease.Name}');";
+            new MySqlCommand(query, connection).ExecuteNonQuery();
+            foreach (ISymptom symptom in disease.Symptoms) {
+                query = $"INSERT INTO DiseaseSymptomsReference (DiseaseID, SymptomID) VALUES ({disease.ID}, {symptom.ID});";
+                new MySqlCommand(query, connection).ExecuteNonQuery();
+                }
             return true;
         }
 
         //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
         //Adds symptom to the database
         public static async Task<bool> AddSymptomAsync(ISymptom symptom) {
-            if (!CreateConnection()) {
-                _ = Log.Error(new Exception("Could not create connection to database"), "AddSymptomAsync", "");
-                return false;
-                }
             try {
-                var command = Connection.CreateCommand();
-                command.CommandText = "SELECT Symptom FROM RegionSymptoms";//Get the reference of regions for the symptom
+                string query = "SELECT Symptom FROM RegionSymptoms";//Get the reference of regions for the symptom
                 int lastRefID = -1;
                 bool hasData = false;
-                using(var reader = command.ExecuteReader()) {
-                    while(reader.Read()) {
-                        hasData = true;
-                        lastRefID = reader.GetInt32(0);
-                    }
-                    if (!hasData) {//If the database is empty
-                        lastRefID= 0;
-                        }
+                var reader = new MySqlCommand(query, connection).ExecuteReader();
+                while(reader.Read()) {
+                    hasData = true;
+                    lastRefID = reader.GetInt32(0);
                 }
+                if (!hasData) {//If the database is empty
+                    lastRefID= 0;
+                    }
+
                 if (lastRefID == -1) {//It should not end in here
                     _=Log.Error(new Exception($"lasRefID was {lastRefID}"), "AddSymptomAsync", "");
                     return false;
                     }
                 lastRefID++;//ID always starts at 1
-                command.CommandText = $"INSERT INTO Symptoms (Region, Name, Description) VALUES ('{lastRefID}', '{symptom.Name}', '{symptom.Description}')";
-                var query = command.ExecuteNonQueryAsync();
+                query = $"INSERT INTO Symptoms (Region, Name, Description) VALUES ('{lastRefID}', '{symptom.Name}', '{symptom.Description}')";
+                var insertion = new MySqlCommand(query, connection).ExecuteReaderAsync();
                 foreach (IRegion region in symptom.Regions) {
                     await AddSympRegionReferenceAsync(lastRefID, region.ID);
                     }
                 if (symptom.Regions.Count == 0) {
                     await AddSympRegionReferenceAsync(lastRefID, 0);
                     }
-                await query;
+                await insertion;
                 return true;
             }
             catch (Exception ex) {
@@ -245,13 +262,8 @@ namespace RareDiseasePredicter.Controller {
         }
 
         private static async Task<bool> AddSympRegionReferenceAsync(int sympID, int regionID) {
-            if(!CreateConnection()) {
-                _ = Log.Error(new Exception("Could not create connection to database"), "AddSympRegionReferenceAsync", "");
-                return false;
-                }
-            var command = Connection.CreateCommand();
-            command.CommandText = $"INSERT INTO RegionSymptoms (Symptom, Region) VALUES ({sympID}, {regionID})";
-            command.ExecuteNonQuery();
+            string query = $"INSERT INTO RegionSymptoms (Symptom, Region) VALUES ({sympID}, {regionID})";
+            new MySqlCommand(query, connection).ExecuteNonQuery();
             return true;
         }
 
@@ -259,67 +271,43 @@ namespace RareDiseasePredicter.Controller {
         //Read all of the regions and if any matches, don't add it
         //possibility of wrong IDs comes from this, if any mismatch with regions pops up, check this
         public static async Task<bool> AddRegionAsync(IRegion region) {
-            if(!CreateConnection()) {
-                _ = Log.Error(new Exception("Could not create connection to database"), "AddRegionAsync", "");
-                return false;
-                }
-            var command = Connection.CreateCommand();
-            command.CommandText = "SELECT Name FROM Regions";
-            using (var reader = command.ExecuteReader()) {
-                while(await reader.ReadAsync()) {
-                    if (reader.GetString(0).ToLower() == region.Name.ToLower()) {
-                        _ = Log.Warning("Tried to add a Region that already exist", "AddRegionAsync", "");
-                        return false;
-                    }
+            string query = "SELECT Name FROM Regions";
+            var reader = new MySqlCommand(query, connection).ExecuteReader();
+            while(reader.Read()) {
+                if (reader.GetString(0).ToLower() == region.Name.ToLower()) {
+                    _ = Log.Warning("Tried to add a Region that already exist", "AddRegionAsync", "");
+                    return false;
                 }
             }
-            command.CommandText = $"INSERT INTO Regions (Name) VALUES ('{region.Name}');";
-            command.ExecuteNonQuery();
+            query = $"INSERT INTO Regions (Name) VALUES ('{region.Name}');";
+            new MySqlCommand(query , connection).ExecuteNonQuery();
             return true;
             }
 
         //Gets regions
         public static async Task<ICollection<IRegion>> GetRegionsAsync() {
-            if(!CreateConnection()) {
-                _ = Log.Error(new Exception("Could not create connection"), "GetRegionsAsync", "");
-                return null;
-                }
             List<IRegion> regions = new List<IRegion>();
-            var command = Connection.CreateCommand();
-            command.CommandText = "SELECT * FROM Regions";
-            using (var reader = command.ExecuteReader()) {  
-                while(await reader.ReadAsync()) {
-                    regions.Add(new Region(reader.GetString(1), reader.GetInt32(0)));
-                }
+            string query = "SELECT * FROM Regions";
+            var reader = new MySqlCommand(query,connection).ExecuteReader();
+            while(reader.Read()) {
+                regions.Add(new Region(reader.GetString(1), reader.GetInt32(0)));
             }
             return regions;
         }
 
         public static async Task<bool> ModifyDiseaseAsync(IDisease disease) {
-            if(!CreateConnection()) {
-                _ = Log.Error(new Exception("Could not create connection to database"), "ModifyDiseaseAsync", "DatabaseController");
-                return false;
-            }
             throw new NotImplementedException();
             return true;
         }
 
         public static async Task<bool> ModifySymptomAsync(ISymptom symptom) {
-            if(!CreateConnection()) {
-                _ = Log.Error(new Exception("Could not create connection to database"), "ModifySymptomAsync", "DatabaseController");
-                return false;
-            }
             throw new NotImplementedException();
             return true;
         }
 
         public static async Task<bool> ModifyRegionAsync(IRegion region) {
-            if(!CreateConnection()) {
-                _ = Log.Error(new Exception("Could not create connection to database"), "ModifyRegionAsync", "DatabaseController");
-                return false;
-            }
-            throw new NotImplementedException();
-            return true;
+            string query = $"UPDATE Regions SET Name = '{region.Name}'";
+            return true ? false : 0 < new MySqlCommand(query, connection).ExecuteNonQuery();
         }
     }
 }
