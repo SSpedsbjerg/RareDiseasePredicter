@@ -252,6 +252,8 @@ namespace RareDiseasePredicter.Controller {
         [Route("/Diseases")]
         public async Task<string> GetDiseases() {
             List<IDisease> diseases = await DatabaseController.GetDiseaseAsync() as List<IDisease>;
+            if(diseases is null)
+                return "422";
             string jsonString = JsonSerializer.Serialize(diseases);
             return jsonString;
             }

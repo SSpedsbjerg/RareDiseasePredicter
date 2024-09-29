@@ -2,6 +2,7 @@
 using RareDiseasePredicter.Interfaces;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.Reflection.PortableExecutable;
 
 /**
  * 
@@ -15,8 +16,8 @@ namespace RareDiseasePredicter.Controller {
     static class DatabaseController {
 
 
-        private static string Server = "localhost";
-        private static string DatabaseName = "Local instance MySQL84";
+        private static string Server = "127.0.0.1";
+        private static string DatabaseName = "db";
         private static string port = "3307";
         private static string userName;
         private static string password;
@@ -44,9 +45,9 @@ namespace RareDiseasePredicter.Controller {
         public static bool isConnected = false;
 
         public static bool ConnectDatabase() {
-            if(connection is null) {
+            if(isConnected == false) {
                 try {
-                    string connstring = string.Format("Server={0}; port={1}; database={1}; UID={2}; password={3}", Server, port, DatabaseName, UserName, Password);
+                    string connstring = string.Format("server={0};port={1};database={2};uid={3};password={4}", Server, port, DatabaseName, UserName, Password);
                     connection = new MySqlConnection(connstring);
                     connection.Open();
                     isConnected = true;
@@ -64,6 +65,7 @@ namespace RareDiseasePredicter.Controller {
             if(connection is null) {
                 return;
             }
+            isConnected = false;
             connection.Close();
         }
 
@@ -75,23 +77,69 @@ namespace RareDiseasePredicter.Controller {
 
         //TODO: add weight to disease
         private static bool CreateTables() {
+            string createQuery;
             try {
-                string createQuery;
-                createQuery = "CREATE TABLE IF NOT EXISTS DiseaseSymptomsReference " +
-                    "(ID INT PRIMARY KEY AUTO_INCREMENT, " +
-                    "DiseaseID INT, " +
-                    "SymptomID INT," +
-                    "FOREIGN KEY (DiseaseID) REFERENCES Disease(ID)," +
-                    "FOREIGN KEY (SymptomID) REFERENCES Symptoms(ID)" +
-                    ");";
-                var reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
                 createQuery = "CREATE TABLE IF NOT EXISTS Disease " +
-                    "(ID INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "(ID INT NOT NULL AUTO_INCREMENT, " +
                     "Description TEXT, " +
-                    "Href TEXT, " +
-                    "Name TEXT " +
+                    "Href varchar(255), " +
+                    "Name varchar(255), " +
+                    "PRIMARY KEY (ID)" +
                     ");";
-                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+                new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+            }
+            catch {
+                CloseDatabase();
+                _ = Log.Error(new Exception("Failed to create Disease table"), "DatabaseController", "");
+                return false;
+            }
+
+            try {
+                createQuery = "CREATE TABLE IF NOT EXISTS Symptoms (" +
+                    "ID INT NOT NULL AUTO_INCREMENT, " +
+                    "Region INT, " +
+                    "Name varchar(255) NOT NULL, " +
+                    "Description TEXT," +
+                    "PRIMARY KEY (ID)" +
+                    ");";
+                new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+            }
+            catch {
+                CloseDatabase();
+                _ = Log.Error(new Exception("Failed to create third table"), "DatabaseController", "");
+                return false;
+            }
+
+            try {
+                createQuery = "CREATE TABLE IF NOT EXISTS Regions (" +
+                    "ID INT NOT NULL AUTO_INCREMENT, " +
+                    "Name varchar(255) NOT NULL," +
+                    "PRIMARY KEY (ID)" +
+                    ");";
+                new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+            }
+            catch {
+                CloseDatabase();
+                _ = Log.Error(new Exception("Failed to create Regions table"), "DatabaseController", "");
+                return false;
+            }
+            try {
+                createQuery = "CREATE TABLE IF NOT EXISTS DiseaseSymptomsReference " +
+                    "(ID INT NOT NULL AUTO_INCREMENT, " +
+                    "DiseaseID INT NOT NULL, " +
+                    "SymptomID INT NOT NULL," +
+                    "FOREIGN KEY (DiseaseID) REFERENCES Disease(ID)," +
+                    "FOREIGN KEY (SymptomID) REFERENCES Symptoms(ID)," +
+                    "PRIMARY KEY (ID)" +
+                    ");";
+                new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+            }
+            catch {
+                CloseDatabase();
+                _ = Log.Error(new Exception("Failed to create DiseaseSymptomsReference table"), "DatabaseController", "");
+                return false;
+            }
+            try {
                 createQuery = "CREATE TABLE IF NOT EXISTS SymptomRegionsReference (" +
                     "ID INT AUTO_INCREMENT PRIMARY KEY, " +
                     "Symptom INT, " +
@@ -99,37 +147,34 @@ namespace RareDiseasePredicter.Controller {
                     "FOREIGN KEY (Symptom) REFERENCES Symptoms(ID), " +
                     "FOREIGN KEY (Region) REFERENCES Regions(ID)" +
                     ");";
-                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
-                createQuery = "CREATE TABLE IF NOT EXISTS Regions (" +
-                    "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                    "Name TEXT" +
-                    ");";
-                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
-                createQuery = "CREATE TABLE IF NOT EXISTS Symptoms (" +
-                    "ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                    "Region INT, " +
-                    "Name TEXT, " +
-                    "Description TEXT" +
-                    ");";
-                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+                new MySqlCommand(createQuery, connection).ExecuteNonQuery();
+            }
+            catch {
+                CloseDatabase();
+                _ = Log.Error(new Exception("Failed to create third table"), "DatabaseController", "");
+                return false;
+            }
+            try {
                 createQuery = "CREATE TABLE IF NOT EXISTS Users (" +
                     "ID INT AUTO_INCREMENT PRIMARY KEY, " +
                     "Username VARCHAR(255) NOT NULL, " +
                     "Password VARBINARY(256) NOT NULL, " +
                     "UNIQUE (Username)" +
                     ");";
-                reader = new MySqlCommand(createQuery, connection).ExecuteNonQuery();
-                return true;
+                new MySqlCommand(createQuery, connection).ExecuteNonQuery();
             }
             catch {
-                _ = Log.Error(new Exception("Failed to create tables"), "DatabaseController", "");
+                CloseDatabase();
+                _ = Log.Error(new Exception("Failed to create third table"), "DatabaseController", "");
                 return false;
             }
-
+            CloseDatabase();
+            return true;
         }
 
         //Gets all diseases along with the symptoms and regions
         public static async Task<ICollection<IDisease>> GetDiseaseAsync() {
+            if(!ConnectDatabase()) return null;
             List<IDisease> diseaseList = new List<IDisease>();
             //Get all diseases
             string query = "SELECT * FROM Disease";
@@ -165,6 +210,7 @@ namespace RareDiseasePredicter.Controller {
                     disease.AddSymptoms(symptom);
                 }
             }
+            CloseDatabase();
             return diseaseList;
         }
 
@@ -226,6 +272,7 @@ namespace RareDiseasePredicter.Controller {
         //IMPORTANT: ADMIN TOOL, NOT INTENDED FOR CLIENT USAGE
         //Adds symptom to the database
         public static async Task<bool> AddSymptomAsync(ISymptom symptom) {
+            ConnectDatabase();
             try {
                 string query = "SELECT Symptom FROM RegionSymptoms";//Get the reference of regions for the symptom
                 int lastRefID = -1;
@@ -253,17 +300,21 @@ namespace RareDiseasePredicter.Controller {
                     await AddSympRegionReferenceAsync(lastRefID, 0);
                     }
                 await insertion;
+                CloseDatabase();
                 return true;
             }
             catch (Exception ex) {
                 _ = Log.Error(ex, "AddSymptomAsync", "");
+                CloseDatabase();
                 return false;
             }
         }
 
         private static async Task<bool> AddSympRegionReferenceAsync(int sympID, int regionID) {
+            ConnectDatabase();
             string query = $"INSERT INTO RegionSymptoms (Symptom, Region) VALUES ({sympID}, {regionID})";
             new MySqlCommand(query, connection).ExecuteNonQuery();
+            CloseDatabase();
             return true;
         }
 
@@ -271,16 +322,21 @@ namespace RareDiseasePredicter.Controller {
         //Read all of the regions and if any matches, don't add it
         //possibility of wrong IDs comes from this, if any mismatch with regions pops up, check this
         public static async Task<bool> AddRegionAsync(IRegion region) {
+            if (!ConnectDatabase()) return false;
             string query = "SELECT Name FROM Regions";
-            var reader = new MySqlCommand(query, connection).ExecuteReader();
+            var command = new MySqlCommand(query, connection);
+            var reader = command.ExecuteReader();
             while(reader.Read()) {
-                if (reader.GetString(0).ToLower() == region.Name.ToLower()) {
+                if (reader.GetString(1).ToLower() == region.Name.ToLower()) {
                     _ = Log.Warning("Tried to add a Region that already exist", "AddRegionAsync", "");
                     return false;
                 }
             }
+            CloseDatabase(); //FOR SOME FUCKING REASON THIS HAS TO BE CLOSED AND THEN OPENED! FIX! in future iteration (:
+            ConnectDatabase();
             query = $"INSERT INTO Regions (Name) VALUES ('{region.Name}');";
             new MySqlCommand(query , connection).ExecuteNonQuery();
+            CloseDatabase();
             return true;
             }
 

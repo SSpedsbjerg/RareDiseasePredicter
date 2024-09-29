@@ -5,7 +5,7 @@ namespace RareDiseasePredicter.Implementations {
     class Symptom : ISymptom {
 
         private string name = "";
-        private string despription = null;
+        private string description = null;
 
         List<IRegion> regions = new List<IRegion>();
         int ID = -1;
@@ -16,8 +16,8 @@ namespace RareDiseasePredicter.Implementations {
             }
 
         public string Description {
-            get { return despription; }
-            set { this.despription = value; }
+            get { return description; }
+            set { this.description = value; }
             }
 
         int ISymptom.ID {
@@ -49,7 +49,7 @@ namespace RareDiseasePredicter.Implementations {
             this.name = name;
             this.regions = (List<IRegion>)regions;
             this.ID = id;
-            this.despription = description;
+            this.description = description;
             }
 
         public Symptom() {
