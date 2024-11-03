@@ -1,4 +1,4 @@
-﻿using RareDiseasePredicter.Interfaces;
+using RareDiseasePredicter.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using RareDiseasePredicter.Implementations;
@@ -98,10 +98,13 @@ namespace RareDiseasePredicter.Controller {
             try {
                 disease = new Disease();
                 disease.ID = -1;
-                disease.Name = body.GetValue("Name").ToString();
-                disease.Description = body.GetValue("Description").ToString();
-                disease.Href = body.GetValue("Href").ToString();
-                disease.Symptoms = ToSymptoms(body.Value<JArray>("Symptoms"));
+                disease.Name = body.GetValue("name").ToString();
+                disease.Description = body.GetValue("description").ToString();
+                disease.Href = body.GetValue("href").ToString();
+                Symptom[] syms = body["symptoms"].ToObject<Symptom[]>();
+                foreach (Symptom symp in syms) {
+                    disease.AddSymptoms(symp);
+                }
             }
             catch (Exception ex) {
                 _= Log.Error(ex, "DataController", "HTTPPOST ADDDISEASE");

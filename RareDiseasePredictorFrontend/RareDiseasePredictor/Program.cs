@@ -1,9 +1,6 @@
 using RareDiseasePredictor.Components;
-using System.Net.Http;
-using Microsoft.Extensions.DependencyInjection;
 using RareDiseasePredictor.Models;
 using Blazored.LocalStorage;
-using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Components.Authorization;
 using RareDiseasePredictor.Components.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
