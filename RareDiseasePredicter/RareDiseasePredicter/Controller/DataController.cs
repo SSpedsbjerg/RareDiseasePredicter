@@ -54,10 +54,10 @@ namespace RareDiseasePredicter.Controller {
             try {
                 disease = new Disease();
                 disease.ID = -1;
-                disease.Name = body.GetValue("Name").ToString();
-                disease.Description = body.GetValue("Description").ToString();
-                disease.Href = body.GetValue("Href").ToString();
-                Symptom[] syms = body["Symptoms"].ToObject<Symptom[]>();
+                disease.Name = body.GetValue("name").ToString();
+                disease.Description = body.GetValue("description").ToString();
+                disease.Href = body.GetValue("href").ToString();
+                Symptom[] syms = body["symptoms"].ToObject<Symptom[]>();
                 foreach (Symptom symp in syms) {
                     disease.AddSymptoms(symp);
                 }
