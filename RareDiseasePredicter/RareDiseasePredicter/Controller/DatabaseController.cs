@@ -312,8 +312,16 @@ namespace RareDiseasePredicter.Controller {
 
         private static async Task<bool> AddSympRegionReferenceAsync(int sympID, int regionID) {
             ConnectDatabase();
-            string query = $"INSERT INTO RegionSymptoms (Symptom, Region) VALUES ({sympID}, {regionID})";
+            string query = $"INSERT INTO SymptomRegionsReference (Symptom, Region) VALUES ({sympID}, {regionID})";
             new MySqlCommand(query, connection).ExecuteNonQuery();
+            CloseDatabase();
+            return true;
+        }
+
+        private static async Task<bool> RemoveSympRegionReferenceAsync(int sympID, int regionID) {
+            ConnectDatabase();
+            string query = $"DELETE FROM SymptomRegionsReference WHERE Symptom = '{sympID}', Region = '{regionID}';";
+            await new MySqlCommand(query, connection).ExecuteNonQueryAsync();
             CloseDatabase();
             return true;
         }
@@ -357,13 +365,54 @@ namespace RareDiseasePredicter.Controller {
         }
 
         public static async Task<bool> ModifySymptomAsync(ISymptom symptom) {
-            throw new NotImplementedException();
+            List<(int, int)> relationIDs = new List<(int, int)>();
+            string query = "SELECT * FROM RegionSymptoms;";
+            ConnectDatabase();
+            var reader = new MySqlCommand(query, connection).ExecuteReader();
+            while(reader.Read()) {
+                relationIDs.Add((reader.GetInt32(0), reader.GetInt32(1)));
+            }
+            CloseDatabase();
+            List<(int, int)> newRelations = new List<(int, int)>();
+            foreach(Region region in symptom.Regions) {
+                if(relationIDs.Contains((symptom.ID, region.ID))) {
+                    newRelations.Add((symptom.ID, region.ID));
+                }
+            }
+            List<(int, int)> additionRelations = new List<(int, int)>();
+            foreach((int, int) relation in newRelations) {
+                if(!relationIDs.Contains(relation)) {
+                    additionRelations.Add(relation);
+                }
+            }
+            List<(int, int)> removalRelations = new List<(int, int)>();
+            foreach((int, int) relation in newRelations) {
+                if(!newRelations.Contains(relation)) {
+                    removalRelations.Add(relation);
+                }
+            }
+            query = $"UPDATE Symptoms SET Name = '{symptom.Name}', Description = '{symptom.Description}' WHERE ID = {symptom.ID};";
+            ConnectDatabase();
+            new MySqlCommand(query, connection).ExecuteNonQuery();
+            query = $"SELECT Regions FROM Symptoms WHERE ID = '{symptom.ID};";
+            reader = new MySqlCommand(query, connection).ExecuteReader();
+            int lastRef = reader.GetInt32(0);
+            CloseDatabase();
+            foreach((int, int) addition in additionRelations) {
+                await AddSympRegionReferenceAsync(lastRef, addition.Item2);
+            }
+            foreach((int, int) removal in removalRelations) {
+                await RemoveSympRegionReferenceAsync(lastRef, removal.Item2);
+            }
             return true;
         }
 
         public static async Task<bool> ModifyRegionAsync(IRegion region) {
-            string query = $"UPDATE Regions SET Name = '{region.Name}'";
-            return true ? false : 0 < new MySqlCommand(query, connection).ExecuteNonQuery();
+            string query = $"UPDATE Regions SET Name = '{region.Name}' WHERE ID = '{region.ID}';";
+            ConnectDatabase();
+            new MySqlCommand(query, connection).ExecuteNonQuery();
+            CloseDatabase();
+            return true;
         }
     }
 }

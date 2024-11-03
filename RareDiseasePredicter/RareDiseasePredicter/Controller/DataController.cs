@@ -129,7 +129,7 @@ namespace RareDiseasePredicter.Controller {
                 symptom.ID = -1;
                 symptom.Name = body.GetValue("Name").ToString();
                 symptom.Description = body.GetValue("Description").ToString();
-                int[] regionsIDArray = body["Regions"].ToObject<int[]>();
+                //tjek id om den er -1
                 Region[] regions = body["Regions"].ToObject<Region[]>();
                 foreach(Region region in regions) {
                     symptom.AddRegion(region);
@@ -169,6 +169,7 @@ namespace RareDiseasePredicter.Controller {
             IRegion region = null;
             try {
                 region = new Region(body.GetValue("Name").ToString(), -1);
+                region.ID = (int)body.GetValue("ID");
             }
             catch(Exception ex) {
                 _ = Log.Error(ex, "DataController", "HTTPPUT Region");

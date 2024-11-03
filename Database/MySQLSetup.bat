@@ -1,0 +1,1 @@
+docker run --name MySQLDocker -d -p 3306:3306 mysql/mysql-server
