@@ -99,7 +99,7 @@
     //Deletes disease based on id, URL is subject to change
     private async Task DeleteRegion(Region region)
     {
-        var response = await Http.DeleteAsync($"https://localhost:57693/Symptoms/{region.Id}");
+        var response = await Http.DeleteAsync($"https://localhost:57693/Symptoms/{region.ID}");
         if (response.IsSuccessStatusCode)
         {
             Logger.LogInformation("Sucessfully Updated " + selectedRegion.Name);

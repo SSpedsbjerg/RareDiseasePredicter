@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections.Immutable;
 using RareDiseasePredicter.Enums;
+using System.Runtime.CompilerServices;
 
 /**
  * 
@@ -20,12 +21,31 @@ namespace RareDiseasePredicter.Controller {
     [ApiController]
     [Route("api/[controller]")]
     public class DataController : ControllerBase {
-        
+
+
+        private readonly IConfiguration _configuration;
+        public DataController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         [HttpGet]
         [Route("/")]//Main page, this can be used to check connection
         public Task<string> NoRequest() {
             return Task.FromResult("200");
             }
+
+        [HttpPost]
+        [Route("/Login")]
+        public async Task<string> Login([FromBody] JObject body)
+        {
+            string username = body["username"].ToString();
+            string password = body["password"].ToString();
+            var token =  PasswordManager.AuthenticateUser(username, password, _configuration);
+            Console.WriteLine("Returning token to Frontend...");
+
+            return JsonSerializer.Serialize(token);
+        }
 
         //Takes name of symptoms and returns a list of diseases which is possible
         //TODO: Add RDDeterminer

@@ -1,8 +1,12 @@
 ﻿@page "/login"
 @inject HttpClient Http;
-@inject Blazored.LocalStorage.ILocalStorageService localStorage;
+@inject HoldTheToken holder;
 @inject NavigationManager Navigation;
 @inject ILogger<Login> Logger
+@using Microsoft.AspNetCore.Components.Authorization
+@using RareDiseasePredictor.Components.Authentication
+@using System.Text.Json
+@rendermode InteractiveServer
 <h3>Login</h3>
 
 <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin" FormName="loginForm">
@@ -32,9 +36,10 @@
         if (response.IsSuccessStatusCode)
         {
             var token = await response.Content.ReadAsStringAsync();
-
+            var fulltoken = JsonSerializer.Deserialize<string>(token);
+            Logger.LogInformation("Got token value of: " + fulltoken);
             // Store the token in local storage
-            await localStorage.SetItemAsync("authToken", token);
+            holder.Token = fulltoken;
 
             // Navigate to the home page or an authorized page
             Navigation.NavigateTo("/");

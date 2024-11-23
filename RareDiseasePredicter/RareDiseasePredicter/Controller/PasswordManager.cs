@@ -14,8 +14,17 @@ namespace RareDiseasePredicter.Controller {
             return provider.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
 
-        public static bool AuthenticateAdmin(string username, byte[] password) {
-            throw new NotImplementedException();
+        public static string AuthenticateUser(string username, string password, IConfiguration _configuration) {
+            AuthService auth = new AuthService(_configuration);
+
+            //TODO  REMOVE ALL THIS SHIT TEST DATA VALUES AND IMPLEMENT USERNAME & PASSWORD CHECKERS YEP
+            string[] roles = ["Admin"];
+            Console.WriteLine("Attempting to generate Token... ");
+
+
+            string token = auth.GenerateJwtToken(username, roles);
+
+            return token;
         }
     }
 }

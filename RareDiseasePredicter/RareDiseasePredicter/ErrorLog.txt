@@ -700,3 +700,251 @@ System.Text.Json.JsonException: 'r' is an invalid start of a value. Path: $ | Li
    at RareDiseasePredicter.Controller.DataController.AddRegion(String body) in D:\Ting\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DataController.cs:line 161
 DataController
 HTTPPOST ADDregion
+----------2024-11-03 11:37:22----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 11:37:22----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-11-03 12:03:36----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:03:37----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:03:39----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:03:45----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:03:47----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:39:17----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:39:19----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:39:37----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:39:39----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:43:59----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:45:22----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:45:24----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:45:40----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:45:42----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:46:11----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:58:37----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:58:53----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-03 12:59:32----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:05:35----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:11:28----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:17:06----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:18:27----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:18:28----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:18:42----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:27:25----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:27:43----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:31:10----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:31:12----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:31:40----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:37:28----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:53:08----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:53:26----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:54:25----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:54:27----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:55:29----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:55:33----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:55:54----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:56:07----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:56:14----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:59:04----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:59:06----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:59:44----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 10:59:46----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:00:13----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:20:08----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:20:16----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:20:38----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:21:14----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:23:13----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:23:18----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:23:46----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:23:55----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:24:37----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:46:18----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:52:12----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:52:14----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:52:20----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:52:34----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:52:37----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-23 11:52:38----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase

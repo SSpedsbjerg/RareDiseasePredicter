@@ -31,6 +31,7 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<ApiDiseaseData>();
+builder.Services.AddSingleton<HoldTheToken>();
 
 var app = builder.Build();
 
@@ -48,6 +49,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+// Adds authentication functionality to app
 app.UseAuthorization();
 app.UseAuthentication();
 

@@ -1,16 +1,25 @@
 ﻿@page "/diseases"
+@using Microsoft.AspNetCore.Components.Authorization
 @using RareDiseasePredictor.Models
+@using System.Security.Claims
 @inject HttpClient Http
 @inject ApiDiseaseData diseaseData
 @inject ILogger<Diseases> Logger
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @rendermode InteractiveServer
+@inject Authentication.HoldTheToken holder;
 
 
 <h3>Diseases</h3>
 
+<p>Welcome @username you have role: @role    TOKEN: @token</p>
 
 @* Search bar *@
-<input type="text" class="form-control mb-3" placeholder="Search for diseases..." value="@searchTerm" @oninput="@FilterDiseases" />
+@if (diseaseData.diseases != null)
+{
+    <input type="text" class="form-control mb-3" placeholder="Search for diseases..." value="@searchTerm" @oninput="@FilterDiseases" />
+}
+
 
 
 @* Modal Component *@
@@ -68,6 +77,9 @@ else
     private List<Disease> filteredDiseases = new List<Disease>();
     private string searchTerm = String.Empty;
 
+    private string username;
+    private string role;
+    private string token;
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,6 +97,16 @@ else
             }
         }
         filteredDiseases = diseaseData.diseases;
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if(user.Identity?.IsAuthenticated == true)
+        {
+            username = user.FindFirst(ClaimTypes.Name)?.Value ?? "Unknown User";
+            role = user.FindFirst(ClaimTypes.Role)?.Value ?? "Unknown Role";
+        }
+        var temp = holder.Token;
+        token = temp.ToString();
     }
 
     private void ShowModal(Disease disease)
