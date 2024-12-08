@@ -55,6 +55,12 @@ namespace RareDiseasePredicter.Implementations {
         public Symptom() {
         }
 
+        public Symptom(string name, string description, List<IRegion> regions) {
+            this.name = name;
+            this.description = description;
+            this.regions = regions;
+        }
+
         public bool AddRegion(IRegion region) {
             regions.Add(region);
             return true;

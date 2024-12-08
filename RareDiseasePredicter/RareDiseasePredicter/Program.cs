@@ -5,11 +5,11 @@ using System;
 using RareDiseasePredicter;
 
 internal class Program {
-    private static void Main(string[] args) {
+    private static async Task Main(string[] args) {
 
         Console.WriteLine("Database Username:");
         DatabaseController.UserName = Console.ReadLine();
-        Console.WriteLine("Database Password");
+        Console.WriteLine("Database Password:");
         DatabaseController.Password = Console.ReadLine();
         
         Console.WriteLine("Starting...");
@@ -19,7 +19,7 @@ internal class Program {
 
         var MyAllowSpecificOrigins = "AllowCore";
 
-        bool databaseSuccess = DatabaseController.Start();
+        bool databaseSuccess = await DatabaseController.Start();
         if (!databaseSuccess) {
             _ = Log.Error(new Exception("Could not start database"), "Program", "Unknow reason for not being able to start database");
             Console.WriteLine("Could not start database");

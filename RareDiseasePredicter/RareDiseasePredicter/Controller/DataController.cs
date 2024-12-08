@@ -4,6 +4,7 @@ using System.Text.Json;
 using RareDiseasePredicter.Implementations;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+using System.Collections.Immutable;
 
 /**
  * 
@@ -47,6 +48,10 @@ namespace RareDiseasePredicter.Controller {
             return jsonString;
             }
 
+        List<IRegion> ToRegions(Newtonsoft.Json.Linq.JToken regions) {
+            return null;
+        }
+
         [HttpPost]
         [Route("/Disease/")]
         public async Task<string> AddDisease([FromBody] JObject body) {
@@ -57,17 +62,42 @@ namespace RareDiseasePredicter.Controller {
                 disease.Name = body.GetValue("Name").ToString();
                 disease.Description = body.GetValue("Description").ToString();
                 disease.Href = body.GetValue("Href").ToString();
-                Symptom[] syms = body["Symptoms"].ToObject<Symptom[]>();
-                foreach (Symptom symp in syms) {
-                    disease.AddSymptoms(symp);
-                }
+                disease.Symptoms = ToSymptoms(body.Value<JArray>("Symptoms"));
             }
             catch (Exception ex) {
                 _= Log.Error(ex, "DataController", "HTTPPOST ADDDISEASE");
                 return "500";
             }
-            DatabaseController.AddDiseaseAsync(disease).Wait();
+            try {
+                DatabaseController.AddDiseaseAsync(disease).Wait();
+            }
+            catch (AggregateException exception) {
+                _ = Log.Error(exception, "DataController", "HTTPPOST ADDDISEASE, database error");
+                return "500";
+            }
             return "200";
+        }
+
+        List<ISymptom> ToSymptoms(JArray symptoms) {
+            List<ISymptom> symptoms_ = new List<ISymptom>(); 
+            foreach(JObject o in symptoms.Children<JObject>()) {
+                Symptom symptom = new Symptom(); 
+                symptom.Name = o.GetValue("Name").ToString();
+                symptom.Description = o.GetValue("Description").ToString();
+                var regs = o.Value<JArray>("Regions");
+                symptom.Regions = ToRegions(regs);
+                symptoms_.Add(symptom);
+            }
+            return symptoms_;
+        }
+
+        List<IRegion> ToRegions(JArray regions) {
+            List<IRegion> regions_ = new List<IRegion>();
+            foreach(JObject o in regions.Children<JObject>()) {
+                IRegion region = new Region(o.GetValue("Name").ToString(), -1);
+                regions_.Add(region);
+            }
+            return regions_;
         }
 
         [HttpPut]
@@ -116,7 +146,7 @@ namespace RareDiseasePredicter.Controller {
                 _ = Log.Error(ex, "DataController", "HTTPPOST ADDsymptom");
                 return "500";
             }
-            DatabaseController.AddSymptomAsync(symptom).Wait();
+            DatabaseController.AddSymptomAsync(symptom, -1).Wait();
             return "200";
         }
 
@@ -159,7 +189,7 @@ namespace RareDiseasePredicter.Controller {
                 _ = Log.Error(ex, "DataController", "HTTPPOST ADDregion");
                 return "500";
             }
-            DatabaseController.AddRegionAsync(region).Wait();
+            DatabaseController.AddRegionAsync(region, -1).Wait();
             return "200";
         }
 
@@ -237,8 +267,6 @@ namespace RareDiseasePredicter.Controller {
             return "403";
             }
 
-
-
         //Gets a list of regions
         [HttpGet]
         [Route("/Regions")]
@@ -275,7 +303,7 @@ namespace RareDiseasePredicter.Controller {
             catch {
                 _ = Log.Warning("Couldn't split name of Symptom", "AddSymptom", "");
             }
-            bool success = await DatabaseController.AddRegionAsync(new Region(name, -1));
+            bool success = await DatabaseController.AddRegionAsync(new Region(name, -1), -1);
             if(success) {
                 return "200";
             }
@@ -305,7 +333,7 @@ namespace RareDiseasePredicter.Controller {
                 }
             }
             symptom.ID = -1;
-            bool success = await DatabaseController.AddSymptomAsync(symptom);
+            bool success = await DatabaseController.AddSymptomAsync(symptom, -1);
             if(success) {
                 return "209 : Accepted, but method is deprecated";
             }
