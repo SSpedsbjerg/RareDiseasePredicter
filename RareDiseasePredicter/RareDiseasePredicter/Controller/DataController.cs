@@ -110,10 +110,8 @@ namespace RareDiseasePredicter.Controller {
                 disease.Name = body.GetValue("Name").ToString();
                 disease.Description = body.GetValue("Description").ToString();
                 disease.Href = body.GetValue("Href").ToString();
-                Symptom[] syms = body["Symptoms"].ToObject<Symptom[]>();
-                foreach(Symptom symp in syms) {
-                    disease.AddSymptoms(symp as Symptom);
-                }
+                var syms = body.Value<JArray>("Symptoms");
+                disease.Symptoms = ToSymptoms(syms);
             }
             catch(Exception ex) {
                 _ = Log.Error(ex, "DataController", "HTTPPUT DISEASE");
@@ -156,7 +154,7 @@ namespace RareDiseasePredicter.Controller {
             ISymptom symptom = null;
             try {
                 symptom = new Symptom();
-                symptom.ID = -1;
+                symptom.ID = int.Parse(body.GetValue("ID").ToString());
                 symptom.Name = body.GetValue("Name").ToString();
                 symptom.Description = body.GetValue("Description").ToString();
                 //tjek id om den er -1

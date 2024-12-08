@@ -195,7 +195,6 @@ namespace RareDiseasePredicter.Controller {
             //Get all diseases
             string query = "USE db; SELECT * FROM Disease";
             var reader = new MySqlCommand(query, connection).ExecuteReader();
-            string h = "";
             while(reader.Read()) {
                 string href = reader.GetString(2); //Href
                 int id = reader.GetInt32(0); //ID
@@ -420,9 +419,12 @@ namespace RareDiseasePredicter.Controller {
             query = $"USE db; UPDATE Disease SET Name = '{disease.Name}', Description = '{disease.Description}' WHERE ID = {disease.ID};";
             ConnectDatabase();
             new MySqlCommand(query, connection).ExecuteNonQuery();
-            query = $"USE db; SELECT Symptoms FROM Disease WHERE ID = '{disease.ID};";
+            query = $"USE db; SELECT SymptomID FROM DiseaseSymptomsReference WHERE DiseaseID = {disease.ID};";
             reader = new MySqlCommand(query, connection).ExecuteReader();
-            int lastRef = reader.GetInt32(0);
+            int lastRef = 0;
+            while(reader.Read()) {
+                lastRef = reader.GetInt32(0);
+            }
             CloseDatabase();
             foreach((int, int) addition in additionRelations) {
                 await AddSympRegionReferenceAsync(lastRef, addition.Item2);
@@ -463,9 +465,13 @@ namespace RareDiseasePredicter.Controller {
             query = $"USE db; UPDATE Symptoms SET Name = '{symptom.Name}', Description = '{symptom.Description}' WHERE ID = {symptom.ID};";
             ConnectDatabase();
             new MySqlCommand(query, connection).ExecuteNonQuery();
-            query = $"USE db; SELECT Regions FROM Symptoms WHERE ID = '{symptom.ID};";
+            query = $"USE db; SELECT Region FROM SymptomRegionsReference WHERE Symptom = {symptom.ID};";
             reader = new MySqlCommand(query, connection).ExecuteReader();
-            int lastRef = reader.GetInt32(0);
+            int lastRef = 0;
+            while(reader.Read()) {
+                lastRef = reader.GetInt32(0);
+            }
+            reader.Close();
             CloseDatabase();
             foreach((int, int) addition in additionRelations) {
                 await AddSympRegionReferenceAsync(lastRef, addition.Item2);
