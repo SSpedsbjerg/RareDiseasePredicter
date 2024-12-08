@@ -26,7 +26,7 @@ internal class Program {
             Console.WriteLine("Could not start database");
             return;
             }
-        */
+        
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,

@@ -948,3 +948,87 @@ ConnectDatabase
 System.Exception: Unable to open connection to MYSQL database
 DatabaseController
 ConnectDatabase
+----------2024-11-24 10:04:50----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:04:52----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:08:03----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:08:31----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:08:33----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:09:23----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:09:25----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:10:04----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:10:06----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:12:25----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:18:28----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:18:30----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:18:35----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:18:58----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:19:01----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:52:05----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-11-24 10:52:07----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-08 10:26:32----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-08 10:26:32----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-12-08 10:27:49----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-08 10:27:49----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database

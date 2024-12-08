@@ -169,16 +169,14 @@
         }
     }
 
-    //Only issue is every individual disease gets edited, so if you remove a symptom and go to another disease and go back to the original disease you removed a symptom for.
-    //It will not restore the disease to the original state in the DB, but the edited state you left it in.
-    //This will ONLY make a put request with the currently selected disease, for now if you need to restore the disease list to original, use force get button(soon tm).
+   
     private async Task UpdateSymptom()
     {
         var jsonString = JsonSerializer.Serialize(selectedSymptom, new JsonSerializerOptions { WriteIndented = true });
-        //Logger.LogInformation("Json File: " + jsonString);
+
         var httpClient = new HttpClient();
-        //Might have to change HTTP, for now keep as is
-        var response = await httpClient.PutAsJsonAsync("https://localhost:57693/AddDisease/", selectedSymptom);
+        
+        var response = await httpClient.PutAsJsonAsync("https://localhost:57693/Symptom/", selectedSymptom);
 
         if (response.IsSuccessStatusCode)
         {

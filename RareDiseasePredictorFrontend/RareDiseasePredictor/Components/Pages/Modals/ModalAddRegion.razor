@@ -2,10 +2,11 @@
 @inject ILogger<ModalAddDisease> Logger
 @using RareDiseasePredictor.Models
 @using System.Text.Json
+@using System.Net.Http.Headers
 @using static System.Net.WebRequestMethods
 @inject HttpClient Http
 @inject ApiDiseaseData diseaseData
-
+@inject Authentication.HoldTheToken http
 
 <div class="modal-dialog modal-dialog-centered p-3 @(IsVisible ? "d-block" : "d-none")" data-bs-autohide="true" data-bs-delay="5000">
     <div class="modal-dialog-centered">
@@ -16,12 +17,6 @@
                 <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
             </div>
             <div class="modal-body">
-                @if (diseaseData.regions is null)
-                {
-                    <p>Loading...</p>
-                }
-                else
-                {
                     <div>
                         <EditForm Model="@region" OnValidSubmit="@AddRegion">
                             <DataAnnotationsValidator />
@@ -36,7 +31,6 @@
                             <button type="submit" class="btn btn-primary mb-3">Add Region</button>
                         </EditForm>
                     </div>
-                }
             </div>
         </div>
     </div>
@@ -49,7 +43,7 @@
 
     [Parameter]
     public EventCallback OnClose { get; set; }
- 
+
     public void Show()
     {
         Logger.LogInformation("Attempting to Show Add Disease Modal...");
@@ -77,12 +71,15 @@
     {
         var jsonString = JsonSerializer.Serialize(region, new JsonSerializerOptions { WriteIndented = true });
         Logger.LogInformation("Json File: " + jsonString);
-        var httpClient = new HttpClient();
-        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Regions/", region);
+
+
+        var httpClient = http.GetHttpClient();
+
+        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Region/", region);
 
         if (response.IsSuccessStatusCode)
         {
-            Logger.LogInformation("Sucessfully added Symptom");
+            Logger.LogInformation("Sucessfully added Region");
         }
         else
         {

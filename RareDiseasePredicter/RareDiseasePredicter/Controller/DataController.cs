@@ -42,7 +42,6 @@ namespace RareDiseasePredicter.Controller {
             string username = body["username"].ToString();
             string password = body["password"].ToString();
             var token =  PasswordManager.AuthenticateUser(username, password, _configuration);
-            Console.WriteLine("Returning token to Frontend...");
 
             return JsonSerializer.Serialize(token);
         }
@@ -241,9 +240,15 @@ namespace RareDiseasePredicter.Controller {
         [HttpPost]
         [Route("/Region/")]
         public async Task<string> AddRegion([FromBody] JObject body) {
+
+            foreach (var header in Request.Headers)
+            {
+                Console.WriteLine($"{header.Key}: {header.Value}");
+            }
+
             IRegion region = null;
             try {
-                region = new Region(body.GetValue("Name").ToString() , - 1);
+                region = new Region(body.GetValue("name").ToString() , - 1);
             }
             catch(Exception ex) {
                 _ = Log.Error(ex, "DataController", "HTTPPOST ADDregion");
@@ -258,8 +263,8 @@ namespace RareDiseasePredicter.Controller {
         public async Task<string> ModifyRegion([FromBody] JObject body) {
             IRegion region = null;
             try {
-                region = new Region(body.GetValue("Name").ToString(), -1);
-                region.ID = (int)body.GetValue("ID");
+                region = new Region(body.GetValue("name").ToString(), -1);
+                region.ID = (int)body.GetValue("id");
             }
             catch(Exception ex) {
                 _ = Log.Error(ex, "DataController", "HTTPPUT Region");
@@ -352,6 +357,9 @@ namespace RareDiseasePredicter.Controller {
         [HttpGet]
         [Route("/AddRegion/{name}")]
         public async Task<string> AddRegionFromRoute([FromRoute] string name) {
+            
+           
+
             try {
                 string[] nameSplit = name.Split("_");
                 name = "";

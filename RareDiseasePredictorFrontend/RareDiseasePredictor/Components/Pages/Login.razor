@@ -38,8 +38,8 @@
             var token = await response.Content.ReadAsStringAsync();
             var fulltoken = JsonSerializer.Deserialize<string>(token);
             Logger.LogInformation("Got token value of: " + fulltoken);
-            // Store the token in local storage
-            holder.Token = fulltoken;
+            // Store the token in a singelton
+            holder.setToken(fulltoken);
 
             // Navigate to the home page or an authorized page
             Navigation.NavigateTo("/");

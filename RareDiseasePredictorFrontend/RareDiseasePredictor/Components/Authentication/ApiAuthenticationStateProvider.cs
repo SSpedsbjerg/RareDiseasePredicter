@@ -45,6 +45,7 @@
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+
             // Decode the token to extract claims
             var claims = ParseClaimsFromJwt(token);
             var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt"));
