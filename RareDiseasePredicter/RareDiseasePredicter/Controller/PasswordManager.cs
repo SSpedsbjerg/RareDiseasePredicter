@@ -1,5 +1,6 @@
 ﻿using RareDiseasePredicter.Interfaces;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace RareDiseasePredicter.Controller {
     public static class PasswordManager {
@@ -7,12 +8,13 @@ namespace RareDiseasePredicter.Controller {
             throw new NotImplementedException();
         }
 
-        private static byte[] HashPassword(string password) {
-            var provider = new HMACSHA3_512();
-            return provider.ComputeHash(HashPassword(password));
+        public static byte[] HashPassword(string password) {
+            var provider = new HMACSHA512();
+            provider.Key = Encoding.UTF8.GetBytes("verysecretkeynobodyknowsevenobamadoesntknowthisone");
+            return provider.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
 
-        public static bool AuthenticateAdmin(string username, string password) {
+        public static bool AuthenticateAdmin(string username, byte[] password) {
             throw new NotImplementedException();
         }
     }

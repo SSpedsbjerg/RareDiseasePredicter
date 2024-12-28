@@ -5,11 +5,12 @@ using RareDiseasePredicter.Implementations;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections.Immutable;
+using RareDiseasePredicter.Enums;
 
 /**
  * 
  * OWNER: Simon dos Reis Spedsbjerg
- * Date: 26/04/2023 - 08/09/2024
+ * Date: 26/04/2023 - 28/12/2024
  * Project: RareDiseasePredictor
  * 
  */
@@ -50,6 +51,44 @@ namespace RareDiseasePredicter.Controller {
 
         List<IRegion> ToRegions(Newtonsoft.Json.Linq.JToken regions) {
             return null;
+        }
+
+        [HttpPost]
+        [Route("/Register")]
+        public async Task<string> AddUser([FromBody] JObject body) {
+            User user = new User();
+            user.role = Roles.User;
+            try {
+                user.Name = body.GetValue("Name").ToString();
+                user.Email = body.GetValue("Email").ToString();
+                user.Password = PasswordManager.HashPassword(body.GetValue("Password").ToString());
+            }
+            catch (Exception e){
+                _ = Log.Error(e, "DataController", "AddUser, failed to extract the correct values from the JSON Object");
+                return "406";
+            }
+            DatabaseController.SaveUser(user);
+            return "200";
+        }
+
+        [HttpPost]
+        [Route("/Login")]
+        public async Task<string> Login([FromBody] JObject body) {
+            User user = new User();
+            try {
+                user.Name = body.GetValue("Name").ToString();
+                user.Password = PasswordManager.HashPassword(body.GetValue("Password").ToString());
+
+            }
+            catch (Exception e) {
+                _ = Log.Error(e, "DataController", "Failed to verify login details");
+                return "406";
+            }
+            user = (User)DatabaseController.GetUser(user.Name, user.Password);
+            if(user is null) {
+                return "401";
+            }
+            return "200";
         }
 
         [HttpPost]

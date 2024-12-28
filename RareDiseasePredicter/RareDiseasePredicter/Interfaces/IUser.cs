@@ -1,4 +1,6 @@
-﻿namespace RareDiseasePredicter.Interfaces {
+﻿using RareDiseasePredicter.Enums;
+
+namespace RareDiseasePredicter.Interfaces {
     public interface IUser {
         public string Name {
             get;
@@ -8,17 +10,18 @@
             get;
             set;
         }
-        public bool IsLoggedIn {
-            get;
-        }
 
         public int ID {
             get;
         }
 
+        //This is only intended to be used for first time creation of password and authentication of the user, should be overwritten in the stack once authenticated
+        public byte[] Password {
+            get; set;
+        }
 
-        bool LogIn(string Username, string Password);
-        bool LogOut();
-
+        public Roles role {
+        get; set;
+        }
     }
 }

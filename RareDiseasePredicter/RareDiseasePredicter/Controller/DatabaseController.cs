@@ -4,6 +4,9 @@ using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Reflection.PortableExecutable;
 using System.Formats.Tar;
+using System.Data;
+using RareDiseasePredicter.Enums;
+using Mysqlx.Notice;
 
 /**
  * 
@@ -94,6 +97,146 @@ namespace RareDiseasePredicter.Controller {
             return true;
             }
 
+        private static bool CreateUserTables() {
+            string query = "";
+            ConnectDatabase();
+            try {
+                query = "CREATE TABLE IF NOT EXISTS Users " +
+                    "(ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                    "Name VARCHAR(255) UNIQUE NOT NULL, " +
+                    "Email VARCHAR(255) UNIQUE NOT NULL, " +
+                    "Password LONGBLOB, " +
+                    "Role INT);";
+                new MySqlCommand(query, connection).ExecuteNonQuery();
+            }
+            catch {
+                CloseDatabase();
+                _ = Log.Error(new Exception("Failed to create user tables"), "DataController", "");
+                return false;
+            }
+            CloseDatabase();
+            return true;
+        }
+
+        private static bool UsernameIsUnique(IUser user) {
+            ConnectDatabase();
+            string query = $"USE db; SELECT Name FROM Users;";
+            var reader = new MySqlCommand(query, connection).ExecuteReader();
+            if(reader.HasRows) {
+                reader.Close();
+                CloseDatabase();
+                return false;
+            }
+            else {
+                reader.Close();
+                CloseDatabase();
+                return true;
+            }
+        }
+
+        private static bool EmailIsUnique(IUser user) {
+            ConnectDatabase();
+            string query = $"USE db; SELECT Email FROM Users;";
+            var reader = new MySqlCommand(query, connection).ExecuteReader();
+            if(reader.HasRows) {
+                reader.Close();
+                CloseDatabase();
+                return false;
+            }
+            else {
+                reader.Close();
+                CloseDatabase();
+                return true;
+            }
+        }
+
+        public static bool SaveUser(IUser user) {
+            CreateUserTables();
+            try {
+                if(!UsernameIsUnique(user))
+                    return false; //TODO: Tell the user the problem
+                if(!EmailIsUnique(user))
+                    return false; //TODO: Tell the user the problem
+            }
+            catch (Exception e) {
+                _ = Log.Error(e, "DatabaseController", "Risk of no values in the database, plz verify and confirm");
+            }
+            if (user == null) { return false; }
+            ConnectDatabase();
+            try {
+                using (var cmd = new MySqlCommand($"USE db; INSERT INTO Users (Name, Email, Password, Role) VALUES (@Name, @Email, @Password, @Role);", connection)) {
+                    cmd.Parameters.Add("@Password", MySqlDbType.LongBlob).Value = user.Password;
+                    cmd.Parameters.Add("@Name", MySqlDbType.VarChar).Value = user.Name;
+                    cmd.Parameters.Add("@Email", MySqlDbType.VarChar).Value = user.Email;
+                    cmd.Parameters.Add("@Role", MySqlDbType.UInt64).Value = (int)user.role;
+                    cmd.ExecuteNonQuery();
+                }
+                CloseDatabase();
+            }
+            catch(Exception ex) {
+                CloseDatabase();
+                _ = Log.Error(new Exception("Could not save user"), "DataController", ex.Message);
+                return false;
+            }
+            return true;
+        }
+
+        public static IUser GetUser(string name, byte[] password) {
+            ConnectDatabase();
+            string query = $"USE db; SELECT * FROM Users WHERE Name = '{name}' AND Password = '{password}';";
+            var reader = new MySqlCommand(query, connection).ExecuteReader();
+            if(reader.HasRows) {
+                while(reader.Read()) {
+                    int length = (int)reader.GetBytes(3, 0, null, 0, 0);
+                    byte[] buffer = new byte[length];
+                    int index = 0;
+                    while(index < length) {
+                        int bytesRead = (int)reader.GetBytes(3, index, buffer, index, length - index);
+                        index += bytesRead;
+                    }
+                    if(buffer == password) {
+                        if(reader.GetInt32(4) == (int)Roles.Admin) {//Implement as Hashmap in next iteration to have it better scaleable
+                            Admin admin = new Admin();
+                            admin.Name = name;
+                            admin.role = Roles.Admin;
+                            admin.Password = null;
+                            admin.Email = reader.GetString(2);
+                            reader.Close();
+                            CloseDatabase();
+                            return admin;
+                        }
+                        else if(reader.GetInt32(4) == (int)Roles.User) {
+                            User user = new User();
+                            user.Name = name;
+                            user.role = Roles.User;
+                            user.Password = null;
+                            user.Email = reader.GetString(2);
+                            reader.Close();
+                            CloseDatabase();
+                            return user;
+                        }
+                        else {
+                            _ = Log.Warning("Could not determine user role", "DataController", "");
+                        }
+                        reader.Close();
+                        CloseDatabase();
+                        return null;
+                    }
+                    else {
+                        _= Log.Warning("Invalid Password Entered", "DatabaseController", query);
+                        reader.Close();
+                        CloseDatabase();
+                        return null;
+                    }
+                }
+            }
+            else {
+                reader.Close();
+                return null;
+            }
+            return null;
+        }
+
         //TODO: add weight to disease
         private static async Task<bool> CreateTablesAsync() {
             string createQuery;
@@ -169,6 +312,7 @@ namespace RareDiseasePredicter.Controller {
                 _ = Log.Error(new Exception("Failed to create SymptomRegionsReference table"), "DatabaseController", "");
                 return false;
             }
+            /*
             try {
                 createQuery = "USE db; CREATE TABLE IF NOT EXISTS Users (" +
                     "ID INT AUTO_INCREMENT PRIMARY KEY, " +
@@ -183,7 +327,7 @@ namespace RareDiseasePredicter.Controller {
                 CloseDatabase();
                 _ = Log.Error(new Exception("Failed to create Users table"), "DatabaseController", "");
                 return false;
-            }
+            }*/
             CloseDatabase();
             return true;
         }
