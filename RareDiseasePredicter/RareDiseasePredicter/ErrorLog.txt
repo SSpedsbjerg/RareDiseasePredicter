@@ -1064,3 +1064,80 @@ ConnectDatabase
 System.Exception: Could not start database
 Program
 Unknow reason for not being able to start database
+----------2024-12-29 11:33:42----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-29 11:33:42----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-12-29 11:33:55----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-29 11:33:55----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-12-29 11:34:37----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-29 11:34:37----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-12-29 11:35:03----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-29 11:35:03----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-12-29 11:36:12----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-29 11:36:12----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-12-29 11:58:49----------
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at RareDiseasePredicter.Controller.DataController.AddUser(JObject body) in D:\Ting\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DataController.cs:line 66
+DataController
+AddUser, failed to extract the correct values from the JSON Object
+----------2024-12-29 12:10:03----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-29 12:10:18----------
+System.Exception: Failed to create user tables
+DataController
+
+----------2024-12-29 12:10:56----------
+System.Exception: Failed to create user tables
+DataController
+
+----------2024-12-29 12:12:21----------
+System.Exception: Failed to create user tables
+DataController
+
+----------2024-12-29 12:12:21----------
+MySql.Data.MySqlClient.MySqlException (0x80004005): There is already an open DataReader associated with this Connection which must be closed first.
+   at MySql.Data.MySqlClient.Interceptors.ExceptionInterceptor.Throw(Exception exception)
+   at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.CheckState()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, Boolean execAsync, CancellationToken cancellationToken)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at RareDiseasePredicter.Controller.DatabaseController.UsernameIsUnique(IUser user) in D:\Ting\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DatabaseController.cs:line 124
+   at RareDiseasePredicter.Controller.DatabaseController.SaveUser(IUser user) in D:\Ting\GitHub\RareDiseasePredicter\RareDiseasePredicter\RareDiseasePredicter\Controller\DatabaseController.cs:line 156
+DatabaseController
+Risk of no values in the database, plz verify and confirm
+----------2024-12-29 12:12:21----------
+System.Exception: Could not save user
+DataController
+There is already an open DataReader associated with this Connection which must be closed first.

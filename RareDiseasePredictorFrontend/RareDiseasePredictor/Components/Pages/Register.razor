@@ -2,15 +2,21 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject ILogger<Register> Logger
+@rendermode InteractiveServer
 <h3>Register</h3>
 
-<EditForm Model="registerModel" OnValidSubmit="HandleRegistration" FormName="registerForm">
+<EditForm Model="@registerModel" OnValidSubmit="@HandleRegistration" FormName="registerForm">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="mb-3 col-2">
         <label>Username:</label>
         <InputText id="Username" class="form-control" placeholder="Username" @bind-Value="registerModel.Username" />
+    </div>
+
+    <div class="mb-3 col-2">
+        <label>Email:</label>
+        <InputText id="Email" class="form-control" placeholder="Email" @bind-Value="registerModel.Email" />
     </div>
 
     <div class="mb-3 col-2">
@@ -45,7 +51,7 @@ else
             var response = await Http.PostAsJsonAsync("https://localhost:57693/register/", registerModel);
             if (response.IsSuccessStatusCode)
             {
-                Navigation.NavigateTo("/login");
+                await InvokeAsync(() => Navigation.NavigateTo("/login"));
             }
             else
             {
@@ -62,7 +68,9 @@ else
 
     public class RegisterModel
     {
+        
         public string Username { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
     }

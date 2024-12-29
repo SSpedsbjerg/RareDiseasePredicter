@@ -62,7 +62,7 @@ namespace RareDiseasePredicter.Controller {
             User user = new User();
             user.role = Roles.User;
             try {
-                user.Name = body.GetValue("name").ToString();
+                user.Name = body.GetValue("username").ToString();
                 user.Email = body.GetValue("email").ToString();
                 user.Password = PasswordManager.HashPassword(body.GetValue("password").ToString());
             }
