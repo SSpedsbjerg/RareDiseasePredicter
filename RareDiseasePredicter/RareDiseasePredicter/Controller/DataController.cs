@@ -91,11 +91,14 @@ namespace RareDiseasePredicter.Controller {
             if(user is null) {
                 return "401";
             }
+            AuthService auth = new AuthService();
             if(user.role == Roles.Admin) {
-                return "Admin";
+                string[] strings = { "Admin" };
+                return auth.GenerateJwtToken(user.Name, strings);
             }
             else if(user.role == Roles.User) {
-                return "User";
+                string[] strings = { "User" };
+                return auth.GenerateJwtToken(user.Name, strings);
             }
             return "200";
         }
