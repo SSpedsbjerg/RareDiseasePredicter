@@ -334,6 +334,7 @@ namespace RareDiseasePredicter.Controller {
 
         //Gets all diseases along with the symptoms and regions
         public static async Task<ICollection<IDisease>> GetDiseaseAsync() {
+            CloseDatabase();
             var con = ConnectDatabase();
             List<IDisease> diseaseList = new List<IDisease>();
             //Get all diseases
@@ -383,9 +384,9 @@ namespace RareDiseasePredicter.Controller {
             string query = "USE db; SELECT * FROM Symptoms";
             var reader = new MySqlCommand(query, connection).ExecuteReader();
             while (reader.Read()) {
-                string name = reader.GetString(2);
+                string name = reader.GetString(1);
                 int id = reader.GetInt32(0);
-                string description = reader.GetString(3);
+                string description = reader.GetString(2);
                 ISymptom symptom = new Symptom(name) {
                     Description = description
                     };
