@@ -26,7 +26,7 @@ namespace RareDiseasePredicter.Controller {
 
         private static string Server = "127.0.0.1";
         private static string DatabaseName = "db";
-        private static string port = "3306";
+        private static string port = "3307";
         private static string userName;
         private static string password;
 
