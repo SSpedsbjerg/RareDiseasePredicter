@@ -183,7 +183,7 @@ namespace RareDiseasePredicter.Controller {
 
         public static IUser GetUser(string name, byte[] password) {
             ConnectDatabase();
-            string query = $"USE db; SELECT * FROM Users WHERE Name = '{name}' AND Password = '{password}';";
+            string query = $"USE db; SELECT * FROM Users WHERE Name = '{name}';";
             var reader = new MySqlCommand(query, connection).ExecuteReader();
             if(reader.HasRows) {
                 while(reader.Read()) {
@@ -194,7 +194,7 @@ namespace RareDiseasePredicter.Controller {
                         int bytesRead = (int)reader.GetBytes(3, index, buffer, index, length - index);
                         index += bytesRead;
                     }
-                    if(buffer == password) {
+                    if(buffer.SequenceEqual(password)) {
                         if(reader.GetInt32(4) == (int)Roles.Admin) {//Implement as Hashmap in next iteration to have it better scaleable
                             Admin admin = new Admin();
                             admin.Name = name;

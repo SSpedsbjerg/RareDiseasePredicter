@@ -91,6 +91,12 @@ namespace RareDiseasePredicter.Controller {
             if(user is null) {
                 return "401";
             }
+            if(user.role == Roles.Admin) {
+                return "Admin";
+            }
+            else if(user.role == Roles.User) {
+                return "User";
+            }
             return "200";
         }
 

@@ -4,11 +4,11 @@ using RareDiseasePredicter.Controller;
 using RareDiseasePredicter.Enums;
 
 namespace RareDiseasePredicter.Implementations {
-    public class Admin {
+    public class Admin : IAdmin {
         private int permissionValue = 0;
         private string userName = "";
         private string mail = null;
-        private string loggedIn;
+        private bool loggedIn = false;
         private string token = "";
         private int id = -1;
         byte[] password = null;
@@ -28,19 +28,23 @@ namespace RareDiseasePredicter.Implementations {
             set => mail = value;
         }
 
-        public bool IsLoggedIn => true;
+        public bool IsLoggedIn => loggedIn;
 
         public string Token => token;
 
         public int ID => id;
-        /*
-        public string LogIn(string Username, string Password) {
-            loggedIn = PasswordManager.AuthenticateUser(Username, Password);
-            return loggedIn;
+
+        public byte[] Password {
+            get => password;
+            set => password = value;
         }
-      */
+        public Roles role {
+            get => role_;
+            set => role_ = value;
+        }
+
         public bool LogOut() {
-;
+            loggedIn = false;
             return true;
         }
     }
