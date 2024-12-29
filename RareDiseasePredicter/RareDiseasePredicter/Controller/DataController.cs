@@ -62,9 +62,9 @@ namespace RareDiseasePredicter.Controller {
             User user = new User();
             user.role = Roles.User;
             try {
-                user.Name = body.GetValue("Name").ToString();
-                user.Email = body.GetValue("Email").ToString();
-                user.Password = PasswordManager.HashPassword(body.GetValue("Password").ToString());
+                user.Name = body.GetValue("name").ToString();
+                user.Email = body.GetValue("email").ToString();
+                user.Password = PasswordManager.HashPassword(body.GetValue("password").ToString());
             }
             catch (Exception e){
                 _ = Log.Error(e, "DataController", "AddUser, failed to extract the correct values from the JSON Object");
@@ -80,7 +80,7 @@ namespace RareDiseasePredicter.Controller {
             User user = new User();
             try {
                 user.Name = body.GetValue("username").ToString();
-                user.Password = PasswordManager.HashPassword(body.GetValue("Password").ToString());
+                user.Password = PasswordManager.HashPassword(body.GetValue("password").ToString());
 
             }
             catch (Exception e) {
@@ -131,9 +131,9 @@ namespace RareDiseasePredicter.Controller {
             List<ISymptom> symptoms_ = new List<ISymptom>(); 
             foreach(JObject o in symptoms.Children<JObject>()) {
                 Symptom symptom = new Symptom(); 
-                symptom.Name = o.GetValue("Name").ToString();
-                symptom.Description = o.GetValue("Description").ToString();
-                var regs = o.Value<JArray>("Regions");
+                symptom.Name = o.GetValue("name").ToString();
+                symptom.Description = o.GetValue("description").ToString();
+                var regs = o.Value<JArray>("regions");
                 symptom.Regions = ToRegions(regs);
                 symptoms_.Add(symptom);
             }
@@ -143,7 +143,7 @@ namespace RareDiseasePredicter.Controller {
         List<IRegion> ToRegions(JArray regions) {
             List<IRegion> regions_ = new List<IRegion>();
             foreach(JObject o in regions.Children<JObject>()) {
-                IRegion region = new Region(o.GetValue("Name").ToString(), -1);
+                IRegion region = new Region(o.GetValue("name").ToString(), -1);
                 regions_.Add(region);
             }
             return regions_;
@@ -155,11 +155,11 @@ namespace RareDiseasePredicter.Controller {
             IDisease disease = null;
             try {
                 disease = new Disease();
-                disease.ID = body["ID"].ToObject<int>();
-                disease.Name = body.GetValue("Name").ToString();
-                disease.Description = body.GetValue("Description").ToString();
-                disease.Href = body.GetValue("Href").ToString();
-                var syms = body.Value<JArray>("Symptoms");
+                disease.ID = body["id"].ToObject<int>();
+                disease.Name = body.GetValue("name").ToString();
+                disease.Description = body.GetValue("description").ToString();
+                disease.Href = body.GetValue("href").ToString();
+                var syms = body.Value<JArray>("symptoms");
                 disease.Symptoms = ToSymptoms(syms);
             }
             catch(Exception ex) {
@@ -182,9 +182,9 @@ namespace RareDiseasePredicter.Controller {
             try {
                 symptom = new Symptom();
                 symptom.ID = -1;
-                symptom.Name = body.GetValue("Name").ToString();
-                symptom.Description = body.GetValue("Description").ToString();
-                Region[] regions = body["Regions"].ToObject<Region[]>();
+                symptom.Name = body.GetValue("name").ToString();
+                symptom.Description = body.GetValue("description").ToString();
+                Region[] regions = body["regions"].ToObject<Region[]>();
                 foreach(Region region in regions) {
                     symptom.AddRegion(region);
                 }
@@ -203,11 +203,11 @@ namespace RareDiseasePredicter.Controller {
             ISymptom symptom = null;
             try {
                 symptom = new Symptom();
-                symptom.ID = int.Parse(body.GetValue("ID").ToString());
-                symptom.Name = body.GetValue("Name").ToString();
-                symptom.Description = body.GetValue("Description").ToString();
+                symptom.ID = int.Parse(body.GetValue("id").ToString());
+                symptom.Name = body.GetValue("name").ToString();
+                symptom.Description = body.GetValue("description").ToString();
                 //tjek id om den er -1
-                Region[] regions = body["Regions"].ToObject<Region[]>();
+                Region[] regions = body["regions"].ToObject<Region[]>();
                 foreach(Region region in regions) {
                     symptom.AddRegion(region);
                 }
