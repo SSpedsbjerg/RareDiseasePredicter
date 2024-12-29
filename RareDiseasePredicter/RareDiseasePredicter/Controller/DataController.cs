@@ -23,28 +23,12 @@ namespace RareDiseasePredicter.Controller {
     public class DataController : ControllerBase {
 
 
-        private readonly IConfiguration _configuration;
-        public DataController(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
         [HttpGet]
         [Route("/")]//Main page, this can be used to check connection
         public Task<string> NoRequest() {
             return Task.FromResult("200");
             }
 
-        [HttpPost]
-        [Route("/Login")]
-        public async Task<string> Login([FromBody] JObject body)
-        {
-            string username = body["username"].ToString();
-            string password = body["password"].ToString();
-            var token =  PasswordManager.AuthenticateUser(username, password, _configuration);
-
-            return JsonSerializer.Serialize(token);
-        }
 
         //Takes name of symptoms and returns a list of diseases which is possible
         //TODO: Add RDDeterminer
@@ -120,10 +104,8 @@ namespace RareDiseasePredicter.Controller {
                 disease.Name = body.GetValue("name").ToString();
                 disease.Description = body.GetValue("description").ToString();
                 disease.Href = body.GetValue("href").ToString();
-                Symptom[] syms = body["symptoms"].ToObject<Symptom[]>();
-                foreach (Symptom symp in syms) {
-                    disease.AddSymptoms(symp);
-                }
+                disease.Symptoms = ToSymptoms(body.Value<JArray>("Symptoms"));
+
             }
             catch (Exception ex) {
                 _= Log.Error(ex, "DataController", "HTTPPOST ADDDISEASE");
@@ -240,12 +222,6 @@ namespace RareDiseasePredicter.Controller {
         [HttpPost]
         [Route("/Region/")]
         public async Task<string> AddRegion([FromBody] JObject body) {
-
-            foreach (var header in Request.Headers)
-            {
-                Console.WriteLine($"{header.Key}: {header.Value}");
-            }
-
             IRegion region = null;
             try {
                 region = new Region(body.GetValue("name").ToString() , - 1);
