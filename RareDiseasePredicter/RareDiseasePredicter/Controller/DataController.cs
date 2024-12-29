@@ -79,7 +79,7 @@ namespace RareDiseasePredicter.Controller {
         public async Task<string> Login([FromBody] JObject body) {
             User user = new User();
             try {
-                user.Name = body.GetValue("Name").ToString();
+                user.Name = body.GetValue("username").ToString();
                 user.Password = PasswordManager.HashPassword(body.GetValue("Password").ToString());
 
             }
