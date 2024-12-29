@@ -16,6 +16,11 @@ namespace RareDiseasePredicter.Controller
             _configuration = configuration;
         }
 
+        public AuthService()
+        {
+
+        }
+
         public string GenerateJwtToken(string username, string[] roles)
         {
             
@@ -35,8 +40,8 @@ namespace RareDiseasePredicter.Controller
 
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: Environment.GetEnvironmentVariable("ISSUER"),
+                audience: Environment.GetEnvironmentVariable("AUDIENCE"),
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds

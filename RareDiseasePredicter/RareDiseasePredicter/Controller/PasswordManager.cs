@@ -17,8 +17,8 @@ namespace RareDiseasePredicter.Controller {
         }
 
         //For at checke om at token er validt, kan man gemme det i en værdi (array eller andet) og sammenligne den værdi med det token som bliver sendt fra http requesten. Listen kan tømmes ved at checke for Delta tid og fjerne udgået tokens.
-        public static string AuthenticateUser(string username, string password, IConfiguration _configuration) {
-            AuthService auth = new AuthService(_configuration);
+        public static string AuthenticateUser(string username, string password) {
+            AuthService auth = new AuthService();
 
             //TODO  REMOVE ALL THIS SHIT TEST DATA VALUES AND IMPLEMENT USERNAME & PASSWORD CHECKERS YEP
             string[] roles = ["Admin"];
