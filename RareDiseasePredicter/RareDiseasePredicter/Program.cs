@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using RareDiseasePredicter;
+using System.Configuration;
+using DotNetEnv;
 
 internal class Program {
     private static async Task Main(string[] args) {
@@ -25,7 +27,7 @@ internal class Program {
             Console.WriteLine("Could not start database");
             return;
             }
-
+        
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -37,10 +39,14 @@ internal class Program {
 
 
         builder.Services.AddControllers().AddNewtonsoftJson();
-        
+
         // Add services to the container.
 
         builder.Services.AddControllers();
+
+        Env.Load();
+
+        builder.Configuration.AddEnvironmentVariables();
 
         var app = builder.Build();
 

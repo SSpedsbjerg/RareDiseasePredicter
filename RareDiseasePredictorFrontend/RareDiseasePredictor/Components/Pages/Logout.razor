@@ -1,0 +1,15 @@
+﻿@page "/logout"
+@inject Authentication.HoldTheToken holder
+@inject NavigationManager Navigation
+
+
+@code {
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        holder.setToken("");
+        Navigation.NavigateTo("/");
+
+    }
+}

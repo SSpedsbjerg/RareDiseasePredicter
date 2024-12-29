@@ -1,5 +1,9 @@
 ﻿@inherits LayoutComponentBase
-
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject Authentication.HoldTheToken holder;
+@inject NavigationManager Navigation;
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -7,7 +11,22 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+          <AuthorizeView>
+            <NotAuthorized>
+                <NavLink class="nav-link" href="login">
+                    <span class="bi nav-menu" aria-hidden="true"></span> LOGIN
+                </NavLink>
+            </NotAuthorized>
+
+            <Authorized>
+                <NavLink class="nav-link" href="logout">
+                        <button type="button" class="btn btn-danger me-3" >LOGOUT</button>
+                </NavLink>
+
+                    Welcome @username
+            </Authorized>
+          </AuthorizeView>
+
         </div>
 
         <article class="content px-4">
@@ -21,3 +40,18 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    private string username;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            username = user.FindFirst(ClaimTypes.Name)?.Value ?? "Unknown User";
+        }
+
+    }
+}

@@ -7,85 +7,92 @@
 @inject ApiDiseaseData diseaseData
 
 
-<div class="toast-container p-3 @(IsVisible ? "d-block" : "d-none")" data-bs-autohide="true" data-bs-delay="5000">
-    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-            <button type="button" class="btn-close btn-danger" aria-label="Close" @onclick="Close"></button>
-        @if (diseaseData.diseases == null)
-        {
-            <p>Loading...</p>
-        }
-
-        else
-        {
-            <div class="mt-3 mb-2">
-                <label class="form-label fs-6">Disease Selector</label>
-                <select class="form-select" @bind="selectedDiseaseName">
-                    @foreach (var disease in diseaseData.diseases)
-                    {
-                        <option value="@disease.Name">@disease.Name</option>
-                    }
-                </select>
+<div class="modal-dialog  modal-dialog-centered p-3 @(IsVisible ? "d-block" : "d-none")" data-bs-autohide="true" data-bs-delay="5000">
+    <div class="modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Edit Disease</h1>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
             </div>
-            if(selectedDisease != null)
-            {
-                <div>
-                    <EditForm Model="@selectedDisease" OnValidSubmit="@SubmitData">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
+            <div class="modal-body">
+                @if (diseaseData.diseases == null)
+                {
+                    <p>Loading...</p>
+                }
 
-                        <div class="mb-3">
-                            <label class="form-label fs-6">Disease Name</label>
-                            <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="selectedDisease.Name"/>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fs-6">Disease Description</label>
-                            <InputTextArea id="Description" style="height: 250px;" class="form-control" placeholder="Description" @bind-Value="selectedDisease.Description" />
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fs-6">Disease Href</label>
-                            <InputText id="Href" class="form-control" placeholder="Href" @bind-Value="selectedDisease.Href" />
-                        </div>
-                        <div>
-                            @if (selectedDisease.Symptoms.Count() != 0)
+                else
+                {
+                    <div class="mb-3">
+                        <label class="form-label fs-6">Disease Selector</label>
+                        <select class="form-select" @bind="selectedDiseaseName">
+                            @foreach (var disease in diseaseData.diseases)
                             {
-                                <label class="form-label mb-3 fs-6">Symptomer</label>
+                                <option value="@disease.Name">@disease.Name</option>
                             }
+                        </select>
+                    </div>
+                    if (selectedDisease != null)
+                    {
+                        <div>
+                            <EditForm Model="@selectedDisease" OnValidSubmit="@UpdateDisease">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
 
-                            <div class="mb-3">
-                                @for (int i = 0; i < selectedDisease.Symptoms.Count; i++)
-                                {
-                                    int b = i;
-                                    <div class="row">
-                                        <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveSymptom(b)">X</button></div>
-                                        <div class="col col fs-5"><p>@selectedDisease.Symptoms[i].Name</p></div>
-                                    </div>
-                                }
-                            </div>
+                                <div class="mb-3">
+                                    <label class="form-label fs-6">Disease Name</label>
+                                    <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="selectedDisease.Name" />
+                                </div>
 
+                                <div class="mb-3">
+                                    <label class="form-label fs-6">Disease Description</label>
+                                    <InputTextArea id="Description" style="height: 250px;" class="form-control" placeholder="Description" @bind-Value="selectedDisease.Description" />
+                                </div>
 
-
-
-                            <div class="mb-3">
-                                <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" list="symptomdatalist" />
-                                <datalist id="symptomdatalist">
-                                    @foreach (var symptom in diseaseData.symptoms)
+                                <div class="mb-3">
+                                    <label class="form-label fs-6">Disease Href</label>
+                                    <InputText id="Href" class="form-control" placeholder="Href" @bind-Value="selectedDisease.Href" />
+                                </div>
+                                <div>
+                                    @if (selectedDisease.Symptoms.Count() != 0)
                                     {
-                                        <option value="@symptom.Name">@symptom.Name</option>
+                                        <label class="form-label mb-3 fs-6">Symptoms</label>
                                     }
-                                </datalist>
-                                <button type="button" class="btn btn-secondary mt-3" @onclick="AddSymptom">Add Symptom</button>
-                            </div>
+
+                                    <div class="mb-3">
+                                        @for (int i = 0; i < selectedDisease.Symptoms.Count; i++)
+                                        {
+                                            int b = i;
+                                            <div class="row">
+                                                <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveSymptom(b)">X</button></div>
+                                                <div class="col col fs-5"><p>@selectedDisease.Symptoms[i].Name</p></div>
+                                            </div>
+                                        }
+                                    </div>
+
+
+
+
+                                    <div class="mb-3">
+                                        <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" list="symptomdatalist" />
+                                        <datalist id="symptomdatalist">
+                                            @foreach (var symptom in diseaseData.symptoms)
+                                            {
+                                                <option value="@symptom.Name">@symptom.Name</option>
+                                            }
+                                        </datalist>
+                                        <button type="button" class="btn btn-secondary mt-3" @onclick="AddSymptom">Add Symptom</button>
+                                    </div>
+                                </div>
+
+
+                                <button type="submit" class="btn btn-primary mb-3">Update</button>
+                                <button type="button" class="btn btn-danger mb-3" @onclick="()   => DeleteDisease(selectedDisease)">Delete</button>
+                            </EditForm>
                         </div>
-
-
-                        <button type="submit" class="btn btn-primary mb-3">Update</button>
-                        <button type="button" class="btn btn-danger mb-3" @onclick="()   => DeleteDisease(selectedDisease)">Delete</button>
-                    </EditForm>
-                </div>
-            }
-        }
+                    }
+                }
+            </div>
+        </div>
     </div>
 </div>
 
@@ -97,19 +104,20 @@
 
     [Parameter]
     public EventCallback OnClose { get; set; }
-
+    //Maybe make clone of this, or just accept it has a pointer to the simpelton xd.
     private Disease selectedDisease => diseaseData.diseases?.FirstOrDefault(f => f.Name == selectedDiseaseName);
     private string selectedDiseaseName;
 
+    //Opens modal
     public void Show()
     {
         Logger.LogInformation("Attempting to Show Edit Disease Modal...");
         IsVisible = true;
         StateHasChanged();
-        Logger.LogInformation("Value to check after states XDD");
     }
 
-    private void Close()
+    //Closes Modal
+    public void Close()
     {
         Logger.LogInformation("Attempting to Close Modal...");
         IsVisible = false;
@@ -123,6 +131,7 @@
 
     private string newSymptom = string.Empty;
 
+    //Adds symptom to disease
     private void AddSymptom()
     {
         Logger.LogInformation("Attempting to add symptom");
@@ -138,7 +147,7 @@
 
         }
     }
-
+    //Removes symptom from disease
     private void RemoveSymptom(int index)
     {
         Logger.LogWarning("Index Value: " + index.ToString());
@@ -146,15 +155,43 @@
         selectedDisease.Symptoms.RemoveAt(index);
 
     }
-    private void DeleteDisease(Disease disease)
+
+    //Deletes disease based on id, URL is subject to change
+    private async Task DeleteDisease(Disease disease)
     {
-        //TODO MAKE DELETE DISEASE METHOD
+
+        var response = await Http.DeleteAsync($"https://localhost:57693/Disease/{disease.ID}");
+        
+
+        if (response.IsSuccessStatusCode)
+        {
+            Logger.LogInformation("Sucessfully Updated " + selectedDisease.Name);
+        }
+        else
+        {
+            Logger.LogError("Error trying to update data: " + response.StatusCode);
+        }
     }
 
-
-    private async Task SubmitData()
+    //Only issue is every individual disease gets edited, so if you remove a symptom and go to another disease and go back to the original disease you removed a symptom for.
+    //It will not restore the disease to the original state in the DB, but the edited state you left it in.
+    //This will ONLY make a put request with the currently selected disease, for now if you need to restore the disease list to original, use force get button(soon tm).
+    private async Task UpdateDisease()
     {
-        //TODO MAKE PUT/UPDATE DISEASE METHOD
+        var jsonString = JsonSerializer.Serialize(selectedDisease, new JsonSerializerOptions { WriteIndented = true });
+        //Logger.LogInformation("Json File: " + jsonString);
+        var httpClient = new HttpClient();
+        //Might have to change HTTP, for now keep as is
+        var response = await httpClient.PutAsJsonAsync("https://localhost:57693/AddDisease/", selectedDisease);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Logger.LogInformation("Sucessfully Updated "+selectedDisease.Name);
+        }
+        else
+        {
+            Logger.LogError("Error trying to update data: " + response.StatusCode);
+        }
 
     }
 

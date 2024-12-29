@@ -1,0 +1,158 @@
+﻿@rendermode InteractiveServer
+@inject ILogger<ModalAddDisease> Logger
+@using RareDiseasePredictor.Models
+@using System.Text.Json
+@using static System.Net.WebRequestMethods
+@inject HttpClient Http
+@inject ApiDiseaseData diseaseData
+
+
+<div class="modal-dialog modal-dialog-centered p-3 @(IsVisible ? "d-block" : "d-none")" data-bs-autohide="true" data-bs-delay="5000">
+    <div class="modal-dialog-centered">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Add symptom</h1>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (diseaseData.regions is null)
+                {
+                    <p>Loading...</p>
+                }
+                else
+                {
+                    <div>
+                        <EditForm Model="@symptom" OnValidSubmit="@AddSymptom">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div class="mb-3">
+                                <label class="form-label fs-6">Symptom Name</label>
+                                <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="symptom.Name" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fs-6">Symptom Description</label>
+                                <InputText id="Description" class="form-control" placeholder="Description" @bind-Value="symptom.Description" />
+                            </div>
+
+                            <div>
+                                @if (symptom.Regions.Count() != 0)
+                                {
+                                    <label class="form-label mb-3 fs-6">Regioner</label>
+                                }
+
+                                <div class="mb-3">
+                                    @for (int i = 0; i < symptom.Regions.Count; i++)
+                                    {
+                                        int b = i;
+                                        <div class="row">
+                                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveRegion(b)">X</button></div>
+                                            <div class="col col fs-5"><p>@symptom.Regions[i].Name</p></div>
+                                        </div>
+                                    }
+                                </div>
+
+
+
+
+                                <div class="mb-3">
+                                    <InputText @bind-Value="newRegion" class="form-control" placeholder="Add new region" list="regiondatalist" />
+                                    <datalist id="regiondatalist">
+                                        @foreach (var region in diseaseData.regions)
+                                        {
+                                            <option value="@region.Name">@region.Name</option>
+                                        }
+                                    </datalist>
+                                    <button type="button" class="btn btn-secondary mt-3" @onclick="AddRegion">Add Region</button>
+                                </div>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary mb-3">Add Symptom</button>
+                        </EditForm>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+ 
+    public void Show()
+    {
+        Logger.LogInformation("Attempting to Show Add Disease Modal...");
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        Logger.LogInformation("Attempting to Close Modal...");
+        IsVisible = false;
+        if (OnClose.HasDelegate)
+        {
+            OnClose.InvokeAsync();
+        }
+        StateHasChanged();
+    }
+
+
+    private Symptom symptom = new Symptom();
+
+    private string newRegion = string.Empty;
+
+    private void AddRegion()
+    {
+        Logger.LogInformation("Attempting to add symptom");
+        if (!string.IsNullOrWhiteSpace(newRegion))
+        {
+            var region = diseaseData.regions.FirstOrDefault(regi => regi.Name == newRegion);
+
+            if (symptom != null)
+            {
+                symptom.Regions.Add(region);
+                newRegion = string.Empty;
+            }
+
+        }
+    }
+
+    private void RemoveRegion(int index)
+    {
+        Logger.LogWarning("Index Value: " + index.ToString());
+        Logger.LogWarning("Amount of symptoms: " + symptom.Regions.Count().ToString());
+        symptom.Regions.RemoveAt(index);
+
+    }
+
+
+    private async Task AddSymptom()
+    {
+        var jsonString = JsonSerializer.Serialize(symptom, new JsonSerializerOptions { WriteIndented = true });
+        Logger.LogInformation("Json File: " + jsonString);
+        var httpClient = new HttpClient();
+        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Symptom/", symptom);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Logger.LogInformation("Sucessfully added Symptom");
+        }
+        else
+        {
+            Logger.LogError("Error trying to post data: " + response.StatusCode);
+        }
+
+    }
+
+    
+
+}

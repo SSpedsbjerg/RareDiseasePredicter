@@ -1,4 +1,4 @@
-﻿using RareDiseasePredicter.Interfaces;
+using RareDiseasePredicter.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using RareDiseasePredicter.Implementations;
@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections.Immutable;
 using RareDiseasePredicter.Enums;
+using System.Runtime.CompilerServices;
 
 /**
  * 
@@ -20,12 +21,14 @@ namespace RareDiseasePredicter.Controller {
     [ApiController]
     [Route("api/[controller]")]
     public class DataController : ControllerBase {
-        
+
+
         [HttpGet]
         [Route("/")]//Main page, this can be used to check connection
         public Task<string> NoRequest() {
             return Task.FromResult("200");
             }
+
 
         //Takes name of symptoms and returns a list of diseases which is possible
         //TODO: Add RDDeterminer
@@ -98,10 +101,11 @@ namespace RareDiseasePredicter.Controller {
             try {
                 disease = new Disease();
                 disease.ID = -1;
-                disease.Name = body.GetValue("Name").ToString();
-                disease.Description = body.GetValue("Description").ToString();
-                disease.Href = body.GetValue("Href").ToString();
+                disease.Name = body.GetValue("name").ToString();
+                disease.Description = body.GetValue("description").ToString();
+                disease.Href = body.GetValue("href").ToString();
                 disease.Symptoms = ToSymptoms(body.Value<JArray>("Symptoms"));
+
             }
             catch (Exception ex) {
                 _= Log.Error(ex, "DataController", "HTTPPOST ADDDISEASE");
@@ -220,7 +224,7 @@ namespace RareDiseasePredicter.Controller {
         public async Task<string> AddRegion([FromBody] JObject body) {
             IRegion region = null;
             try {
-                region = new Region(body.GetValue("Name").ToString() , - 1);
+                region = new Region(body.GetValue("name").ToString() , - 1);
             }
             catch(Exception ex) {
                 _ = Log.Error(ex, "DataController", "HTTPPOST ADDregion");
@@ -235,8 +239,8 @@ namespace RareDiseasePredicter.Controller {
         public async Task<string> ModifyRegion([FromBody] JObject body) {
             IRegion region = null;
             try {
-                region = new Region(body.GetValue("Name").ToString(), -1);
-                region.ID = (int)body.GetValue("ID");
+                region = new Region(body.GetValue("name").ToString(), -1);
+                region.ID = (int)body.GetValue("id");
             }
             catch(Exception ex) {
                 _ = Log.Error(ex, "DataController", "HTTPPUT Region");
@@ -329,6 +333,9 @@ namespace RareDiseasePredicter.Controller {
         [HttpGet]
         [Route("/AddRegion/{name}")]
         public async Task<string> AddRegionFromRoute([FromRoute] string name) {
+            
+           
+
             try {
                 string[] nameSplit = name.Split("_");
                 name = "";

@@ -1,0 +1,192 @@
+﻿@rendermode InteractiveServer
+@inject ILogger<ModalEditDisease> Logger
+@using RareDiseasePredictor.Models
+@using System.Text.Json
+@using static System.Net.WebRequestMethods
+@inject HttpClient Http
+@inject ApiDiseaseData diseaseData
+
+
+<div class="modal-dialog  modal-dialog-centered p-3 @(IsVisible ? "d-block" : "d-none")" data-bs-autohide="true" data-bs-delay="5000">
+    <div class="modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Edit Symptom</h1>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (diseaseData.symptoms == null)
+                {
+                    <p>Loading...</p>
+                }
+
+                else
+                {
+                    <div class="mb-3">
+                        <label class="form-label fs-6">Symptom Selector</label>
+                        <select class="form-select" @bind="selectedSymptomName">
+                            @foreach (var symptom in diseaseData.symptoms)
+                            {
+                                <option value="@symptom.Name">@symptom.Name</option>
+                            }
+                        </select>
+                    </div>
+                    if (selectedSymptom != null)
+                    {
+                        <div>
+                            <EditForm Model="@selectedSymptom" OnValidSubmit="@UpdateSymptom">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+
+                                <div class="mb-3">
+                                    <label class="form-label fs-6">Symptom Name</label>
+                                    <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="selectedSymptom.Name" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fs-6">Symptom Description</label>
+                                    <InputTextArea id="Description" style="height: 250px;" class="form-control" placeholder="Description" @bind-Value="selectedSymptom.Description" />
+                                </div>
+
+                                <div>
+                                    @if (selectedSymptom.Regions.Count() != 0)
+                                    {
+                                        <label class="form-label mb-3 fs-6">Regions</label>
+                                    }
+
+                                    <div class="mb-3">
+                                        @for (int i = 0; i < selectedSymptom.Regions.Count; i++)
+                                        {
+                                            int b = i;
+                                            <div class="row">
+                                                <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveRegion(b)">X</button></div>
+                                                <div class="col col fs-5"><p>@selectedSymptom.Regions[i].Name</p></div>
+                                            </div>
+                                        }
+                                    </div>
+
+
+
+
+                                    <div class="mb-3">
+                                        <InputText @bind-Value="newRegion" class="form-control" placeholder="Add new region" list="regiondatalist" />
+                                        <datalist id="regiondatalist">
+                                            @foreach (var region in diseaseData.regions)
+                                            {
+                                                <option value="@region.Name">@region.Name</option>
+                                            }
+                                        </datalist>
+                                        <button type="button" class="btn btn-secondary mt-3" @onclick="AddRegion">Add Region</button>
+                                    </div>
+                                </div>
+
+
+                                <button type="submit" class="btn btn-primary mb-3">Update</button>
+                                <button type="button" class="btn btn-danger mb-3" @onclick="()   => DeleteSymptom(selectedSymptom)">Delete</button>
+                            </EditForm>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+    
+    //This prevents the selectedDisease to edit the simpelton.
+    private Symptom selectedSymptom => diseaseData.symptoms?.FirstOrDefault(f => f.Name == selectedSymptomName);
+    private string selectedSymptomName;
+
+    private Disease tempDisease = new Disease();
+
+
+    //Opens modal
+    public void Show()
+    {
+        Logger.LogInformation("Attempting to Show Edit Disease Modal...");
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    //Closes Modal
+    public void Close()
+    {
+        Logger.LogInformation("Attempting to Close Modal...");
+        IsVisible = false;
+        if (OnClose.HasDelegate)
+        {
+            OnClose.InvokeAsync();
+        }
+        StateHasChanged();
+    }
+
+
+    private string newRegion = string.Empty;
+
+    //Adds region to symptom
+    private void AddRegion()
+    {
+        Logger.LogInformation("Attempting to add symptom");
+        if (!string.IsNullOrWhiteSpace(newRegion))
+        {
+            var region = diseaseData.regions.FirstOrDefault(regi => regi.Name == newRegion);
+
+            if (region != null)
+            {
+                selectedSymptom.Regions.Add(region);
+                newRegion = string.Empty;
+            }
+
+        }
+    }
+    //Removes region from symptom
+    private void RemoveRegion(int index)
+    {
+        Logger.LogWarning("Index Value: " + index.ToString());
+        Logger.LogWarning("Amount of symptoms: " + selectedSymptom.Regions.Count().ToString());
+        selectedSymptom.Regions.RemoveAt(index);
+
+    }
+    //Deletes disease based on id, URL is subject to change
+    private async Task DeleteSymptom(Symptom symptom)
+    {
+        var response = await Http.DeleteAsync($"https://localhost:57693/Symptoms/{symptom.ID}");
+        if (response.IsSuccessStatusCode)
+        {
+            Logger.LogInformation("Sucessfully Updated " + selectedSymptom.Name);
+        }
+        else
+        {
+            Logger.LogError("Error trying to update data: " + response.StatusCode);
+        }
+    }
+
+   
+    private async Task UpdateSymptom()
+    {
+        var jsonString = JsonSerializer.Serialize(selectedSymptom, new JsonSerializerOptions { WriteIndented = true });
+
+        var httpClient = new HttpClient();
+        
+        var response = await httpClient.PutAsJsonAsync("https://localhost:57693/Symptom/", selectedSymptom);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Logger.LogInformation("Sucessfully Updated " + selectedSymptom.Name);
+        }
+        else
+        {
+            Logger.LogError("Error trying to update data: " + response.StatusCode);
+        }
+
+    }
+
+}

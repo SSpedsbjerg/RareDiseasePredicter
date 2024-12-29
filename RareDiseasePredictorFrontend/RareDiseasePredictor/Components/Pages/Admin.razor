@@ -1,4 +1,7 @@
 ﻿@page "/admin"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using RareDiseasePredictor.Components.Authentication
 @using RareDiseasePredictor.Models
 @using RareDiseasePredictor.Components.Pages.Modals
 @using System.Text.Json
@@ -6,21 +9,40 @@
 @inject ILogger<Admin> Logger
 @inject HttpClient Http
 @inject ApiDiseaseData diseaseData
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
+
+
 
 <h1>Admin Control Board</h1>
 
 <PageTitle>Admin Board</PageTitle>
 
+    
 
+    <div>
+    <button type="button" class="btn btn-success me-2" @onclick="ShowAddDiseaseModal">Add Disease</button>
+    <button type="button" class="btn btn-warning " @onclick="ShowEditDiseaseModal">Edit Disease</button>
+    </div>
+    <div class="mt-2">
+    <button type="button" class="btn btn-success me-2" @onclick="ShowAddSymptomModal">Add Symptom</button>
+    <button type="button" class="btn btn-warning " @onclick="ShowEditSymptomModal">Edit Symptom</button>
+    </div>
+    <div class="mt-2">
+        <button type="button" class="btn btn-success me-2" @onclick="ShowAddRegionModal">Add Region</button>
+    <button type="button" class="btn btn-warning " @onclick="ShowEditRegionModal">Edit Region</button>
+    </div>
+    <div class="mt-2">
+        <button type="button" class="btn btn-primary" @onclick="ForceApiRefresh">Force API Refresh</button>
+    </div>
 
-
-
-
-    <button type="button" class="btn btn-success" @onclick="ShowAddDiseaseModal">Add Disease</button>
-    <button type="button" class="btn btn-warning" @onclick="ShowEditDiseaseModal">Edit Disease</button>
     <ModalAddDisease @ref="modalAddDisease" IsVisible="false"/>
     <ModalEditDisease @ref="modalEditDisease" IsVisible="false"/>
+    <ModalAddSymptom @ref="modalAddSymptom" IsVisible="false"/>
+    <ModalEditSymptom @ref="modalEditSymptom" IsVisible="false" />
+    <ModalAddRegion @ref="modalAddRegion" IsVisible="false" />
+    <ModalEditRegion @ref="modalEditRegion" IsVisible="false" />
 
 
 
@@ -29,56 +51,195 @@
 
     private ModalAddDisease modalAddDisease = new ModalAddDisease();
     private ModalEditDisease modalEditDisease = new ModalEditDisease();
-    private List<Symptom> symptoms;
-    private List<Disease> diseases;
-
+    private ModalAddSymptom modalAddSymptom = new ModalAddSymptom();
+    private ModalEditSymptom modalEditSymptom = new ModalEditSymptom();
+    private ModalAddRegion modalAddRegion = new ModalAddRegion();
+    private ModalEditRegion modalEditRegion = new ModalEditRegion();
+    private string currentModal;
 
 
     private void ShowAddDiseaseModal()
     {
         Logger.LogInformation("Attempting to open Add Disease modal...");
+        if (currentModal != "adddiseasemodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
         modalAddDisease.Show();
+        currentModal = "adddiseasemodal";
         StateHasChanged();
     }
 
     private void ShowEditDiseaseModal()
     {
         Logger.LogInformation("Attempting to open Edit Disease modal...");
+        if (currentModal != "editdiseasemodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
         modalEditDisease.Show();
+        currentModal = "editdiseasemodal";
         StateHasChanged();
+    }
+
+    private void ShowAddSymptomModal()
+    {
+        Logger.LogInformation("Attempting to open Add Symptom modal...");
+        if (currentModal != "addsymptommodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
+        modalAddSymptom.Show();
+        currentModal = "addsymptommodal";
+        StateHasChanged();
+    }
+
+    private void ShowEditSymptomModal()
+    {
+        Logger.LogInformation("Attempting to open Edit Symptom modal...");
+        if (currentModal != "editsymptommodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
+        modalEditSymptom.Show();
+        currentModal = "editsymptommodal";
+        StateHasChanged();
+    }
+
+    private void ShowAddRegionModal()
+    {
+        Logger.LogInformation("Attempting to open Add Region modal...");
+        if (currentModal != "addregionmodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
+        modalAddRegion.Show();
+        currentModal = "addregionmodal";
+        StateHasChanged();
+    }
+
+    private void ShowEditRegionModal()
+    {
+        Logger.LogInformation("Attempting to open Edit Region modal...");
+        if (currentModal != "editregionmodal" && currentModal is not null)
+        {
+            modalCloser(currentModal);
+        }
+        modalEditRegion.Show();
+        currentModal = "editregionmodal";
+        StateHasChanged();
+    }
+
+    private void modalCloser(string currentModal)
+    {
+        switch (currentModal)
+        {
+            case "editdiseasemodal":
+                modalEditDisease.Close();
+                break;
+            case "adddiseasemodal":
+                modalAddDisease.Close();
+                break;
+            case "addsymptommodal":
+                modalAddSymptom.Close();
+                break;
+            case "editsymptommodal":
+                modalEditSymptom.Close();
+                break;
+            case "addregionmodal":
+                modalAddRegion.Close();
+                break;
+            case "editregionmodal":
+                modalEditRegion.Close();
+                break;
+
+        }
+
+
+    }
+
+    private async Task ForceApiRefresh()
+    {
+        await diseaseData.LoadSymptomsData(Http, "https://localhost:57693/symptoms");
+        await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
+        await diseaseData.LoadRegionsData(Http, "https://localhost:57693/regions");
+        Logger.LogInformation("Forced API Refresh...");
+
     }
 
     protected override async Task OnInitializedAsync()
     {
-
-        if(diseaseData.symptoms == null)
-        {
-            try
-            {
-                await diseaseData.LoadSymptomsData(Http, "https://localhost:57693/symptoms");
-                Logger.LogInformation("Sucessfully got API info for symptoms");
-
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
-            }
-        }
-
-        if(diseaseData.diseases == null)
-        {
-            try
-            {
-                await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
-                Logger.LogInformation("Sucessfully got API info for diseases");
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
-            }
+        /*
+        if(diseaseData.symptoms is null)
+    {
+    try
+    {
+    await diseaseData.LoadSymptomsData(Http, "https://localhost:57693/symptoms");
+    Logger.LogInformation("Sucessfully got API info for symptoms");
 
         }
+        catch (Exception ex)
+        {
+        Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
+        }
+        }
 
-        
+        if(diseaseData.diseases is null)
+        {
+        try
+        {
+        await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
+        Logger.LogInformation("Sucessfully got API info for diseases");
+        }
+        catch (Exception ex)
+        {
+        Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+        }
+
+        }
+
+        if (diseaseData.regions is null)
+        {
+        try
+        {
+        await diseaseData.LoadRegionsData(Http, "https://localhost:57693/regions");
+        Logger.LogInformation("Sucessfully got API info for regions");
+        }
+        catch (Exception ex)
+        {
+        Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+        }
+
+        }
+
+        */
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            bool isAdmin = false;
+            Logger.LogInformation("User is authenticated");
+            foreach (var claim in user.Claims)
+            {
+                Logger.LogInformation($"{claim.Type}: {claim.Value}");
+                if (claim.Value == "Admin")
+                {
+                    isAdmin = true;
+                    break;
+                }
+            }
+            if (!isAdmin)
+            {
+                Navigation.NavigateTo("/Forbidden");
+            }
+
+        }
+        else
+        {
+            Logger.LogInformation("User is not authenticated");
+            Navigation.NavigateTo("/Forbidden");
+        }
     }
 }

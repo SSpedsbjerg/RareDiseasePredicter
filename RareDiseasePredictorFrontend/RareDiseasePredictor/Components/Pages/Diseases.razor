@@ -1,0 +1,122 @@
+﻿@page "/diseases"
+@using Microsoft.AspNetCore.Components.Authorization
+@using RareDiseasePredictor.Models
+@using System.Security.Claims
+@inject HttpClient Http
+@inject ApiDiseaseData diseaseData
+@inject ILogger<Diseases> Logger
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@rendermode InteractiveServer
+@inject Authentication.HoldTheToken holder;
+
+
+<h3>Diseases</h3>
+
+@* Search bar *@
+@if (diseaseData.diseases != null)
+{
+    <input type="text" class="form-control mb-3" placeholder="Search for diseases..." value="@searchTerm" @oninput="@FilterDiseases" />
+}
+
+
+
+@* Modal Component *@
+@if (selectedDisease != null)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@selectedDisease.Name</h5>
+                </div>
+                <div class="modal-body">
+                    <p>@selectedDisease.Description</p>
+                    <p><strong>Href:</strong> @selectedDisease.Href</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (diseaseData.diseases == null)
+{
+    <h2>Loading...</h2>
+}
+else
+{
+    <div class="row">
+        @if (filteredDiseases.Any())
+        {
+            @foreach (var disease in filteredDiseases)
+            {
+                <div class="col-md-4">
+                    <div class="card" @onclick="() => ShowModal(disease)">
+                        <div class="card-body">
+                            <h5 class="card-title">@disease.Name</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        else
+        {
+            <p>No diseases found.</p>
+        }
+    </div>
+    
+}
+
+
+@code {
+    private Disease selectedDisease;
+    private List<Disease> filteredDiseases = new List<Disease>();
+    private string searchTerm = String.Empty;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (diseaseData.diseases is null)
+        {
+            try
+            {
+                await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
+                Logger.LogInformation("Sucessfully got API info for diseases");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+            }
+        }
+        filteredDiseases = diseaseData.diseases;
+
+    }
+
+    private void ShowModal(Disease disease)
+    {
+        selectedDisease = disease;
+    }
+
+    private void CloseModal()
+    {
+        selectedDisease = null;
+    }
+
+    private void FilterDiseases(ChangeEventArgs e)
+    {
+        // Filter products based on the search term (case insensitive).
+        if (!string.IsNullOrEmpty(e.Value.ToString()))
+        {
+            searchTerm = e.Value.ToString();
+            filteredDiseases = diseaseData.diseases.Where(p => p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        else
+        {
+            filteredDiseases = diseaseData.diseases;
+        }
+    }
+
+}

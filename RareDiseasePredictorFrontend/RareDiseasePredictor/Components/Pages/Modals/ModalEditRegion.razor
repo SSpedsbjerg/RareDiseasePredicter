@@ -1,0 +1,135 @@
+﻿@rendermode InteractiveServer
+@inject ILogger<ModalEditDisease> Logger
+@using RareDiseasePredictor.Models
+@using System.Text.Json
+@using static System.Net.WebRequestMethods
+@inject HttpClient Http
+@inject ApiDiseaseData diseaseData
+
+
+<div class="modal-dialog  modal-dialog-centered p-3 @(IsVisible ? "d-block" : "d-none")" data-bs-autohide="true" data-bs-delay="5000">
+    <div class="modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Edit Region</h1>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (diseaseData.regions == null)
+                {
+                    <p>Loading...</p>
+                }
+
+                else
+                {
+                    <div class="mb-3">
+                        <label class="form-label fs-6">Region Selector</label>
+                        <select class="form-select" @bind="SelectedRegioName">
+                            @foreach (var region in diseaseData.regions)
+                            {
+                                <option value="@region.Name">@region.Name</option>
+                            }
+                        </select>
+                    </div>
+                    if (selectedRegion != null)
+                    {
+                        <div>
+                            <EditForm Model="@selectedRegion" OnValidSubmit="@UpdateRegion">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+
+                                <div class="mb-3">
+                                    <label class="form-label fs-6">Symptom Name</label>
+                                    <InputText id="Name" class="form-control" placeholder="Name" @bind-Value="selectedRegion.Name" />
+                                </div>
+
+
+
+                                <button type="submit" class="btn btn-primary mb-3">Update</button>
+                                <button type="button" class="btn btn-danger mb-3" @onclick="()   => DeleteRegion(selectedRegion)">Delete</button>
+                            </EditForm>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+    
+    //This makes a pointer to the singelton so the singelton CAN be edited.
+    private Region selectedRegion => diseaseData.regions?.FirstOrDefault(f => f.Name == SelectedRegioName);
+    private string SelectedRegioName;
+
+    
+
+
+    //Opens modal
+    public void Show()
+    {
+        Logger.LogInformation("Attempting to Show Edit Disease Modal...");
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    //Closes Modal
+    public void Close()
+    {
+        Logger.LogInformation("Attempting to Close Modal...");
+        IsVisible = false;
+        if (OnClose.HasDelegate)
+        {
+            OnClose.InvokeAsync();
+        }
+        StateHasChanged();
+    }
+
+
+    private string newRegion = string.Empty;
+
+
+    //Deletes disease based on id, URL is subject to change
+    private async Task DeleteRegion(Region region)
+    {
+        var response = await Http.DeleteAsync($"https://localhost:57693/Symptoms/{region.ID}");
+        if (response.IsSuccessStatusCode)
+        {
+            Logger.LogInformation("Sucessfully Updated " + selectedRegion.Name);
+        }
+        else
+        {
+            Logger.LogError("Error trying to update data: " + response.StatusCode);
+        }
+    }
+
+    //Only issue is every individual disease gets edited, so if you remove a symptom and go to another disease and go back to the original disease you removed a symptom for.
+    //It will not restore the disease to the original state in the DB, but the edited state you left it in.
+    //This will ONLY make a put request with the currently selected disease, for now if you need to restore the disease list to original, use force get button(soon tm).
+    private async Task UpdateRegion()
+    {
+        var jsonString = JsonSerializer.Serialize(selectedRegion, new JsonSerializerOptions { WriteIndented = true });
+        //Logger.LogInformation("Json File: " + jsonString);
+        var httpClient = new HttpClient();
+        //Might have to change HTTP, for now keep as is
+        var response = await httpClient.PutAsJsonAsync("https://localhost:57693/Region/", selectedRegion);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Logger.LogInformation("Sucessfully Updated " + selectedRegion.Name);
+        }
+        else
+        {
+            Logger.LogError("Error trying to update data: " + response.StatusCode);
+        }
+
+    }
+
+}
