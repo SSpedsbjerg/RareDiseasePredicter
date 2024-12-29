@@ -16,12 +16,6 @@
                 <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
             </div>
             <div class="modal-body">
-                @if (diseaseData.regions is null)
-                {
-                    <p>Loading...</p>
-                }
-                else
-                {
                     <div>
                         <EditForm Model="@symptom" OnValidSubmit="@AddSymptom">
                             <DataAnnotationsValidator />
@@ -37,43 +31,52 @@
                                 <InputText id="Description" class="form-control" placeholder="Description" @bind-Value="symptom.Description" />
                             </div>
 
-                            <div>
-                                @if (symptom.Regions.Count() != 0)
-                                {
-                                    <label class="form-label mb-3 fs-6">Regioner</label>
-                                }
 
-                                <div class="mb-3">
-                                    @for (int i = 0; i < symptom.Regions.Count; i++)
+                            @if (diseaseData.regions is null)
+                            {
+
+                            }
+                            else
+                            {
+                                <div>
+                                    @if (symptom.Regions.Count() != 0)
                                     {
-                                        int b = i;
-                                        <div class="row">
-                                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveRegion(b)">X</button></div>
-                                            <div class="col col fs-5"><p>@symptom.Regions[i].Name</p></div>
-                                        </div>
+                                        <label class="form-label mb-3 fs-6">Regioner</label>
                                     }
-                                </div>
 
-
-
-
-                                <div class="mb-3">
-                                    <InputText @bind-Value="newRegion" class="form-control" placeholder="Add new region" list="regiondatalist" />
-                                    <datalist id="regiondatalist">
-                                        @foreach (var region in diseaseData.regions)
+                                    <div class="mb-3">
+                                        @for (int i = 0; i < symptom.Regions.Count; i++)
                                         {
-                                            <option value="@region.Name">@region.Name</option>
+                                            int b = i;
+                                            <div class="row">
+                                                <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" @onclick="() => RemoveRegion(b)">X</button></div>
+                                                <div class="col col fs-5"><p>@symptom.Regions[i].Name</p></div>
+                                            </div>
                                         }
-                                    </datalist>
-                                    <button type="button" class="btn btn-secondary mt-3" @onclick="AddRegion">Add Region</button>
+                                    </div>
+
+
+
+
+                                    <div class="mb-3">
+                                        <InputText @bind-Value="newRegion" class="form-control" placeholder="Add new region" list="regiondatalist" />
+                                        <datalist id="regiondatalist">
+                                            @foreach (var region in diseaseData.regions)
+                                            {
+                                                <option value="@region.Name">@region.Name</option>
+                                            }
+                                        </datalist>
+                                        <button type="button" class="btn btn-secondary mt-3" @onclick="AddRegion">Add Region</button>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+ 
 
 
                             <button type="submit" class="btn btn-primary mb-3">Add Symptom</button>
                         </EditForm>
                     </div>
-                }
+                
             </div>
         </div>
     </div>
