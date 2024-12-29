@@ -94,11 +94,11 @@ namespace RareDiseasePredicter.Controller {
             AuthService auth = new AuthService();
             if(user.role == Roles.Admin) {
                 string[] strings = { "Admin" };
-                return auth.GenerateJwtToken(user.Name, strings);
+                return JsonSerializer.Serialize<string>(auth.GenerateJwtToken(user.Name, strings));
             }
             else if(user.role == Roles.User) {
                 string[] strings = { "User" };
-                return auth.GenerateJwtToken(user.Name, strings);
+                return JsonSerializer.Serialize<string>(auth.GenerateJwtToken(user.Name, strings));
             }
             return "200";
         }
