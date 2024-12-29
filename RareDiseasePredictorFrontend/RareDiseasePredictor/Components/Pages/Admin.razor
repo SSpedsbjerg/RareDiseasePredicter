@@ -169,7 +169,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        /*
+        
         if(diseaseData.symptoms is null)
     {
     try
@@ -212,7 +212,7 @@
 
         }
 
-        */
+        
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
@@ -220,10 +220,9 @@
         if (user.Identity.IsAuthenticated)
         {
             bool isAdmin = false;
-            Logger.LogInformation("User is authenticated");
+
             foreach (var claim in user.Claims)
             {
-                Logger.LogInformation($"{claim.Type}: {claim.Value}");
                 if (claim.Value == "Admin")
                 {
                     isAdmin = true;
