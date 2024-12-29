@@ -26,7 +26,7 @@ namespace RareDiseasePredicter.Controller {
 
         private static string Server = "127.0.0.1";
         private static string DatabaseName = "db";
-        private static string port = "3306";
+        private static string port = "3307";
         private static string userName;
         private static string password;
 
@@ -196,7 +196,7 @@ namespace RareDiseasePredicter.Controller {
                     }
                     if(buffer.SequenceEqual(password)) {
                         if(reader.GetInt32(4) == (int)Roles.Admin) {//Implement as Hashmap in next iteration to have it better scaleable
-                            Admin admin = new Admin();
+                            User admin = new User();
                             admin.Name = name;
                             admin.role = Roles.Admin;
                             admin.Password = null;
