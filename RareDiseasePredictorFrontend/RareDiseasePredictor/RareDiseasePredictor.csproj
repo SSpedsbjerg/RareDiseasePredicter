@@ -7,11 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\youshallnotpass.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Components\Pages\Admin.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Components\Pages\Admin.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\youshallnotpass.jpg" />
   </ItemGroup>
 
   <ItemGroup>

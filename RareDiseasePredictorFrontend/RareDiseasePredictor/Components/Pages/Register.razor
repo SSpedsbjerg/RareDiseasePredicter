@@ -25,20 +25,38 @@
 
     <button class="btn btn-info" type="submit">Register</button>
 </EditForm>
+@if (errorMessage == null)
+{
 
+}
+else
+{
+    <p style="color:red">@errorMessage</p>
+}
 @code {
     private RegisterModel registerModel = new();
 
+    private string errorMessage = null;
+
     private async Task HandleRegistration()
     {
-        var response = await Http.PostAsJsonAsync("https://localhost:57693/register/", registerModel);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            Navigation.NavigateTo("/login");
+            var response = await Http.PostAsJsonAsync("https://localhost:57693/register/", registerModel);
+            if (response.IsSuccessStatusCode)
+            {
+                Navigation.NavigateTo("/login");
+            }
+            else
+            {
+                Logger.LogError("Error attempting to register: " + response.StatusCode + response.Content);
+                errorMessage = "Error attempting to register";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Logger.LogError("Error attempting to register: " + response.StatusCode + response.Content);
+            errorMessage = "Error attempting to connect to login server";
+            Logger.LogError(ex.ToString());
         }
     }
 

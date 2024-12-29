@@ -1032,3 +1032,35 @@ ConnectDatabase
 System.Exception: Could not start database
 Program
 Unknow reason for not being able to start database
+----------2024-12-14 11:14:15----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-14 11:14:15----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-12-14 11:15:02----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-14 11:15:02----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-12-14 11:17:18----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-14 11:17:18----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database
+----------2024-12-14 11:18:09----------
+System.Exception: Unable to open connection to MYSQL database
+DatabaseController
+ConnectDatabase
+----------2024-12-14 11:18:09----------
+System.Exception: Could not start database
+Program
+Unknow reason for not being able to start database

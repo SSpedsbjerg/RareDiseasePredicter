@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text;
+using DotNetEnv;
 
 namespace RareDiseasePredicter.Controller
 {
@@ -17,7 +18,8 @@ namespace RareDiseasePredicter.Controller
 
         public string GenerateJwtToken(string username, string[] roles)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET")));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>

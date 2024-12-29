@@ -25,29 +25,48 @@
 
     <button type="submit" class="btn btn-info mb-3">Login</button>
 </EditForm>
+@if (errorMessage == null)
+{
+    
+}
+else
+{
+    <p style="color:red">@errorMessage</p>
+}
 <a href="https://localhost:7028/register">No Account?, Click here to register!</a>
 
 @code {
     private LoginModel loginModel = new();
 
+    private string errorMessage = null;
+
     private async Task HandleLogin()
     {
-        var response = await Http.PostAsJsonAsync("https://localhost:57693/login/", loginModel);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            var token = await response.Content.ReadAsStringAsync();
-            var fulltoken = JsonSerializer.Deserialize<string>(token);
-            Logger.LogInformation("Got token value of: " + fulltoken);
-            // Store the token in a singelton
-            holder.setToken(fulltoken);
+            var response = await Http.PostAsJsonAsync("https://localhost:57693/login/", loginModel);
+            if (response.IsSuccessStatusCode)
+            {
+                var token = await response.Content.ReadAsStringAsync();
+                var fulltoken = JsonSerializer.Deserialize<string>(token);
+                Logger.LogInformation("Got token value of: " + fulltoken);
+                // Store the token in a singelton
+                holder.setToken(fulltoken);
+                // Navigate to the home page or an authorized page
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                Logger.LogError("Error attempting to login: " + response.StatusCode + response.Content);
+                errorMessage = "Error attempting to login: Did you use the right username and password?";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Error attempting to connect to login server";
+            Logger.LogError(ex.ToString());
+        }
 
-            // Navigate to the home page or an authorized page
-            Navigation.NavigateTo("/");
-        }
-        else
-        {
-            Logger.LogError("Error attempting to login: " + response.StatusCode + response.Content);
-        }
     }
 
     public class LoginModel

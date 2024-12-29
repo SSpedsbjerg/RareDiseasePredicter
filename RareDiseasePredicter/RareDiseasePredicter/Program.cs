@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using RareDiseasePredicter;
 using System.Configuration;
+using DotNetEnv;
 
 internal class Program {
     private static async Task Main(string[] args) {
@@ -42,6 +43,10 @@ internal class Program {
         // Add services to the container.
 
         builder.Services.AddControllers();
+
+        Env.Load();
+
+        builder.Configuration.AddEnvironmentVariables();
 
         var app = builder.Build();
 

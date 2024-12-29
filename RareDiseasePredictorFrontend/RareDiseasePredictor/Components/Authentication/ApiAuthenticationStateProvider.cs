@@ -45,14 +45,17 @@
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-
             // Decode the token to extract claims
             var claims = ParseClaimsFromJwt(token);
             var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt"));
 
             return new AuthenticationState(user);
         }
-
+        /// <summary>
+        /// Takes a JWT token and parses it to get the claims from the JWT token
+        /// </summary>
+        /// <param name="jwt"> JWT Token</param>
+        /// <returns>Claims from JWT token</returns>
         private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
             var handler = new JwtSecurityTokenHandler();

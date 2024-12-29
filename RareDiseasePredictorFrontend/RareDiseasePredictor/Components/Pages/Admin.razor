@@ -1,5 +1,7 @@
 ﻿@page "/admin"
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using RareDiseasePredictor.Components.Authentication
 @using RareDiseasePredictor.Models
 @using RareDiseasePredictor.Components.Pages.Modals
 @using System.Text.Json
@@ -7,7 +9,10 @@
 @inject ILogger<Admin> Logger
 @inject HttpClient Http
 @inject ApiDiseaseData diseaseData
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
+
 
 
 <h1>Admin Control Board</h1>
@@ -166,47 +171,75 @@
     {
         /*
         if(diseaseData.symptoms is null)
-        {
-            try
-            {
-                await diseaseData.LoadSymptomsData(Http, "https://localhost:57693/symptoms");
-                Logger.LogInformation("Sucessfully got API info for symptoms");
+    {
+    try
+    {
+    await diseaseData.LoadSymptomsData(Http, "https://localhost:57693/symptoms");
+    Logger.LogInformation("Sucessfully got API info for symptoms");
 
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
-            }
+        }
+        catch (Exception ex)
+        {
+        Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
+        }
         }
 
         if(diseaseData.diseases is null)
         {
-            try
-            {
-                await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
-                Logger.LogInformation("Sucessfully got API info for diseases");
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
-            }
+        try
+        {
+        await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
+        Logger.LogInformation("Sucessfully got API info for diseases");
+        }
+        catch (Exception ex)
+        {
+        Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+        }
 
         }
 
         if (diseaseData.regions is null)
         {
-            try
-            {
-                await diseaseData.LoadRegionsData(Http, "https://localhost:57693/regions");
-                Logger.LogInformation("Sucessfully got API info for regions");
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
-            }
+        try
+        {
+        await diseaseData.LoadRegionsData(Http, "https://localhost:57693/regions");
+        Logger.LogInformation("Sucessfully got API info for regions");
+        }
+        catch (Exception ex)
+        {
+        Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+        }
 
         }
 
         */
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            bool isAdmin = false;
+            Logger.LogInformation("User is authenticated");
+            foreach (var claim in user.Claims)
+            {
+                Logger.LogInformation($"{claim.Type}: {claim.Value}");
+                if (claim.Value == "Admin")
+                {
+                    isAdmin = true;
+                    break;
+                }
+            }
+            if (!isAdmin)
+            {
+                Navigation.NavigateTo("/Forbidden");
+            }
+
+        }
+        else
+        {
+            Logger.LogInformation("User is not authenticated");
+            Navigation.NavigateTo("/Forbidden");
+        }
     }
 }
