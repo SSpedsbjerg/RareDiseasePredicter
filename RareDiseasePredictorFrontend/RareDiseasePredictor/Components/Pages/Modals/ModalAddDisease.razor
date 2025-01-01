@@ -63,14 +63,22 @@
 
 
                                     <div class="mb-3">
-                                        <InputText @bind-Value="newSymptom" class="form-control" placeholder="Add new symptom" list="symptomdatalist" />
-                                        <datalist id="symptomdatalist">
-                                            @foreach (var symptom in diseaseData.symptoms)
-                                            {
-                                                <option value="@symptom.Name">@symptom.Name</option>
-                                            }
-                                        </datalist>
+                                    <label class="form-label fs-6">Add Symptom</label>
+                                    <select class="form-select" @bind="newSymptom">
+                                        @foreach (var symptom in diseaseData.symptoms)
+                                        {
+                                            <option value="@symptom.Name">@symptom.Name</option>
+                                        }
+                                    </select>
                                         <button type="button" class="btn btn-secondary mt-3" @onclick="AddSymptom">Add Symptom</button>
+                                    @if (statusMessage == null)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        <p style="color:@color">@statusMessage</p>
+                                    }
                                     </div>
                                 </div>
                             }
@@ -92,7 +100,11 @@
 
     [Parameter]
     public EventCallback OnClose { get; set; }
- 
+
+    string statusMessage;
+
+    string color;
+
     public void Show()
     {
         Logger.LogInformation("Attempting to Show Add Disease Modal...");
@@ -104,12 +116,14 @@
     {
         Logger.LogInformation("Attempting to Close Modal...");
         IsVisible = false;
+        statusMessage = null;
         if (OnClose.HasDelegate)
         {
             OnClose.InvokeAsync();
         }
         StateHasChanged();
     }
+
 
 
     private Disease disease = new Disease();
@@ -146,15 +160,29 @@
         var jsonString = JsonSerializer.Serialize(disease, new JsonSerializerOptions { WriteIndented = true });
         Logger.LogInformation("Json File: " + jsonString);
         var httpClient = new HttpClient();
-        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Disease/", disease);
 
-        if (response.IsSuccessStatusCode)
+        try
         {
-            Logger.LogInformation("Sucessfully added disease");
+            var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Disease/", disease);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Logger.LogInformation("Sucessfully added disease");
+                statusMessage = "Sucessfully added Disease!";
+                color = "green";
+            }
+            else
+            {
+                Logger.LogError("Error trying to post data: " + response.StatusCode);
+                statusMessage = "There was an error trying to add disease";
+                color = "red";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Logger.LogError("Error trying to post data: " + response.StatusCode);
+            Logger.LogError("Error trying to connect to the backend " + ex);
+            statusMessage = "There was an error trying to connect to the server...";
+            color = "red";
         }
 
     }

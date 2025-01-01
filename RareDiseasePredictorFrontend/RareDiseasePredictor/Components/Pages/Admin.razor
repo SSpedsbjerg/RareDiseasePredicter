@@ -171,44 +171,44 @@
     {
         
         if(diseaseData.symptoms is null)
-    {
-    try
-    {
-    await diseaseData.LoadSymptomsData(Http, "https://localhost:57693/symptoms");
-    Logger.LogInformation("Sucessfully got API info for symptoms");
-
-        }
-        catch (Exception ex)
         {
-        Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
-        }
+            try
+            {
+                await diseaseData.LoadSymptomsData(Http, "https://localhost:57693/symptoms");
+                Logger.LogInformation("Sucessfully got API info for symptoms");
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(" Error attempting to get Symptoms: " + ex.Message);
+            }
         }
 
         if(diseaseData.diseases is null)
         {
-        try
-        {
-        await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
-        Logger.LogInformation("Sucessfully got API info for diseases");
-        }
-        catch (Exception ex)
-        {
-        Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
-        }
+            try
+            {
+                await diseaseData.LoadDiseaseData(Http, "https://localhost:57693/diseases");
+                Logger.LogInformation("Sucessfully got API info for diseases");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+            }
 
         }
 
         if (diseaseData.regions is null)
         {
-        try
-        {
-        await diseaseData.LoadRegionsData(Http, "https://localhost:57693/regions");
-        Logger.LogInformation("Sucessfully got API info for regions");
-        }
-        catch (Exception ex)
-        {
-        Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
-        }
+            try
+            {
+                await diseaseData.LoadRegionsData(Http, "https://localhost:57693/regions");
+                Logger.LogInformation("Sucessfully got API info for regions");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(" Error attempting to get Diseases: " + ex.Message);
+            }
 
         }
 

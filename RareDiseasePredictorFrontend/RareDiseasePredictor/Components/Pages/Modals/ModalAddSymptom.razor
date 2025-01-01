@@ -32,16 +32,14 @@
                             </div>
 
 
-                            @if (diseaseData.regions is null)
+                            @if (diseaseData.regions is not null)
                             {
-
-                            }
-                            else
-                            {
+                                @if (diseaseData.regions.Count() != 0)
+                                {
                                 <div>
                                     @if (symptom.Regions.Count() != 0)
                                     {
-                                        <label class="form-label mb-3 fs-6">Regioner</label>
+                                        <label class="form-label mb-3 fs-6">Regiones</label>
                                     }
 
                                     <div class="mb-3">
@@ -59,22 +57,40 @@
 
 
                                     <div class="mb-3">
-                                        <InputText @bind-Value="newRegion" class="form-control" placeholder="Add new region" list="regiondatalist" />
-                                        <datalist id="regiondatalist">
+                                        <label class="form-label fs-6">Add Region</label>
+                                        <select class="form-select" @bind="newRegion">
                                             @foreach (var region in diseaseData.regions)
                                             {
                                                 <option value="@region.Name">@region.Name</option>
                                             }
-                                        </datalist>
+                                        </select>
                                         <button type="button" class="btn btn-secondary mt-3" @onclick="AddRegion">Add Region</button>
                                     </div>
                                 </div>
+                                }
+                                else
+                                {
+                                
+                                }
+
+                            }
+                            else
+                            {
+
                             }
  
 
 
                             <button type="submit" class="btn btn-primary mb-3">Add Symptom</button>
                         </EditForm>
+                    @if (statusMessage == null)
+                    {
+
+                    }
+                    else
+                    {
+                        <p style="color:@color">@statusMessage</p>
+                    }
                     </div>
                 
             </div>
@@ -89,7 +105,7 @@
 
     [Parameter]
     public EventCallback OnClose { get; set; }
- 
+
     public void Show()
     {
         Logger.LogInformation("Attempting to Show Add Disease Modal...");
@@ -100,6 +116,7 @@
     public void Close()
     {
         Logger.LogInformation("Attempting to Close Modal...");
+        statusMessage = null;
         IsVisible = false;
         if (OnClose.HasDelegate)
         {
@@ -108,6 +125,8 @@
         StateHasChanged();
     }
 
+    string statusMessage;
+    string color;
 
     private Symptom symptom = new Symptom();
 
@@ -143,16 +162,31 @@
         var jsonString = JsonSerializer.Serialize(symptom, new JsonSerializerOptions { WriteIndented = true });
         Logger.LogInformation("Json File: " + jsonString);
         var httpClient = new HttpClient();
-        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Symptom/", symptom);
 
-        if (response.IsSuccessStatusCode)
+        try
         {
-            Logger.LogInformation("Sucessfully added Symptom");
+            var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Symptom/", symptom);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Logger.LogInformation("Sucessfully added Symptom");
+                statusMessage = "Sucessfully added Symptom!";
+                color = "green";
+            }
+            else
+            {
+                Logger.LogError("Error trying to post data: " + response.StatusCode);
+                statusMessage = "There was an error trying to add symptom";
+                color = "red";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Logger.LogError("Error trying to post data: " + response.StatusCode);
+            Logger.LogError("Error trying to connect to the backend " + ex);
+            statusMessage = "There was an error trying to connect to the server...";
+            color = "red";
         }
+
 
     }
 

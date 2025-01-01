@@ -30,6 +30,14 @@
 
                             <button type="submit" class="btn btn-primary mb-3">Add Region</button>
                         </EditForm>
+                    @if (statusMessage == null)
+                    {
+
+                    }
+                    else
+                    {
+                        <p style="color:@color">@statusMessage</p>
+                    }
                     </div>
             </div>
         </div>
@@ -55,6 +63,7 @@
     {
         Logger.LogInformation("Attempting to Close Modal...");
         IsVisible = false;
+        statusMessage = null;
         if (OnClose.HasDelegate)
         {
             OnClose.InvokeAsync();
@@ -65,7 +74,8 @@
 
     private Region region = new Region();
 
-
+    string statusMessage;
+    string color;
 
     private async Task AddRegion()
     {
@@ -75,16 +85,30 @@
 
         var httpClient = http.GetHttpClient();
 
-        var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Region/", region);
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync("https://localhost:57693/Region/", region);
 
-        if (response.IsSuccessStatusCode)
-        {
-            Logger.LogInformation("Sucessfully added Region");
+            if (response.IsSuccessStatusCode)
+            {
+                Logger.LogInformation("Sucessfully added Region");
+                statusMessage = "Sucessfully added Region!";
+                color = "green";
+            }
+            else
+            {
+                Logger.LogError("Error trying to post data: " + response.StatusCode);
+                statusMessage = "There was an error trying to add region";
+                color = "red";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Logger.LogError("Error trying to post data: " + response.StatusCode);
+            Logger.LogError("Error trying to connect to the backend " + ex);
+            statusMessage = "There was an error trying to connect to the server...";
+            color = "red";
         }
+
 
     }
 

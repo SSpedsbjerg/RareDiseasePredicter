@@ -11,6 +11,14 @@
       "RelativeMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|solutionrelative:rarediseasepredicter\\controller\\databasecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredicter\\rarediseasepredicter\\controller\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|solutionrelative:rarediseasepredicter\\controller\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredicter\\rarediseasepredicter\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|solutionrelative:rarediseasepredicter\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredicter\\rarediseasepredicter\\.env||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|solutionrelative:rarediseasepredicter\\.env||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
@@ -19,20 +27,12 @@
       "RelativeMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|solutionrelative:rarediseasepredicter\\interfaces\\iuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredicter\\rarediseasepredicter\\controller\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|solutionrelative:rarediseasepredicter\\controller\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredicter\\rarediseasepredicter\\implementations\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|solutionrelative:rarediseasepredicter\\implementations\\admin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredicter\\rarediseasepredicter\\controller\\passwordmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|solutionrelative:rarediseasepredicter\\controller\\passwordmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredicter\\rarediseasepredicter\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|solutionrelative:rarediseasepredicter\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8EB38C71-E666-49EE-8193-863C4D225B10}|RareDiseasePredicter\\RareDiseasePredicter.csproj|d:\\ting\\github\\rarediseasepredicter\\rarediseasepredicter\\rarediseasepredicter\\interfaces\\iadmin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -93,20 +93,20 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "AuthService.cs",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Controller\\AuthService.cs",
               "RelativeDocumentMoniker": "RareDiseasePredicter\\Controller\\AuthService.cs",
               "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Controller\\AuthService.cs",
               "RelativeToolTip": "RareDiseasePredicter\\Controller\\AuthService.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABQAAAB5AAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABEAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-29T10:05:36.086Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": ".env",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\.env",
               "RelativeDocumentMoniker": "RareDiseasePredicter\\.env",
@@ -114,12 +114,11 @@
               "RelativeToolTip": "RareDiseasePredicter\\.env",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-12-14T09:55:42.072Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-14T09:55:42.072Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Admin.cs",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Implementations\\Admin.cs",
               "RelativeDocumentMoniker": "RareDiseasePredicter\\Implementations\\Admin.cs",
@@ -127,8 +126,7 @@
               "RelativeToolTip": "RareDiseasePredicter\\Implementations\\Admin.cs",
               "ViewState": "AgIAABMAAAAAAAAAAAAgwCsAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-03T10:31:22.329Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-03T10:31:22.329Z"
             },
             {
               "$type": "Document",
@@ -138,7 +136,7 @@
               "RelativeDocumentMoniker": "RareDiseasePredicter\\Controller\\DatabaseController.cs",
               "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Controller\\DatabaseController.cs",
               "RelativeToolTip": "RareDiseasePredicter\\Controller\\DatabaseController.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADoCAAAAAAAAAAAIwHICAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2023-04-27T21:47:11.187Z",
               "EditorCaption": ""
@@ -151,7 +149,7 @@
               "RelativeDocumentMoniker": "RareDiseasePredicter\\Controller\\DataController.cs",
               "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Controller\\DataController.cs",
               "RelativeToolTip": "RareDiseasePredicter\\Controller\\DataController.cs",
-              "ViewState": "AgIAAEoAAAAAAAAAAAAAALIAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAQwN4AAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2023-04-27T21:47:05.918Z",
               "EditorCaption": ""
@@ -170,7 +168,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "PasswordManager.cs",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Controller\\PasswordManager.cs",
               "RelativeDocumentMoniker": "RareDiseasePredicter\\Controller\\PasswordManager.cs",
@@ -178,21 +176,19 @@
               "RelativeToolTip": "RareDiseasePredicter\\Controller\\PasswordManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwBsAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-03T09:26:46.381Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-03T09:26:46.381Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Program.cs",
               "RelativeDocumentMoniker": "RareDiseasePredicter\\Program.cs",
               "ToolTip": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Program.cs",
               "RelativeToolTip": "RareDiseasePredicter\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwC0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2023-04-27T08:49:25.323Z",
-              "EditorCaption": ""
+              "WhenOpened": "2023-04-27T08:49:25.323Z"
             },
             {
               "$type": "Document",
@@ -232,7 +228,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "IUser.cs",
               "DocumentMoniker": "D:\\Ting\\GitHub\\RareDiseasePredicter\\RareDiseasePredicter\\RareDiseasePredicter\\Interfaces\\IUser.cs",
               "RelativeDocumentMoniker": "RareDiseasePredicter\\Interfaces\\IUser.cs",
@@ -240,8 +236,7 @@
               "RelativeToolTip": "RareDiseasePredicter\\Interfaces\\IUser.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-03T10:35:05.6Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-03T10:35:05.6Z"
             },
             {
               "$type": "Document",

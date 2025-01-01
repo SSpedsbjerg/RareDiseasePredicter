@@ -24,7 +24,7 @@
                 {
                     <div class="mb-3">
                         <label class="form-label fs-6">Symptom Selector</label>
-                        <select class="form-select" @bind="selectedSymptomName">
+                        <select class="form-select" @onchange="OnSymptomChange">
                             @foreach (var symptom in diseaseData.symptoms)
                             {
                                 <option value="@symptom.Name">@symptom.Name</option>
@@ -69,13 +69,13 @@
 
 
                                     <div class="mb-3">
-                                        <InputText @bind-Value="newRegion" class="form-control" placeholder="Add new region" list="regiondatalist" />
-                                        <datalist id="regiondatalist">
+                                       <label class="form-label fs-6">Add Region</label>
+                                        <select class="form-select" @bind="newRegion">
                                             @foreach (var region in diseaseData.regions)
                                             {
                                                 <option value="@region.Name">@region.Name</option>
                                             }
-                                        </datalist>
+                                        </select>
                                         <button type="button" class="btn btn-secondary mt-3" @onclick="AddRegion">Add Region</button>
                                     </div>
                                 </div>
@@ -84,6 +84,14 @@
                                 <button type="submit" class="btn btn-primary mb-3">Update</button>
                                 <button type="button" class="btn btn-danger mb-3" @onclick="()   => DeleteSymptom(selectedSymptom)">Delete</button>
                             </EditForm>
+                            @if (statusMessage == null)
+                            {
+
+                            }
+                            else
+                            {
+                                <p style="color:@color">@statusMessage</p>
+                            }
                         </div>
                     }
                 }
@@ -100,12 +108,30 @@
 
     [Parameter]
     public EventCallback OnClose { get; set; }
+
     
-    //This prevents the selectedDisease to edit the simpelton.
-    private Symptom selectedSymptom => diseaseData.symptoms?.FirstOrDefault(f => f.Name == selectedSymptomName);
+    private Symptom selectedSymptom;
     private string selectedSymptomName;
 
     private Disease tempDisease = new Disease();
+
+    string statusMessage;
+    string color;
+
+    //Creates a deep copy of the original symptom
+    private void OnSymptomChange(ChangeEventArgs e)
+    {
+        selectedSymptomName = e.Value?.ToString();
+        var originalSymptom = diseaseData.symptoms?.FirstOrDefault(f => f.Name == selectedSymptomName);
+
+        selectedSymptom = originalSymptom != null ? new Symptom
+            {
+                Name = originalSymptom.Name,
+                Description = originalSymptom.Description,
+                ID = originalSymptom.ID,
+                Regions = originalSymptom.Regions
+            } : new Symptom();
+    }
 
 
     //Opens modal
@@ -121,6 +147,7 @@
     {
         Logger.LogInformation("Attempting to Close Modal...");
         IsVisible = false;
+        statusMessage = null;
         if (OnClose.HasDelegate)
         {
             OnClose.InvokeAsync();
@@ -155,37 +182,68 @@
         selectedSymptom.Regions.RemoveAt(index);
 
     }
-    //Deletes disease based on id, URL is subject to change
+    //Deletes symptom based on id, URL is subject to change
     private async Task DeleteSymptom(Symptom symptom)
     {
-        var response = await Http.DeleteAsync($"https://localhost:57693/Symptoms/{symptom.ID}");
-        if (response.IsSuccessStatusCode)
+        try
         {
-            Logger.LogInformation("Sucessfully Updated " + selectedSymptom.Name);
+            var response = await Http.DeleteAsync($"https://localhost:57693/Symptom/{symptom.ID}");
+            if (response.IsSuccessStatusCode)
+            {
+                Logger.LogInformation("Sucessfully Deleted " + selectedSymptom.Name);
+                statusMessage = "Sucessfully deleted Symptom!";
+                color = "green";
+            }
+            else
+            {
+                Logger.LogError("Error trying to update data: " + response.StatusCode);
+                statusMessage = "There was an error trying to delete symptom";
+                color = "red";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Logger.LogError("Error trying to update data: " + response.StatusCode);
+            Logger.LogError("Error trying to connect to the backend " + ex);
+            statusMessage = "There was an error trying to connect to the server...";
+            color = "red";
         }
+
+
+
     }
 
-   
+
     private async Task UpdateSymptom()
     {
         var jsonString = JsonSerializer.Serialize(selectedSymptom, new JsonSerializerOptions { WriteIndented = true });
 
         var httpClient = new HttpClient();
-        
-        var response = await httpClient.PutAsJsonAsync("https://localhost:57693/Symptom/", selectedSymptom);
 
-        if (response.IsSuccessStatusCode)
+
+        try
         {
-            Logger.LogInformation("Sucessfully Updated " + selectedSymptom.Name);
+            var response = await httpClient.PutAsJsonAsync("https://localhost:57693/Symptom/", selectedSymptom);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Logger.LogInformation("Sucessfully Updated " + selectedSymptom.Name);
+                statusMessage = "Sucessfully updated Symptom!";
+                color = "green";
+            }
+            else
+            {
+                Logger.LogError("Error trying to update data: " + response.StatusCode);
+                statusMessage = "There was an error trying to update symptom";
+                color = "red";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Logger.LogError("Error trying to update data: " + response.StatusCode);
+            Logger.LogError("Error trying to connect to the backend " + ex);
+            statusMessage = "There was an error trying to connect to the server...";
+            color = "red";
         }
+
 
     }
 

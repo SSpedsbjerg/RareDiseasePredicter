@@ -24,7 +24,7 @@
                 {
                     <div class="mb-3">
                         <label class="form-label fs-6">Region Selector</label>
-                        <select class="form-select" @bind="SelectedRegioName">
+                        <select class="form-select" @onchange="OnRegionChanged">
                             @foreach (var region in diseaseData.regions)
                             {
                                 <option value="@region.Name">@region.Name</option>
@@ -48,6 +48,14 @@
                                 <button type="submit" class="btn btn-primary mb-3">Update</button>
                                 <button type="button" class="btn btn-danger mb-3" @onclick="()   => DeleteRegion(selectedRegion)">Delete</button>
                             </EditForm>
+                            @if (statusMessage == null)
+                            {
+
+                            }
+                            else
+                            {
+                                <p style="color:@color">@statusMessage</p>
+                            }
                         </div>
                     }
                 }
@@ -64,13 +72,27 @@
 
     [Parameter]
     public EventCallback OnClose { get; set; }
-    
+
     //This makes a pointer to the singelton so the singelton CAN be edited.
-    private Region selectedRegion => diseaseData.regions?.FirstOrDefault(f => f.Name == SelectedRegioName);
-    private string SelectedRegioName;
+    private Region selectedRegion;
+    private string SelectedRegionName;
 
-    
+    string statusMessage;
+    string color;
 
+
+    //Creates a deep copy of the chosen region
+    private void OnRegionChanged(ChangeEventArgs e)
+    {
+        SelectedRegionName = e.Value?.ToString();
+        var originalRegion = diseaseData.regions?.FirstOrDefault(f => f.Name == SelectedRegionName);
+
+        selectedRegion = originalRegion != null ? new Region
+            {
+                Name = originalRegion.Name,
+                ID = originalRegion.ID,
+            } : new Region();
+    }
 
     //Opens modal
     public void Show()
@@ -85,6 +107,7 @@
     {
         Logger.LogInformation("Attempting to Close Modal...");
         IsVisible = false;
+        statusMessage = null;
         if (OnClose.HasDelegate)
         {
             OnClose.InvokeAsync();
@@ -99,15 +122,29 @@
     //Deletes disease based on id, URL is subject to change
     private async Task DeleteRegion(Region region)
     {
-        var response = await Http.DeleteAsync($"https://localhost:57693/Symptoms/{region.ID}");
-        if (response.IsSuccessStatusCode)
+        try
         {
-            Logger.LogInformation("Sucessfully Updated " + selectedRegion.Name);
+            var response = await Http.DeleteAsync($"https://localhost:57693/Region/{region.ID}");
+            if (response.IsSuccessStatusCode)
+            {
+                Logger.LogInformation("Sucessfully Deleted " + selectedRegion.Name);
+                statusMessage = "Sucessfully deleted Region!";
+                color = "green";
+            }
+            else
+            {
+                Logger.LogError("Error trying to update data: " + response.StatusCode);
+                statusMessage = "There was an error trying to delete region";
+                color = "red";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Logger.LogError("Error trying to update data: " + response.StatusCode);
+            Logger.LogError("Error trying to connect to the backend " + ex);
+            statusMessage = "There was an error trying to connect to the server...";
+            color = "red";
         }
+
     }
 
     //Only issue is every individual disease gets edited, so if you remove a symptom and go to another disease and go back to the original disease you removed a symptom for.
@@ -119,15 +156,29 @@
         //Logger.LogInformation("Json File: " + jsonString);
         var httpClient = new HttpClient();
         //Might have to change HTTP, for now keep as is
-        var response = await httpClient.PutAsJsonAsync("https://localhost:57693/Region/", selectedRegion);
 
-        if (response.IsSuccessStatusCode)
+        try
         {
-            Logger.LogInformation("Sucessfully Updated " + selectedRegion.Name);
+            var response = await httpClient.PutAsJsonAsync("https://localhost:57693/Region/", selectedRegion);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Logger.LogInformation("Sucessfully Updated " + selectedRegion.Name);
+                statusMessage = "Sucessfully updated Region!";
+                color = "green";
+            }
+            else
+            {
+                Logger.LogError("Error trying to update data: " + response.StatusCode);
+                statusMessage = "There was an error trying to update region";
+                color = "red";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Logger.LogError("Error trying to update data: " + response.StatusCode);
+            Logger.LogError("Error trying to connect to the backend " + ex);
+            statusMessage = "There was an error trying to connect to the server...";
+            color = "red";
         }
 
     }

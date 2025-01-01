@@ -58,7 +58,7 @@ namespace RareDiseasePredicter.Controller {
 
         [HttpPost]
         [Route("/Register")]
-        public async Task<string> AddUser([FromBody] JObject body) {
+        public async Task<IActionResult> AddUser([FromBody] JObject body) {
             User user = new User();
             user.role = Roles.User;
             try {
@@ -68,15 +68,15 @@ namespace RareDiseasePredicter.Controller {
             }
             catch (Exception e){
                 _ = Log.Error(e, "DataController", "AddUser, failed to extract the correct values from the JSON Object");
-                return "406";
+                return StatusCode(406, "Not Acceptable");
             }
             DatabaseController.SaveUser(user);
-            return "200";
+            return Ok();
         }
 
         [HttpPost]
         [Route("/Login")]
-        public async Task<string> Login([FromBody] JObject body) {
+        public async Task<IActionResult> Login([FromBody] JObject body) {
             User user = new User();
             try {
                 user.Name = body.GetValue("username").ToString();
@@ -85,22 +85,22 @@ namespace RareDiseasePredicter.Controller {
             }
             catch (Exception e) {
                 _ = Log.Error(e, "DataController", "Failed to verify login details");
-                return "406";
+                return Forbid("Username or password not correct");
             }
             user = (User)DatabaseController.GetUser(user.Name, user.Password);
             if(user is null) {
-                return "401";
+                return Unauthorized();
             }
             AuthService auth = new AuthService();
             if(user.role == Roles.Admin) {
                 string[] strings = { "Admin" };
-                return JsonSerializer.Serialize<string>(auth.GenerateJwtToken(user.Name, strings));
+                return Ok(JsonSerializer.Serialize<string>(auth.GenerateJwtToken(user.Name, strings)));
             }
             else if(user.role == Roles.User) {
                 string[] strings = { "User" };
-                return JsonSerializer.Serialize<string>(auth.GenerateJwtToken(user.Name, strings));
+                return Ok(JsonSerializer.Serialize<string>(auth.GenerateJwtToken(user.Name, strings)));
             }
-            return "200";
+            return Ok();
         }
 
         [HttpPost]
